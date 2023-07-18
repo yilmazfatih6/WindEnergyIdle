@@ -16,28 +16,39 @@ class WINDENERGYIDLE_CPP_API AWEI_Pawn : public APawn
 
 private:
 
+#pragma region "Reference Variables"
 	// References
 	APlayerController* PlayerController;
+#pragma endregion
 
+#pragma region "Flag Variables"
 	// Flags
 	bool bIsLeftMouseDown;
 	bool bMoveToPickupLocation;
+	bool bIsSpawnedPlaced = true;
+#pragma endregion
 
+#pragma region "Spawn and Placement Variables"
 	// Spawn and placement
 	float MovementSpeed = 1;
 	FVector PickupLocation;
 	FVector PlacementLocation;
-	FTransform* SpawnTransform;
 	ABaseTurbine* SelectedTurbine;
 	ABaseTurbine* PreviouslySelectedTurbine;
+#pragma endregion
 
+#pragma region "Tracing Variables"
 	// Tracing
 	FCollisionQueryParams QueryParams;
 	FHitResult Hit;
 	FVector WorldLocation;
 	FVector WorldDirection;
+#pragma endregion
 	
+#pragma region "Exposed Variables"
 	// Exposed
+	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
+	FVector SpawnLocation;
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
 	FRotator SpawnRotation;
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
@@ -48,7 +59,8 @@ private:
 	TEnumAsByte<ECollisionChannel> TraceChannelPropertyGround = ECC_Pawn;
 	UPROPERTY(EditDefaultsOnly, Category="Collision")
 	TEnumAsByte<ECollisionChannel> TraceChannelPropertyTurbine = ECC_Pawn;
-
+#pragma endregion
+	
 protected:
 	// Expose a mapping context as a property in your header file...
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
@@ -67,6 +79,7 @@ private:
 	void PlaceSelectedTurbine();
 	void MoveBackToPickupLocation();
 	void MoveToPickUpLocation() const;
+	void SetTurbineSelected(ABaseTurbine* Turbine);
 	
 protected:
 	// Called when the game starts or when spawned
@@ -83,5 +96,5 @@ public:
 	void OnLeftMouseClickRelease();
 
 	UFUNCTION(BlueprintCallable)
-	void SpawnTurbine();
+	void SpawnTurbine(bool &bWasSuccessful);
 };

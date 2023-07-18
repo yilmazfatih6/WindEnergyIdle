@@ -11,11 +11,30 @@ ABaseTurbine::ABaseTurbine()
 
 }
 
+void ABaseTurbine::BeginOverlap()
+{
+	bIsOverlapping = true;
+
+	SelectionMesh->SetMaterial(0, SelectionInvalidMaterial);
+}
+
+void ABaseTurbine::EndOverlap()
+{
+	bIsOverlapping = false;
+
+	SelectionMesh->SetMaterial(0, SelectionValidMaterial);
+}
+
 // Called when the game starts or when spawned
 void ABaseTurbine::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UE_LOG(LogTemp, Log, TEXT("[BaseTurbine] BeginPlay"));
+
+	EndOverlap();
 	
+	SetUnselected();
 }
 
 // Called every frame
@@ -27,10 +46,19 @@ void ABaseTurbine::Tick(float DeltaTime)
 
 void ABaseTurbine::SetSelected()
 {
-	
+	EndOverlap();
+	bIsSelected = true;
+	SelectionMesh->SetVisibility(true);
 }
 
 void ABaseTurbine::SetUnselected()
 {
+	bIsSelected = false;
+	SelectionMesh->SetVisibility(false);
+}
+
+bool ABaseTurbine::IsOverlapping() const
+{
+	return bIsOverlapping;
 }
 

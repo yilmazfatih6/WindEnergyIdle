@@ -67,9 +67,19 @@ void AWEI_Pawn::OnLeftMouseClickRelease()
 	PlaceSelectedTurbine();
 }
 
-void AWEI_Pawn::SpawnTurbine()
+void AWEI_Pawn::SpawnTurbine(bool &bWasSuccessful)
 {
-	SelectedTurbine = GetWorld()->SpawnActor<ABaseTurbine>(TurbineToSpawn, GetActorLocation(), SpawnRotation);
+	if (!bIsSpawnedPlaced)
+	{
+		bWasSuccessful = false;
+		return;
+	}
+
+	bWasSuccessful = true;
+	bIsSpawnedPlaced = false;
+	ABaseTurbine* SpawnedTurbine = GetWorld()->SpawnActor<ABaseTurbine>(TurbineToSpawn, SpawnLocation, SpawnRotation);
+	SetTurbineSelected(SpawnedTurbine);
+	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] SpawnTurbine, Turbine: %s"), *SpawnedTurbine->GetName());
 }
 
 void AWEI_Pawn::PlaceSelectedTurbine()
@@ -78,15 +88,18 @@ void AWEI_Pawn::PlaceSelectedTurbine()
 
 	SelectedTurbine->SetUnselected();
 
-	if(SelectedTurbine->bIsOverlapping)
+	if(SelectedTurbine->IsOverlapping())
 	{
 		PlacementLocation = SelectedTurbine->GetActorLocation();
 		bMoveToPickupLocation = true;
 	}
 
-	// TODO: OnPlacementOverlap
 	PreviouslySelectedTurbine = SelectedTurbine;
 	SelectedTurbine = nullptr;
+
+	bIsSpawnedPlaced = true;
+
+	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] PlaceSelectedTurbine, Turbine: %s"), *PreviouslySelectedTurbine->GetName());
 }
 
 void AWEI_Pawn::MoveBackToPickupLocation()
@@ -109,8 +122,19 @@ void AWEI_Pawn::MoveBackToPickupLocation()
 
 void AWEI_Pawn::MoveToPickUpLocation() const
 {
+	if(!SelectedTurbine) return;
+	if(!PreviouslySelectedTurbine) return;
+	
 	PreviouslySelectedTurbine->SetActorLocation(FMath::Lerp(SelectedTurbine->GetActorLocation(), PickupLocation, GetWorld()->DeltaTimeSeconds * MovementSpeed));
 	// SelectedTurbine->SetActorLocation(PickupLocation);
+}
+
+void AWEI_Pawn::SetTurbineSelected(ABaseTurbine* Turbine)
+{
+	SelectedTurbine = Turbine;
+	SelectedTurbine->SetSelected();
+	PickupLocation = SelectedTurbine->GetActorLocation();
+	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] SetTurbineSelected, Turbine: %s"), *SelectedTurbine->GetName());
 }
 
 void AWEI_Pawn::HoverSelectedTurbine()
@@ -130,17 +154,20 @@ void AWEI_Pawn::HoverSelectedTurbine()
 
 	if (Hit.bBlockingHit && IsValid(Hit.GetActor()))
 	{
-		UE_LOG(LogTemp, Log, TEXT("Trace hit actor: %s"), *Hit.GetActor()->GetName());
+		// UE_LOG(LogTemp, Log, TEXT("Trace hit actor: %s"), *Hit.GetActor()->GetName());
 		SelectedTurbine->SetActorLocation(Hit.ImpactPoint);
 	}
 	else {
 		// UE_LOG(LogTemp, Log, TEXT("No Actors were hit"));
 	}
+
+	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] HoverSelectedTurbine, Turbine: %s"), *SelectedTurbine->GetName());
 }
 
 void AWEI_Pawn::SelectTurbine()
 {
 	if(!bIsLeftMouseDown) return;
+	if(!bIsSpawnedPlaced) return;
 
 	bMoveToPickupLocation = false;
 
@@ -159,16 +186,16 @@ void AWEI_Pawn::SelectTurbine()
 		UE_LOG(LogTemp, Log, TEXT("Select turbine trace. Hit actor is null!"));
 		return;
 	}
-	SelectedTurbine = Cast<ABaseTurbine>(Hit.GetActor());
+	ABaseTurbine * HitTurbine = Cast<ABaseTurbine>(Hit.GetActor());
 
-	if(SelectedTurbine == nullptr)
+	if(HitTurbine == nullptr)
 	{
 		UE_LOG(LogTemp, Log, TEXT("Select turbine trace. Selected turbine is null!"));
 		return;
 	}
-	UE_LOG(LogTemp, Log, TEXT("Selected turbine: %s"), *SelectedTurbine->GetName());
+	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] SelectTurbine, Turbine: %s"), *HitTurbine->GetName());
 
-	SelectedTurbine->SetSelected();
-	PickupLocation = SelectedTurbine->GetActorLocation();
+	SetTurbineSelected(HitTurbine);
 }
+
 
