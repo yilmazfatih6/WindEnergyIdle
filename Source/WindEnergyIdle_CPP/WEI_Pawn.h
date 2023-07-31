@@ -9,6 +9,8 @@
 #include "InputMappingContext.h"
 #include "WEI_Pawn.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlacementEvent);
+
 UCLASS()
 class WINDENERGYIDLE_CPP_API AWEI_Pawn : public APawn
 {
@@ -67,6 +69,10 @@ protected:
 	class UInputMappingContext* InputMapping;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
 	class UInputAction* InputAction;
+
+public:
+	UPROPERTY(BlueprintAssignable);
+	FPlacementEvent OnTurbineSpawned;
 	
 public:
 	// Sets default values for this pawn's properties

@@ -80,6 +80,8 @@ void AWEI_Pawn::SpawnTurbine(bool &bWasSuccessful)
 	ABaseTurbine* SpawnedTurbine = GetWorld()->SpawnActor<ABaseTurbine>(TurbineToSpawn, SpawnLocation, SpawnRotation);
 	SetTurbineSelected(SpawnedTurbine);
 	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] SpawnTurbine, Turbine: %s"), *SpawnedTurbine->GetName());
+
+	OnTurbineSpawned.Broadcast();
 }
 
 void AWEI_Pawn::PlaceSelectedTurbine()
