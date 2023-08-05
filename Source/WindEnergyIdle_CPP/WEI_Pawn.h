@@ -71,8 +71,15 @@ protected:
 	class UInputAction* InputAction;
 
 public:
+
 	UPROPERTY(BlueprintAssignable);
-	FPlacementEvent OnTurbineSpawned;
+	FPlacementEvent OnTurbinePlacementComplete;
+
+	UPROPERTY(BlueprintAssignable);
+	FPlacementEvent OnTurbinePlacementCanceled;
+	
+	UPROPERTY(BlueprintAssignable);
+	FPlacementEvent OnTurbinePlacementStart;
 	
 public:
 	// Sets default values for this pawn's properties

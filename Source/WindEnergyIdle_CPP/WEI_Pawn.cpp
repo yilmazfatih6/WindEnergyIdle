@@ -81,7 +81,7 @@ void AWEI_Pawn::SpawnTurbine(bool &bWasSuccessful)
 	SetTurbineSelected(SpawnedTurbine);
 	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] SpawnTurbine, Turbine: %s"), *SpawnedTurbine->GetName());
 
-	OnTurbineSpawned.Broadcast();
+	OnTurbinePlacementStart.Broadcast();
 }
 
 void AWEI_Pawn::PlaceSelectedTurbine()
@@ -100,6 +100,8 @@ void AWEI_Pawn::PlaceSelectedTurbine()
 	SelectedTurbine = nullptr;
 
 	bIsSpawnedPlaced = true;
+
+	OnTurbinePlacementComplete.Broadcast();
 
 	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] PlaceSelectedTurbine, Turbine: %s"), *PreviouslySelectedTurbine->GetName());
 }
@@ -120,6 +122,8 @@ void AWEI_Pawn::MoveBackToPickupLocation()
 
 	// Set the timer to call the delegate at a specified interval
 	GetWorldTimerManager().SetTimer(TimerHandle, Delegate, 0.1f, true);
+
+	OnTurbinePlacementCanceled.Broadcast();
 }
 
 void AWEI_Pawn::MoveToPickUpLocation() const
@@ -129,6 +133,8 @@ void AWEI_Pawn::MoveToPickUpLocation() const
 	
 	PreviouslySelectedTurbine->SetActorLocation(FMath::Lerp(SelectedTurbine->GetActorLocation(), PickupLocation, GetWorld()->DeltaTimeSeconds * MovementSpeed));
 	// SelectedTurbine->SetActorLocation(PickupLocation);
+
+	OnTurbinePlacementCanceled.Broadcast();
 }
 
 void AWEI_Pawn::SetTurbineSelected(ABaseTurbine* Turbine)
@@ -198,6 +204,8 @@ void AWEI_Pawn::SelectTurbine()
 	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] SelectTurbine, Turbine: %s"), *HitTurbine->GetName());
 
 	SetTurbineSelected(HitTurbine);
+
+	OnTurbinePlacementStart.Broadcast();
 }
 
 
