@@ -96,10 +96,13 @@ void AWEI_Pawn::PlaceSelectedTurbine()
 		bMoveToPickupLocation = true;
 	}
 
+	SelectedTurbine->Place();
+	
 	PreviouslySelectedTurbine = SelectedTurbine;
 	SelectedTurbine = nullptr;
 
 	bIsSpawnedPlaced = true;
+
 
 	OnTurbinePlacementComplete.Broadcast();
 
@@ -169,7 +172,7 @@ void AWEI_Pawn::HoverSelectedTurbine()
 		// UE_LOG(LogTemp, Log, TEXT("No Actors were hit"));
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] HoverSelectedTurbine, Turbine: %s"), *SelectedTurbine->GetName());
+	// UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] HoverSelectedTurbine, Turbine: %s"), *SelectedTurbine->GetName());
 }
 
 void AWEI_Pawn::SelectTurbine()

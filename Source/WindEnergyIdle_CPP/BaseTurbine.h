@@ -14,6 +14,9 @@ class WINDENERGYIDLE_CPP_API ABaseTurbine : public AActor
 private:
 	bool bIsSelected;
 	bool bIsOverlapping;
+	float baseEnergyPerSecond = 5;
+	float windMultiplier = 0;
+	float previousWindMultiplier = 0;
 
 protected:
 	UPROPERTY(Category="References", BlueprintReadWrite)
@@ -23,13 +26,6 @@ protected:
 	UPROPERTY(Category="References", EditDefaultsOnly, BlueprintReadOnly)
 	UMaterialInstance* SelectionValidMaterial;
 	
-public:	
-	// Sets default values for this actor's properties
-	ABaseTurbine();
-
-private:
-
-protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
@@ -38,12 +34,17 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void EndOverlap();
 
-public:	
+public:
+	// Sets default values for this actor's properties
+	ABaseTurbine();
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	void SetSelected();
 	void SetUnselected();
+
+	virtual void Place();
 	
 	bool IsOverlapping() const;
 };

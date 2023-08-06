@@ -20,7 +20,9 @@ void UEnergyManager::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+
+	EnergyPerSecond = 0;
+	OnEnergyPerSecondDecrease.Broadcast(EnergyPerSecond);
 }
 
 
@@ -35,14 +37,14 @@ void UEnergyManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 float UEnergyManager::IncreaseEnergyPerSecond(const float Value)
 {
 	EnergyPerSecond += Value;
-	OnEnergyChanged.Broadcast(EnergyPerSecond);
+	OnEnergyPerSecondIncrease.Broadcast(EnergyPerSecond);
 	return EnergyPerSecond;
 }
 
 float UEnergyManager::DecreaseEnergyPerSecond(const float Value)
 {
 	EnergyPerSecond -= Value;
-	OnEnergyChanged.Broadcast(EnergyPerSecond);
+	OnEnergyPerSecondDecrease.Broadcast(EnergyPerSecond);
 	return EnergyPerSecond;
 }
 

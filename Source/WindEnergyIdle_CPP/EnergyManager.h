@@ -12,7 +12,9 @@ UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class WINDENERGYIDLE_CPP_API UEnergyManager : public UActorComponent
 {
 	UPROPERTY(BlueprintAssignable);
-	FEnergyEvent OnEnergyChanged;
+	FEnergyEvent OnEnergyPerSecondIncrease;
+	UPROPERTY(BlueprintAssignable);
+	FEnergyEvent OnEnergyPerSecondDecrease;
 	
 	GENERATED_BODY()
 
@@ -27,9 +29,12 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
+
+	UFUNCTION(BlueprintCallable)
 	float IncreaseEnergyPerSecond(float Value);
+	UFUNCTION(BlueprintCallable)
 	float DecreaseEnergyPerSecond(float Value);
+	UFUNCTION(BlueprintCallable)
 	float GetEnergyPerSecond() const;
 	
 private:

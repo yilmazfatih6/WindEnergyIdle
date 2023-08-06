@@ -13,5 +13,10 @@ UCLASS()
 class WINDENERGYIDLE_CPP_API AWindEnergyIdle_CPPGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	UPROPERTY(BlueprintReadOnly)
+	class UEnergyManager* EnergyManager;
+
+	AWindEnergyIdle_CPPGameModeBase();
 };
