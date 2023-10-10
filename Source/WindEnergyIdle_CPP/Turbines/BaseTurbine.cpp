@@ -3,15 +3,14 @@
 
 #include "BaseTurbine.h"
 
-#include "EnergyManager.h"
-#include "WindEnergyIdle_CPPGameModeBase.h"
+#include "WindEnergyIdle_CPP/WindEnergyIdle_CPPGameModeBase.h"
+#include "WindEnergyIdle_CPP/Managers/EnergyManager.h"
 
 // Sets default values
 ABaseTurbine::ABaseTurbine()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 void ABaseTurbine::BeginOverlap()

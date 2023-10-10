@@ -18,5 +18,8 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	class UEnergyManager* EnergyManager;
 
+	UPROPERTY(BlueprintReadOnly)
+	class UUpgradeManager* UpgradeManager;
+
 	AWindEnergyIdle_CPPGameModeBase();
 };

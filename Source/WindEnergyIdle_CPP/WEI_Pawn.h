@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BaseTurbine.h"
+#include "Turbines/BaseTurbine.h"
 #include "GameFramework/HUD.h"
 #include "GameFramework/Pawn.h"
 #include "InputMappingContext.h"
