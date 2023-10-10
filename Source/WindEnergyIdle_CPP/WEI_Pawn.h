@@ -32,6 +32,7 @@ private:
 
 #pragma region "Spawn and Placement Variables"
 	// Spawn and placement
+	UPROPERTY(EditAnywhere)
 	float MovementSpeed = 1;
 	FVector PickupLocation;
 	FVector PlacementLocation;
@@ -91,7 +92,7 @@ private:
 	void SelectTurbine();
 	void PlaceSelectedTurbine();
 	void MoveBackToPickupLocation();
-	void MoveToPickUpLocation() const;
+	void MoveToPickUpLocation();
 	void SetTurbineSelected(ABaseTurbine* Turbine);
 	
 protected:

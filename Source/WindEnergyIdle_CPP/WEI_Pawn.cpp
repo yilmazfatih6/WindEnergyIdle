@@ -29,6 +29,7 @@ void AWEI_Pawn::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	
 	HoverSelectedTurbine();
+	MoveToPickUpLocation();
 }
 
 // Called to bind functionality to input
@@ -92,8 +93,13 @@ void AWEI_Pawn::PlaceSelectedTurbine()
 
 	if(SelectedTurbine->IsOverlapping())
 	{
+		UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] PlaceSelectedTurbine, Selected turbine is overlapping: %s"), *SelectedTurbine->GetName());
 		PlacementLocation = SelectedTurbine->GetActorLocation();
 		bMoveToPickupLocation = true;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] PlaceSelectedTurbine, Selected turbine is not overlapping: %s"), *SelectedTurbine->GetName());
 	}
 
 	SelectedTurbine->Place();
@@ -111,11 +117,14 @@ void AWEI_Pawn::PlaceSelectedTurbine()
 
 void AWEI_Pawn::MoveBackToPickupLocation()
 {
+	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] MoveBackToPickupLocation, bMoveToPickupLocation: %s"), bMoveToPickupLocation ? TEXT("True") : TEXT("False"));
+	
 	if(!bMoveToPickupLocation) return;
 
 	if(!PreviouslySelectedTurbine) return;
 
 	// SelectedTurbine->SetActorLocation()
+	// UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] MoveBackToPickupLocation, Turbine: %s"), *PreviouslySelectedTurbine->GetName());
 
 	// Create a timer
 	FTimerHandle TimerHandle;
@@ -129,12 +138,25 @@ void AWEI_Pawn::MoveBackToPickupLocation()
 	OnTurbinePlacementCanceled.Broadcast();
 }
 
-void AWEI_Pawn::MoveToPickUpLocation() const
+void AWEI_Pawn::MoveToPickUpLocation()
 {
-	if(!SelectedTurbine) return;
+	// if(!SelectedTurbine) return;
+	if(!bMoveToPickupLocation) return;
 	if(!PreviouslySelectedTurbine) return;
+
+	FVector start = PreviouslySelectedTurbine->GetActorLocation();
+	FVector end = PickupLocation;
+	float difference = FVector::Dist(start, end);
 	
-	PreviouslySelectedTurbine->SetActorLocation(FMath::Lerp(SelectedTurbine->GetActorLocation(), PickupLocation, GetWorld()->DeltaTimeSeconds * MovementSpeed));
+	if(difference <= 0.1f)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] MoveToPickUpLocation, Movement is completed!"));
+		bMoveToPickupLocation = false;
+		return;
+	}
+
+	PreviouslySelectedTurbine->SetActorLocation(FMath::Lerp(start, end, GetWorld()->DeltaTimeSeconds * MovementSpeed));
+	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] MoveToPickUpLocation, SetActorLocation: %s"), *PreviouslySelectedTurbine->GetName());
 	// SelectedTurbine->SetActorLocation(PickupLocation);
 
 	OnTurbinePlacementCanceled.Broadcast();
