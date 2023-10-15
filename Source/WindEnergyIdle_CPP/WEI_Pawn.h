@@ -16,14 +16,15 @@ class WINDENERGYIDLE_CPP_API AWEI_Pawn : public APawn
 {
 	GENERATED_BODY()
 
-private:
-
 #pragma region "Reference Variables"
+protected:
 	// References
+	UPROPERTY(BlueprintReadOnly)
 	APlayerController* PlayerController;
 #pragma endregion
 
 #pragma region "Flag Variables"
+private:
 	// Flags
 	bool bIsLeftMouseDown;
 	bool bMoveToPickupLocation;
@@ -49,9 +50,11 @@ private:
 #pragma endregion
 	
 #pragma region "Exposed Variables"
+protected:
 	// Exposed
-	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spawn")
 	FVector SpawnLocation;
+private:
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
 	FRotator SpawnRotation;
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
@@ -98,6 +101,9 @@ private:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintNativeEvent)
+	void SetSpawnPoint();
 
 public:	
 	// Called every frame

@@ -23,6 +23,10 @@ void AWEI_Pawn::BeginPlay()
 	Super::BeginPlay();
 }
 
+void AWEI_Pawn::SetSpawnPoint_Implementation()
+{
+}
+
 // Called every frame
 void AWEI_Pawn::Tick(float DeltaTime)
 {
@@ -76,6 +80,8 @@ void AWEI_Pawn::SpawnTurbine(bool &bWasSuccessful)
 		return;
 	}
 
+	SetSpawnPoint();
+	
 	bWasSuccessful = true;
 	bIsSpawnedPlaced = false;
 	ABaseTurbine* SpawnedTurbine = GetWorld()->SpawnActor<ABaseTurbine>(TurbineToSpawn, SpawnLocation, SpawnRotation);
