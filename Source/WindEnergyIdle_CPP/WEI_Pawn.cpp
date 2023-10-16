@@ -1,12 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "WEI_Pawn.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Math/UnrealMathUtility.h"
 #include "EnhancedInputSubsystems.h"
+#include "TurbinePlacer.h"
+#include "TurbineSelector.h"
+#include "TurbineSpawner.h"
 #include "EnhancedInput/Public/EnhancedInputComponent.h"
 
 // Sets default values
@@ -15,25 +16,28 @@ AWEI_Pawn::AWEI_Pawn()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+	TurbineSpawner = CreateDefaultSubobject<UTurbineSpawner>(TEXT("Turbine Spawner"));
+	TurbinePlacer = CreateDefaultSubobject<UTurbinePlacer>(TEXT("Turbine Placer"));
+	TurbineSelector = CreateDefaultSubobject<UTurbineSelector>(TEXT("Turbine Selector"));
 }
 
 // Called when the game starts or when spawned
 void AWEI_Pawn::BeginPlay()
 {
 	Super::BeginPlay();
-}
-
-void AWEI_Pawn::SetSpawnPoint_Implementation()
-{
+	
+	TurbineSpawner->OnSpawn.AddDynamic(this, &ThisClass::OnTurbineSpawned);
+	TurbineSelector->OnSelect.AddDynamic(this, &ThisClass::OnTurbineSelected);
+	TurbinePlacer->OnPlace.AddDynamic(this, &ThisClass::OnTurbinePlaced);
+	TurbinePlacer->OnPlacementFail.AddDynamic(this, &ThisClass::OnTurbinePlacementFailed);
 }
 
 // Called every frame
 void AWEI_Pawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-	HoverSelectedTurbine();
-	MoveToPickUpLocation();
+
 }
 
 // Called to bind functionality to input
@@ -58,185 +62,41 @@ void AWEI_Pawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AWEI_Pawn::OnLeftMouseClickPressed()
 {
-	UE_LOG(LogTemp, Log, TEXT("OnLeftMouseClickPressed"));
+	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] OnLeftMouseClickPressed"));
 
 	bIsLeftMouseDown = true;
-	SelectTurbine();
+	TurbineSelector->LineTraceTurbine();
+	TurbinePlacer->SetHover(true);
 }
 
 void AWEI_Pawn::OnLeftMouseClickRelease()
 {
-	UE_LOG(LogTemp, Log, TEXT("OnLeftMouseClickRelease"));
+	// UE_LOG(LogTemp, Log, TEXT("OnLeftMouseClickRelease"));
 
 	bIsLeftMouseDown = false;
-	PlaceSelectedTurbine();
+	TurbinePlacer->Place();
+	TurbinePlacer->SetHover(false);
 }
 
-void AWEI_Pawn::SpawnTurbine(bool &bWasSuccessful)
+void AWEI_Pawn::OnTurbineSpawned(ABaseTurbine* Turbine)
 {
-	if (!bIsSpawnedPlaced)
-	{
-		bWasSuccessful = false;
-		return;
-	}
-
-	SetSpawnPoint();
-	
-	bWasSuccessful = true;
-	bIsSpawnedPlaced = false;
-	ABaseTurbine* SpawnedTurbine = GetWorld()->SpawnActor<ABaseTurbine>(TurbineToSpawn, SpawnLocation, SpawnRotation);
-	SetTurbineSelected(SpawnedTurbine);
-	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] SpawnTurbine, Turbine: %s"), *SpawnedTurbine->GetName());
-
-	OnTurbinePlacementStart.Broadcast();
+	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] OnTurbineSpawned"));
+	TurbineSelector->SetSelectedTurbine(Turbine);
 }
 
-void AWEI_Pawn::PlaceSelectedTurbine()
+void AWEI_Pawn::OnTurbineSelected(ABaseTurbine* Turbine)
 {
-	if(!SelectedTurbine) return;
-
-	SelectedTurbine->SetUnselected();
-
-	if(SelectedTurbine->IsOverlapping())
-	{
-		UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] PlaceSelectedTurbine, Selected turbine is overlapping: %s"), *SelectedTurbine->GetName());
-		PlacementLocation = SelectedTurbine->GetActorLocation();
-		bMoveToPickupLocation = true;
-	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] PlaceSelectedTurbine, Selected turbine is not overlapping: %s"), *SelectedTurbine->GetName());
-	}
-
-	SelectedTurbine->Place();
-	
-	PreviouslySelectedTurbine = SelectedTurbine;
-	SelectedTurbine = nullptr;
-
-	bIsSpawnedPlaced = true;
-
-
-	OnTurbinePlacementComplete.Broadcast();
-
-	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] PlaceSelectedTurbine, Turbine: %s"), *PreviouslySelectedTurbine->GetName());
+	TurbinePlacer->SetTargetTurbine(Turbine);
 }
 
-void AWEI_Pawn::MoveBackToPickupLocation()
+void AWEI_Pawn::OnTurbinePlaced(ABaseTurbine* Turbine)
 {
-	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] MoveBackToPickupLocation, bMoveToPickupLocation: %s"), bMoveToPickupLocation ? TEXT("True") : TEXT("False"));
-	
-	if(!bMoveToPickupLocation) return;
-
-	if(!PreviouslySelectedTurbine) return;
-
-	// SelectedTurbine->SetActorLocation()
-	// UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] MoveBackToPickupLocation, Turbine: %s"), *PreviouslySelectedTurbine->GetName());
-
-	// Create a timer
-	FTimerHandle TimerHandle;
-
-	// Create a delegate that will call the FInterpTo function
-	const FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AWEI_Pawn::MoveToPickUpLocation);
-
-	// Set the timer to call the delegate at a specified interval
-	GetWorldTimerManager().SetTimer(TimerHandle, Delegate, 0.1f, true);
-
-	OnTurbinePlacementCanceled.Broadcast();
+	TurbineSpawner->SetCanSpawn(true);
+	TurbineSelector->ResetSelectedTurbine();
 }
 
-void AWEI_Pawn::MoveToPickUpLocation()
+void AWEI_Pawn::OnTurbinePlacementFailed(ABaseTurbine* Turbine)
 {
-	// if(!SelectedTurbine) return;
-	if(!bMoveToPickupLocation) return;
-	if(!PreviouslySelectedTurbine) return;
-
-	FVector start = PreviouslySelectedTurbine->GetActorLocation();
-	FVector end = PickupLocation;
-	float difference = FVector::Dist(start, end);
-	
-	if(difference <= 0.1f)
-	{
-		UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] MoveToPickUpLocation, Movement is completed!"));
-		bMoveToPickupLocation = false;
-		return;
-	}
-
-	PreviouslySelectedTurbine->SetActorLocation(FMath::Lerp(start, end, GetWorld()->DeltaTimeSeconds * MovementSpeed));
-	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] MoveToPickUpLocation, SetActorLocation: %s"), *PreviouslySelectedTurbine->GetName());
-	// SelectedTurbine->SetActorLocation(PickupLocation);
-
-	OnTurbinePlacementCanceled.Broadcast();
+	if(Turbine->IsInitialPlacement()) return;
+	TurbineSelector->ResetSelectedTurbine();
 }
-
-void AWEI_Pawn::SetTurbineSelected(ABaseTurbine* Turbine)
-{
-	SelectedTurbine = Turbine;
-	SelectedTurbine->SetSelected();
-	PickupLocation = SelectedTurbine->GetActorLocation();
-	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] SetTurbineSelected, Turbine: %s"), *SelectedTurbine->GetName());
-}
-
-void AWEI_Pawn::HoverSelectedTurbine()
-{
-	if(!bIsLeftMouseDown) return;
-
-	if(!SelectedTurbine) return;
-
-	PlayerController->DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
-
-	const FVector TraceEnd = WorldLocation + WorldDirection * TraceDistance;
-
-	QueryParams.AddIgnoredActor(this);
-	
-	GetWorld()->LineTraceSingleByChannel(Hit, WorldLocation, TraceEnd, TraceChannelPropertyGround, QueryParams);
-	// DrawDebugLine(GetWorld(), WorldLocation, TraceEnd, Hit.bBlockingHit ? FColor::Blue : FColor::Red, false, 5.0f, 0, 10.0f);
-
-	if (Hit.bBlockingHit && IsValid(Hit.GetActor()))
-	{
-		// UE_LOG(LogTemp, Log, TEXT("Trace hit actor: %s"), *Hit.GetActor()->GetName());
-		SelectedTurbine->SetActorLocation(Hit.ImpactPoint);
-	}
-	else {
-		// UE_LOG(LogTemp, Log, TEXT("No Actors were hit"));
-	}
-
-	// UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] HoverSelectedTurbine, Turbine: %s"), *SelectedTurbine->GetName());
-}
-
-void AWEI_Pawn::SelectTurbine()
-{
-	if(!bIsLeftMouseDown) return;
-	if(!bIsSpawnedPlaced) return;
-
-	bMoveToPickupLocation = false;
-
-	PlayerController->DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
-
-	const FVector TraceEnd = WorldLocation + WorldDirection * TraceDistance;
-
-	QueryParams.AddIgnoredActor(this);
-
-	GetWorld()->LineTraceSingleByChannel(Hit, WorldLocation, TraceEnd, TraceChannelPropertyTurbine, QueryParams);
-	// DrawDebugLine(GetWorld(), WorldLocation, TraceEnd, Hit.bBlockingHit ? FColor::Blue : FColor::Red, false, 5.0f, 0, 10.0f);
-
-	// if(!Hit.IsValidBlockingHit()) return;
-	if(Hit.GetActor() == nullptr)
-	{
-		UE_LOG(LogTemp, Log, TEXT("Select turbine trace. Hit actor is null!"));
-		return;
-	}
-	ABaseTurbine * HitTurbine = Cast<ABaseTurbine>(Hit.GetActor());
-
-	if(HitTurbine == nullptr)
-	{
-		UE_LOG(LogTemp, Log, TEXT("Select turbine trace. Selected turbine is null!"));
-		return;
-	}
-	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] SelectTurbine, Turbine: %s"), *HitTurbine->GetName());
-
-	SetTurbineSelected(HitTurbine);
-
-	OnTurbinePlacementStart.Broadcast();
-}
-
-

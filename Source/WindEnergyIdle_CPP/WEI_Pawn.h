@@ -9,64 +9,29 @@
 #include "InputMappingContext.h"
 #include "WEI_Pawn.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlacementEvent);
 
 UCLASS()
 class WINDENERGYIDLE_CPP_API AWEI_Pawn : public APawn
 {
 	GENERATED_BODY()
 
-#pragma region "Reference Variables"
 protected:
 	// References
 	UPROPERTY(BlueprintReadOnly)
 	APlayerController* PlayerController;
-#pragma endregion
 
-#pragma region "Flag Variables"
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UTurbineSpawner* TurbineSpawner;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UTurbineSelector* TurbineSelector;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UTurbinePlacer* TurbinePlacer;
+
 private:
-	// Flags
 	bool bIsLeftMouseDown;
-	bool bMoveToPickupLocation;
-	bool bIsSpawnedPlaced = true;
-#pragma endregion
 
-#pragma region "Spawn and Placement Variables"
-	// Spawn and placement
-	UPROPERTY(EditAnywhere)
-	float MovementSpeed = 1;
-	FVector PickupLocation;
-	FVector PlacementLocation;
-	ABaseTurbine* SelectedTurbine;
-	ABaseTurbine* PreviouslySelectedTurbine;
-#pragma endregion
-
-#pragma region "Tracing Variables"
-	// Tracing
-	FCollisionQueryParams QueryParams;
-	FHitResult Hit;
-	FVector WorldLocation;
-	FVector WorldDirection;
-#pragma endregion
-	
-#pragma region "Exposed Variables"
-protected:
-	// Exposed
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spawn")
-	FVector SpawnLocation;
-private:
-	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	FRotator SpawnRotation;
-	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	TSubclassOf<class ABaseTurbine> TurbineToSpawn;
-	UPROPERTY(EditDefaultsOnly, Category="Collision")
-	float TraceDistance = 10000000;
-	UPROPERTY(EditDefaultsOnly, Category="Collision")
-	TEnumAsByte<ECollisionChannel> TraceChannelPropertyGround = ECC_Pawn;
-	UPROPERTY(EditDefaultsOnly, Category="Collision")
-	TEnumAsByte<ECollisionChannel> TraceChannelPropertyTurbine = ECC_Pawn;
-#pragma endregion
-	
 protected:
 	// Expose a mapping context as a property in your header file...
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
@@ -76,34 +41,26 @@ protected:
 
 public:
 
-	UPROPERTY(BlueprintAssignable);
-	FPlacementEvent OnTurbinePlacementComplete;
-
-	UPROPERTY(BlueprintAssignable);
-	FPlacementEvent OnTurbinePlacementCanceled;
-	
-	UPROPERTY(BlueprintAssignable);
-	FPlacementEvent OnTurbinePlacementStart;
 	
 public:
 	// Sets default values for this pawn's properties
 	AWEI_Pawn();
 
 private:
-	
-	void HoverSelectedTurbine();
-	void SelectTurbine();
-	void PlaceSelectedTurbine();
-	void MoveBackToPickupLocation();
-	void MoveToPickUpLocation();
-	void SetTurbineSelected(ABaseTurbine* Turbine);
+
+	UFUNCTION()
+	void OnTurbineSpawned(ABaseTurbine* Turbine);
+	UFUNCTION()
+	void OnTurbineSelected(ABaseTurbine* Turbine);
+	UFUNCTION()
+	void OnTurbinePlaced(ABaseTurbine* Turbine);
+	UFUNCTION()
+	void OnTurbinePlacementFailed(ABaseTurbine* Turbine);
 	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UFUNCTION(BlueprintNativeEvent)
-	void SetSpawnPoint();
 
 public:	
 	// Called every frame
@@ -115,6 +72,5 @@ public:
 	void OnLeftMouseClickPressed();
 	void OnLeftMouseClickRelease();
 
-	UFUNCTION(BlueprintCallable)
-	void SpawnTurbine(bool &bWasSuccessful);
+	
 };
