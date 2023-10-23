@@ -28,6 +28,9 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UTurbinePlacer* TurbinePlacer;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UTurbineMerger* TurbineMerger;
 
 private:
 	bool bIsLeftMouseDown;

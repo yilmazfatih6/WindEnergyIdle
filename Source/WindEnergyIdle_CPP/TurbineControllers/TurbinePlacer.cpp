@@ -3,8 +3,8 @@
 
 #include "TurbinePlacer.h"
 
-#include "WEI_Pawn.h"
 #include "Kismet/GameplayStatics.h"
+#include "WindEnergyIdle_CPP/Turbines/BaseTurbine.h"
 
 class ABaseTurbine;
 // Sets default values for this component's properties
@@ -77,7 +77,7 @@ void UTurbinePlacer::MoveBackToPickupLocation()
 	FTimerHandle TimerHandle;
 
 	// Create a delegate that will call the FInterpTo function
-	const FTimerDelegate Delegate = FTimerDelegate::CreateUObject(TargetTurbine, &ABaseTurbine::MoveToPlacementLocation);
+	const FTimerDelegate Delegate = FTimerDelegate::CreateUObject(TargetTurbine, &ABaseTurbine::Move);
 
 	// Set the timer to call the delegate at a specified interval
 	GetOwner()->GetWorldTimerManager().SetTimer(TimerHandle, Delegate, 0.1f, true);
@@ -101,7 +101,7 @@ void UTurbinePlacer::Place()
 
 	if(TargetTurbine->IsOverlapping())
 	{
-		TargetTurbine->StartMovementToPlacementLocation();
+		TargetTurbine->StartMovement(TargetTurbine->GetPlacementLocation());
 		OnPlacementFail.Broadcast(TargetTurbine);
 		UE_LOG(LogTemp, Log, TEXT("[UTurbinePlacer] Place, Placement failed due to overlap! Turbine: %s"), *TargetTurbine->GetName());
 	}

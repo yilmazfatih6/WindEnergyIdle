@@ -4,7 +4,7 @@
 #include "TurbineSelector.h"
 
 #include "Kismet/GameplayStatics.h"
-#include "Turbines/BaseTurbine.h"
+#include "WindEnergyIdle_CPP/Turbines/BaseTurbine.h"
 
 // Sets default values for this component's properties
 UTurbineSelector::UTurbineSelector()

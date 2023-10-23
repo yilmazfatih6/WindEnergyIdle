@@ -34,7 +34,7 @@ void ABaseTurbine::BeginPlay()
 
 	UE_LOG(LogTemp, Log, TEXT("[BaseTurbine] BeginPlay"));
 
-	placementLocation = GetActorLocation();
+	PlacementLocation = GetActorLocation();
 
 	EndOverlap();
 	
@@ -46,7 +46,7 @@ void ABaseTurbine::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	MoveToPlacementLocation();
+	Move();
 }
 
 void ABaseTurbine::SetSelected()
@@ -68,11 +68,11 @@ void ABaseTurbine::	Place()
 	
 	AWindEnergyIdle_CPPGameModeBase* GameMode = static_cast<AWindEnergyIdle_CPPGameModeBase*>(GetWorld()->GetAuthGameMode());
 
-	windMultiplier = 1;
+	WindMultiplier = 1;
 
-	float EnergyDifference = (baseEnergyPerSecond * windMultiplier) - (baseEnergyPerSecond * previousWindMultiplier);
+	float EnergyDifference = (BaseEnergyPerSecond * WindMultiplier) - (BaseEnergyPerSecond * PreviousWindMultiplier);
 
-	previousWindMultiplier = windMultiplier;
+	PreviousWindMultiplier = WindMultiplier;
 	UE_LOG(LogTemp, Log, TEXT("[BaseTurbine] EnergyDifference = %f"), EnergyDifference);
 
 	if(EnergyDifference > 0)
@@ -86,7 +86,7 @@ void ABaseTurbine::	Place()
 		UE_LOG(LogTemp, Log, TEXT("[BaseTurbine] Decrease Energy Per Second!"));
 	}
 
-	placementLocation = GetActorLocation();
+	PlacementLocation = GetActorLocation();
 	
 }
 
@@ -95,31 +95,48 @@ bool ABaseTurbine::IsOverlapping() const
 	return bIsOverlapping;
 }
 
-void ABaseTurbine::MoveToPlacementLocation()
+void ABaseTurbine::Move()
 {
-	if(!bMoveToPlacementLocation) return;
+	if(!bMove) return;
 
-	FVector start = GetActorLocation();
-	FVector end = placementLocation;
-	float difference = FVector::Dist(start, end);
+	const FVector Start = GetActorLocation();
+	const FVector End = MovementLocation;
+	const float Difference = FVector::Dist(Start, End);
 	
-	if(difference <= 0.1f)
+	if(Difference <= 0.1f)
 	{
 		UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] MoveToPlacementLocation, Movement is completed!"));
-		bMoveToPlacementLocation = false;
+		bMove = false;
+		OnMovementComplete.Broadcast(this);
 		return;
 	}
 
-	SetActorLocation(FMath::Lerp(start, end, GetWorld()->DeltaTimeSeconds * MovementSpeed));
-	UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] MoveToPlacementLocation, SetActorLocation: %s"), *GetName());
+	SetActorLocation(FMath::Lerp(Start, End, GetWorld()->DeltaTimeSeconds * MovementSpeed));
+	// UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] MoveToPlacementLocation, SetActorLocation: %s"), *GetName());
 }
 
-void ABaseTurbine::StartMovementToPlacementLocation()
+void ABaseTurbine::StartMovement(const FVector& TargetMovementLocation)
 {
-	bMoveToPlacementLocation = true;
+	bMove = true;
+	MovementLocation = TargetMovementLocation;
 }
 
-bool ABaseTurbine::IsInitialPlacement()
+bool ABaseTurbine::IsInitialPlacement() const
 {
 	return bIsInitialPlacement;
+}
+
+int32 ABaseTurbine::GetLevel() const
+{
+	return Level;
+}
+
+float ABaseTurbine::GetWindMultiplier() const
+{
+	return WindMultiplier;
+}
+
+FVector ABaseTurbine::GetPlacementLocation() const
+{
+	return PlacementLocation;
 }

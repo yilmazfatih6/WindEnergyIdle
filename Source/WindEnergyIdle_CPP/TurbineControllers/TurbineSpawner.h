@@ -4,53 +4,74 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Turbines/BaseTurbine.h"
+#include "WindEnergyIdle_CPP/Turbines/BaseTurbine.h"
 #include "TurbineSpawner.generated.h"
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTurbineDelegate, ABaseTurbine*, Turbine);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSpawnStartDelegate);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class WINDENERGYIDLE_CPP_API UTurbineSpawner : public UActorComponent
 {
 	GENERATED_BODY()
 
+#pragma region "Delegates"
+
 public:
 	UPROPERTY(BlueprintAssignable);
-	FTurbineDelegate OnSpawn;
+	FTurbineDelegate OnSpawnStart;
 	
 	UPROPERTY(BlueprintAssignable);
-	FOnSpawnStartDelegate OnSpawnStart;
+	FTurbineDelegate OnSpawnComplete;
+	
+#pragma endregion 
+
+#pragma region "Properties"
 
 private:
 	bool bCanSpawn = true;
 
-	ABaseTurbine* spawnedTurbine;
+	ABaseTurbine* SpawnedTurbine;
+
+	TArray<ABaseTurbine*> SpawnedTurbines;
+	TArray<TArray<ABaseTurbine*>*>* SpawnedTurbinesByLevel;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
 	FRotator SpawnRotation;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	TSubclassOf<class ABaseTurbine> TurbineToSpawn;
-	
+	TArray<TSubclassOf<class ABaseTurbine>> TurbineBlueprints;
+	// TSubclassOf<class ABaseTurbine> TurbineToSpawn;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spawn")
 	FVector SpawnLocation;
+
+#pragma endregion 
+
+#pragma region "Functions"
 	
-public:	
-	// Sets default values for this component's properties
-	UTurbineSpawner();
+private:
+	void AddToTurbinesByLevels(ABaseTurbine* Turbine, int Level);
+	void RemoveToTurbinesByLevels(ABaseTurbine* Turbine) const;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+public:
+	// Sets default values for this component's properties
+	UTurbineSpawner();
+
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void SetCanSpawn(bool value);
 
 	UFUNCTION(BlueprintCallable)
-	void SpawnTurbine(bool &bWasSuccessful);
+	void SpawnTurbine(int Level, bool &bWasSuccessful);
+
+	void RemoveTurbineFromArray(ABaseTurbine* Turbine);
+	void DespawnTurbine(ABaseTurbine* Turbine);
+
+	const TArray<TArray<ABaseTurbine*>*>* GetSpawnedTurbinesByLevel() const;
+
+#pragma endregion 
 };

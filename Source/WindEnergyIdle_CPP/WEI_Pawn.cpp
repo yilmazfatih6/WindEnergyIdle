@@ -5,10 +5,11 @@
 #include "Kismet/GameplayStatics.h"
 #include "Math/UnrealMathUtility.h"
 #include "EnhancedInputSubsystems.h"
-#include "TurbinePlacer.h"
-#include "TurbineSelector.h"
-#include "TurbineSpawner.h"
 #include "EnhancedInput/Public/EnhancedInputComponent.h"
+#include "TurbineControllers/TurbineMerger.h"
+#include "TurbineControllers/TurbinePlacer.h"
+#include "TurbineControllers/TurbineSelector.h"
+#include "TurbineControllers/TurbineSpawner.h"
 
 // Sets default values
 AWEI_Pawn::AWEI_Pawn()
@@ -20,6 +21,8 @@ AWEI_Pawn::AWEI_Pawn()
 	TurbineSpawner = CreateDefaultSubobject<UTurbineSpawner>(TEXT("Turbine Spawner"));
 	TurbinePlacer = CreateDefaultSubobject<UTurbinePlacer>(TEXT("Turbine Placer"));
 	TurbineSelector = CreateDefaultSubobject<UTurbineSelector>(TEXT("Turbine Selector"));
+	TurbineMerger = CreateDefaultSubobject<UTurbineMerger>(TEXT("Turbine Merger"));
+	TurbineMerger->InjectData(TurbineSpawner);
 }
 
 // Called when the game starts or when spawned
@@ -27,7 +30,7 @@ void AWEI_Pawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	TurbineSpawner->OnSpawn.AddDynamic(this, &ThisClass::OnTurbineSpawned);
+	TurbineSpawner->OnSpawnComplete.AddDynamic(this, &ThisClass::OnTurbineSpawned);
 	TurbineSelector->OnSelect.AddDynamic(this, &ThisClass::OnTurbineSelected);
 	TurbinePlacer->OnPlace.AddDynamic(this, &ThisClass::OnTurbinePlaced);
 	TurbinePlacer->OnPlacementFail.AddDynamic(this, &ThisClass::OnTurbinePlacementFailed);

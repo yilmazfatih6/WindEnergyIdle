@@ -6,24 +6,38 @@
 #include "GameFramework/Actor.h"
 #include "BaseTurbine.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTurbineDelegate, ABaseTurbine*, Turbine);
+
+const int MERGE_TURBINE_AMOUNT = 3;
+
 UCLASS()
 class WINDENERGYIDLE_CPP_API ABaseTurbine : public AActor
 {
 	GENERATED_BODY()
 
+public:
+	
+	UPROPERTY(BlueprintAssignable);
+	FTurbineDelegate OnMovementComplete;
+
 private:
 	bool bIsInitialPlacement = true;
 	bool bIsSelected;
 	bool bIsOverlapping;
-	float baseEnergyPerSecond = 5;
-	float windMultiplier = 0;
-	float previousWindMultiplier = 0;
+	
+	float BaseEnergyPerSecond = 5;
+	float WindMultiplier = 0;
+	float PreviousWindMultiplier = 0;
 
+	UPROPERTY(EditAnywhere)
+	int32 Level = 1;
+	
 	UPROPERTY(EditAnywhere)
 	float MovementSpeed = 1;
 
-	FVector placementLocation;
-	bool bMoveToPlacementLocation;
+	FVector PlacementLocation;
+	FVector MovementLocation;
+	bool bMove;
 
 protected:
 	UPROPERTY(Category="References", BlueprintReadWrite)
@@ -60,8 +74,12 @@ public:
 	
 	bool IsOverlapping() const;
 
-	void MoveToPlacementLocation();
-	void StartMovementToPlacementLocation();
+	void Move();
+	void StartMovement(const FVector& TargetMovementLocation);
 
-	bool IsInitialPlacement();
+	bool IsInitialPlacement() const;
+
+	int32 GetLevel() const;
+	float GetWindMultiplier() const;
+	FVector GetPlacementLocation() const;
 };
