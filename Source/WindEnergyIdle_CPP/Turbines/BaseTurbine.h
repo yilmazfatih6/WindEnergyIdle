@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/TimelineComponent.h"
 #include "GameFramework/Actor.h"
 #include "BaseTurbine.generated.h"
 
@@ -32,11 +33,14 @@ private:
 	UPROPERTY(EditAnywhere)
 	int32 Level = 1;
 	
-	UPROPERTY(EditAnywhere)
-	float MovementSpeed = 1;
-
+	UPROPERTY(EditAnywhere, Category = "Movement");
+	UCurveFloat* CurveFloat;
+	
+	FTimeline CurveTimeline;
+	FVector MovementStartLocation;
 	FVector PlacementLocation;
 	FVector MovementLocation;
+	
 	bool bMove;
 
 protected:
@@ -74,8 +78,13 @@ public:
 	
 	bool IsOverlapping() const;
 
-	void Move();
 	void StartMovement(const FVector& TargetMovementLocation);
+
+	UFUNCTION()
+	void Move(float Value);
+
+	UFUNCTION()
+	void EndMovement();
 
 	bool IsInitialPlacement() const;
 

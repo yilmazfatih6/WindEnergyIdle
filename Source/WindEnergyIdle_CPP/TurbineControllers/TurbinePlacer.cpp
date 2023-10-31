@@ -73,14 +73,14 @@ void UTurbinePlacer::MoveBackToPickupLocation()
 	// SelectedTurbine->SetActorLocation()
 	// UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] MoveBackToPickupLocation, Turbine: %s"), *PreviouslySelectedTurbine->GetName());
 
-	// Create a timer
-	FTimerHandle TimerHandle;
-
-	// Create a delegate that will call the FInterpTo function
-	const FTimerDelegate Delegate = FTimerDelegate::CreateUObject(TargetTurbine, &ABaseTurbine::Move);
-
-	// Set the timer to call the delegate at a specified interval
-	GetOwner()->GetWorldTimerManager().SetTimer(TimerHandle, Delegate, 0.1f, true);
+	// // Create a timer
+	// FTimerHandle TimerHandle;
+	//
+	// // Create a delegate that will call the FInterpTo function
+	// const FTimerDelegate Delegate = FTimerDelegate::CreateUObject(TargetTurbine, &ABaseTurbine::Move);
+	//
+	// // Set the timer to call the delegate at a specified interval
+	// GetOwner()->GetWorldTimerManager().SetTimer(TimerHandle, Delegate, 0.1f, true);
 
 	// OnTurbinePlacementCanceled.Broadcast();
 }

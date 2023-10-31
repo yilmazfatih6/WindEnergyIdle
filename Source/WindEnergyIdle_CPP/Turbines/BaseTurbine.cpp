@@ -56,7 +56,7 @@ void ABaseTurbine::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	Move();
+	CurveTimeline.TickTimeline(DeltaTime);
 }
 
 void ABaseTurbine::SetSelected()
@@ -105,30 +105,39 @@ bool ABaseTurbine::IsOverlapping() const
 	return bIsOverlapping;
 }
 
-void ABaseTurbine::Move()
+void ABaseTurbine::Move(float Value)
 {
-	if(!bMove) return;
-
-	const FVector Start = GetActorLocation();
-	const FVector End = MovementLocation;
-	const float Difference = FVector::Dist(Start, End);
-	
-	if(Difference <= 0.1f)
-	{
-		UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] MoveToPlacementLocation, Movement is completed!"));
-		bMove = false;
-		OnMovementComplete.Broadcast(this);
-		return;
-	}
-
-	SetActorLocation(FMath::Lerp(Start, End, GetWorld()->DeltaTimeSeconds * MovementSpeed));
-	// UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] MoveToPlacementLocation, SetActorLocation: %s"), *GetName());
+	// if(!bMove) return;
+	const FVector NewLocation = FMath::Lerp(MovementStartLocation, MovementLocation, Value);
+	SetActorLocation(NewLocation);
 }
 
 void ABaseTurbine::StartMovement(const FVector& TargetMovementLocation)
 {
-	bMove = true;
+	if(CurveFloat == nullptr)
+	{
+		return;
+	}
+	
 	MovementLocation = TargetMovementLocation;
+	MovementStartLocation = GetActorLocation();
+	
+	FOnTimelineFloat OnTimelineUpdate;
+	FOnTimelineEvent OnTimelineFinish;
+	
+	OnTimelineUpdate.BindDynamic(this, &ThisClass::Move);
+	OnTimelineFinish.BindDynamic(this, &ThisClass::EndMovement);
+	
+	CurveTimeline.AddInterpFloat(CurveFloat, OnTimelineUpdate);
+	CurveTimeline.SetTimelineFinishedFunc(OnTimelineFinish);
+	CurveTimeline.SetLooping(false);
+	CurveTimeline.PlayFromStart();
+}
+
+void ABaseTurbine::EndMovement()
+{
+	UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] EndMovement"));
+	OnMovementComplete.Broadcast(this);
 }
 
 bool ABaseTurbine::IsInitialPlacement() const
