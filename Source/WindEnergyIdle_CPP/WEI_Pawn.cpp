@@ -22,7 +22,7 @@ AWEI_Pawn::AWEI_Pawn()
 	TurbinePlacer = CreateDefaultSubobject<UTurbinePlacer>(TEXT("Turbine Placer"));
 	TurbineSelector = CreateDefaultSubobject<UTurbineSelector>(TEXT("Turbine Selector"));
 	TurbineMerger = CreateDefaultSubobject<UTurbineMerger>(TEXT("Turbine Merger"));
-	TurbineMerger->InjectData(TurbineSpawner);
+	TurbineMerger->InjectData(TurbineSpawner, TurbinePlacer);
 }
 
 // Called when the game starts or when spawned

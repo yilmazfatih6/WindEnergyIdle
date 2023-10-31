@@ -3,6 +3,7 @@
 
 #include "TurbineSpawner.h"
 
+#include "WindEnergyIdle_CPP/TurbineBlueprintData.h"
 #include "WindEnergyIdle_CPP/Turbines/BaseTurbine.h"
 
 // Sets default values for this component's properties
@@ -39,13 +40,13 @@ void UTurbineSpawner::SetCanSpawn(bool value)
 	bCanSpawn = value;
 }
 
-void UTurbineSpawner::SpawnTurbine(const int Level, bool &bWasSuccessful)
+ABaseTurbine* UTurbineSpawner::SpawnTurbine(const int Level, bool &bWasSuccessful)
 {
 	if (!bCanSpawn)
 	{
 		UE_LOG(LogTemp, Log, TEXT("[UTurbineSpawner] Can not spawn a new turbine!"));
 		bWasSuccessful = false;
-		return;
+		return nullptr;
 	}
 
 	UE_LOG(LogTemp, Log, TEXT("[UTurbineSpawner] Spawn a new turbine!"));
@@ -53,22 +54,21 @@ void UTurbineSpawner::SpawnTurbine(const int Level, bool &bWasSuccessful)
 
 	bWasSuccessful = true;
 	bCanSpawn = false;
-	SpawnedTurbine = GetWorld()->SpawnActor<ABaseTurbine>(TurbineBlueprints[Level - 1], SpawnLocation, SpawnRotation);
+	SpawnedTurbine = GetWorld()->SpawnActor<ABaseTurbine>(TurbineBlueprints->Turbines[Level - 1], SpawnLocation, SpawnRotation);
 	SpawnedTurbines.Add(SpawnedTurbine);
 
 	AddToTurbinesByLevels(SpawnedTurbine, Level);
 
 	// Raise event.
 	OnSpawnComplete.Broadcast(SpawnedTurbine);
-	
-	// SetTurbineSelected(SpawnedTurbine);
-	// UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] SpawnTurbine, Turbine: %s"), *SpawnedTurbine->GetName());
-	//
-	// OnTurbinePlacementStart.Broadcast();
+
+	return SpawnedTurbine;
 }
 
 void UTurbineSpawner::RemoveTurbineFromArray(ABaseTurbine* Turbine)
 {
+	UE_LOG(LogTemp, Log, TEXT("[UTurbineSpawner] RemoveTurbineFromArray %s"), *Turbine->GetName());
+
 	SpawnedTurbines.Remove(Turbine);
 	
 	RemoveToTurbinesByLevels(Turbine);
@@ -82,6 +82,11 @@ void UTurbineSpawner::DespawnTurbine(ABaseTurbine* Turbine)
 const TArray<TArray<ABaseTurbine*>*>* UTurbineSpawner::GetSpawnedTurbinesByLevel()  const
 {
 	return SpawnedTurbinesByLevel;
+}
+
+const UTurbineBlueprintData* UTurbineSpawner::GetTurbineBlueprints() const
+{
+	return TurbineBlueprints;
 }
 
 void UTurbineSpawner::AddToTurbinesByLevels(ABaseTurbine* Turbine, int Level)

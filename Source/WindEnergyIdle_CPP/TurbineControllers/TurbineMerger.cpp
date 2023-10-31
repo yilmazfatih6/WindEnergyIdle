@@ -4,6 +4,7 @@
 #include "TurbineMerger.h"
 
 #include "TurbinePlacer.h"
+#include "WindEnergyIdle_CPP/TurbineBlueprintData.h"
 #include "WindEnergyIdle_CPP/Turbines/BaseTurbine.h"
 
 UTurbineMerger::UTurbineMerger()
@@ -14,7 +15,7 @@ UTurbineMerger::UTurbineMerger()
 }
 
 // Sets default values for this component's properties
-void UTurbineMerger::InjectData(UTurbineSpawner* TurbineSpawnerReference)
+void UTurbineMerger::InjectData(UTurbineSpawner* TurbineSpawnerReference, UTurbinePlacer* TurbinePlacerReference)
 {
 	UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] InjectData"));
 
@@ -23,6 +24,7 @@ void UTurbineMerger::InjectData(UTurbineSpawner* TurbineSpawnerReference)
 	PrimaryComponentTick.bCanEverTick = false;
 
 	TurbineSpawner = TurbineSpawnerReference;
+	TurbinePlacer = TurbinePlacerReference;
 
 	UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] InjectData, TurbineSpawner: %s"), *TurbineSpawner->GetName());
 	TurbineSpawner->OnSpawnComplete.AddDynamic(this, &ThisClass::OnTurbineSpawn);
@@ -49,12 +51,6 @@ void UTurbineMerger::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 void UTurbineMerger::Merge()
 {
 	UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] Merge"));
-
-	if(!bCanMerge)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("[UTurbineMerger] Merge, can't merge!"));
-		return;
-	}
 	
 	if(TurbineSpawner == nullptr)
 	{
@@ -62,16 +58,31 @@ void UTurbineMerger::Merge()
 		return;
 	}
 
+	ClosestTurbines->Empty();
+
 	// Get turbines to merge!
 	for (int i = TurbineSpawner->GetSpawnedTurbinesByLevel()->Num() - 1; i >= 0 ; i--)
 	{
-		const auto Turbines = (*TurbineSpawner->GetSpawnedTurbinesByLevel())[i]; 
+		// Store turbines in a local variable.
+		const auto Turbines = (*TurbineSpawner->GetSpawnedTurbinesByLevel())[i];
+		
+		// Skip if this turbines are max level.
+		const auto TurbinesLevel = i + 1;
+		const auto MaxTurbineLevel = TurbineSpawner->GetTurbineBlueprints()->Turbines.Num();
+		UE_LOG(LogTemp, Warning, TEXT("[UTurbineMerger] TurbinesLevel=%d"), TurbinesLevel)
+		UE_LOG(LogTemp, Warning, TEXT("[UTurbineMerger] MaxTurbineLevel=%d"), MaxTurbineLevel)
+		
+		if(TurbinesLevel == MaxTurbineLevel) continue;
+
+		// Skip if number of turbines in this level is less than required amount
 		if(Turbines->Num() < MERGE_TURBINE_AMOUNT) continue;
 
 		bool bWasSuccessful = false;
 		FindClosestObjects(Turbines, bWasSuccessful);
 		if(bWasSuccessful) break;
 	}
+
+	UE_LOG(LogTemp, Warning, TEXT("[UTurbineMerger] Merge, ClosestTurbines->Num()=%d"), ClosestTurbines->Num());
 
 	// Return if there is not enough turbines to merge.
 	if(ClosestTurbines->Num() < MERGE_TURBINE_AMOUNT)
@@ -93,7 +104,7 @@ void UTurbineMerger::Merge()
 	}
 
 	// Finally Merge!
-	auto CenterTurbine = (*ClosestTurbines)[CenterTurbineIndex];
+	CenterTurbine = (*ClosestTurbines)[CenterTurbineIndex];
 	for (int i = 0; i < ClosestTurbines->Num(); ++i)
 	{
 		const auto Turbine = (*ClosestTurbines)[i];
@@ -108,8 +119,8 @@ void UTurbineMerger::Merge()
 
 void UTurbineMerger::OnTurbineSpawn(ABaseTurbine* Turbine)
 {
-	UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] OnTurbineSpawn"));
-	SetCanMerge();
+	// UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] OnTurbineSpawn"));
+	// SetCanMerge();
 }
 
 void UTurbineMerger::SetCanMerge()
@@ -188,21 +199,41 @@ void UTurbineMerger::FindClosestObjects(TArray<ABaseTurbine*>* Turbines, bool& b
 
 void UTurbineMerger::OnMergeMovementComplete(ABaseTurbine* Turbine)
 {
+	UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] OnMergeMovementComplete"));
 	Turbine->OnMovementComplete.RemoveDynamic(this, &ThisClass::OnMergeMovementComplete);
 	MergeMovementCompleteCount++;
 
-	// Despawn turbines if all movement completed.
+	// Check if all movement completed.
 	if(MergeMovementCompleteCount == MERGE_TURBINE_AMOUNT - 1)
 	{
+		// Reset counter.
+		MergeMovementCompleteCount = 0;
+		
+		const auto FirstClosestTurbine = (*ClosestTurbines)[0];
+		
+		// Despawn previous turbines
 		for (int i = 0; i < ClosestTurbines->Num(); ++i)
 		{
 			const auto CurrentTurbine = (*ClosestTurbines)[i];
-
-			bool bWasSuccessful = false;
-			TurbineSpawner->SpawnTurbine(CurrentTurbine->GetLevel() + 1, bWasSuccessful);
-
 			TurbineSpawner->DespawnTurbine(CurrentTurbine);
-
 		}
+
+		// Spawn next level turbine
+		const auto TurbineLevel = FirstClosestTurbine->GetLevel();
+		const auto NextTurbineLevel = TurbineLevel + 1;
+		bool bWasSuccessful = false;
+		const auto SpawnedTurbine = TurbineSpawner->SpawnTurbine(NextTurbineLevel, bWasSuccessful);
+
+		// Set location
+		SpawnedTurbine->SetActorLocation(CenterTurbine->GetActorLocation());
+
+		// Place
+
+		if(TurbinePlacer == nullptr)
+		{
+			UE_LOG(LogTemp, Log, TEXT("[TurbineMerger] OnMergeMovementComplete TurbinePlacer is null!"));
+			return;
+		}
+		TurbinePlacer->Place();
 	}
 }

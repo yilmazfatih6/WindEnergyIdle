@@ -56,7 +56,7 @@ protected:
 	virtual void BeginPlay() override;
 	
 	UFUNCTION(BlueprintCallable)
-	void BeginOverlap();
+	void BeginOverlap(AActor* OtherActor);
 	UFUNCTION(BlueprintCallable)
 	void EndOverlap();
 

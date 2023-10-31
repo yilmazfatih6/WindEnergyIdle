@@ -13,8 +13,18 @@ ABaseTurbine::ABaseTurbine()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-void ABaseTurbine::BeginOverlap()
+void ABaseTurbine::BeginOverlap(AActor* OtherActor)
 {
+	UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] BeginOverlap"));
+
+	const auto ThisActor = static_cast<AActor*>(this);
+	UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] BeginOverlap, OtherActor: %s"), *OtherActor->GetName());
+	UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] BeginOverlap, ThisActor: %s"), *ThisActor->GetName());
+
+	if(OtherActor == ThisActor) return;
+
+	UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] BeginOverlap, overlapping!"));
+	
 	bIsOverlapping = true;
 
 	SelectionMesh->SetMaterial(0, SelectionInvalidMaterial);

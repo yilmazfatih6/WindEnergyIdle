@@ -37,7 +37,7 @@ private:
 	FRotator SpawnRotation;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	TArray<TSubclassOf<class ABaseTurbine>> TurbineBlueprints;
+	class UTurbineBlueprintData* TurbineBlueprints;
 	// TSubclassOf<class ABaseTurbine> TurbineToSpawn;
 
 protected:
@@ -66,12 +66,14 @@ public:
 	void SetCanSpawn(bool value);
 
 	UFUNCTION(BlueprintCallable)
-	void SpawnTurbine(int Level, bool &bWasSuccessful);
+	ABaseTurbine* SpawnTurbine(int Level, bool &bWasSuccessful);
 
 	void RemoveTurbineFromArray(ABaseTurbine* Turbine);
 	void DespawnTurbine(ABaseTurbine* Turbine);
 
 	const TArray<TArray<ABaseTurbine*>*>* GetSpawnedTurbinesByLevel() const;
+
+	const UTurbineBlueprintData* GetTurbineBlueprints() const;
 
 #pragma endregion 
 };
