@@ -17,19 +17,18 @@ class WINDENERGYIDLE_CPP_API ABaseTurbine : public AActor
 	GENERATED_BODY()
 
 public:
-	
+
 	UPROPERTY(BlueprintAssignable);
 	FTurbineDelegate OnMovementComplete;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UTurbineEnergyController* TurbineEnergyController;
+	
 private:
 	bool bIsInitialPlacement = true;
 	bool bIsSelected;
 	bool bIsOverlapping;
 	
-	float BaseEnergyPerSecond = 5;
-	float WindMultiplier = 0;
-	float PreviousWindMultiplier = 0;
-
 	UPROPERTY(EditAnywhere)
 	int32 Level = 1;
 	
@@ -88,7 +87,7 @@ public:
 
 	bool IsInitialPlacement() const;
 
+	UTurbineEnergyController* GetEnergyController() const;
 	int32 GetLevel() const;
-	float GetWindMultiplier() const;
 	FVector GetPlacementLocation() const;
 };

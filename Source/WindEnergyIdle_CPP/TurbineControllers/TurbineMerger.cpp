@@ -5,6 +5,8 @@
 
 #include "TurbinePlacer.h"
 #include "WindEnergyIdle_CPP/TurbineBlueprintData.h"
+// #include "WindEnergyIdle_CPP/TurbineEnergyController.h"
+#include "WindEnergyIdle_CPP/TurbineEnergyController.h"
 #include "WindEnergyIdle_CPP/Turbines/BaseTurbine.h"
 
 UTurbineMerger::UTurbineMerger()
@@ -58,6 +60,12 @@ void UTurbineMerger::Merge()
 		return;
 	}
 
+	if(TurbineSpawner->GetSpawnedTurbinesByLevel() == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[UTurbineMerger] Merge, SpawnedTurbinesByLevel is null!"));
+		return;
+	}
+	
 	ClosestTurbines->Empty();
 
 	// Get turbines to merge!
@@ -96,7 +104,7 @@ void UTurbineMerger::Merge()
 	auto MaxWindMultiplier = -1.f;
 	for (int i = 0; i < ClosestTurbines->Num(); ++i)
 	{
-		const auto WindMultiplier = (*ClosestTurbines)[i]->GetWindMultiplier();
+		const auto WindMultiplier = 1; //(*ClosestTurbines)[i]->GetEnergyController()->GetWindMultiplier();
 		if(WindMultiplier <= MaxWindMultiplier) continue;
 
 		CenterTurbineIndex = i;
@@ -215,6 +223,7 @@ void UTurbineMerger::OnMergeMovementComplete(ABaseTurbine* Turbine)
 		for (int i = 0; i < ClosestTurbines->Num(); ++i)
 		{
 			const auto CurrentTurbine = (*ClosestTurbines)[i];
+			CurrentTurbine->GetEnergyController()->ResetEnergy();
 			TurbineSpawner->DespawnTurbine(CurrentTurbine);
 		}
 
