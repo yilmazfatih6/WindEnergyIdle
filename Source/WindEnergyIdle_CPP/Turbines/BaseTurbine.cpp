@@ -15,6 +15,12 @@ ABaseTurbine::ABaseTurbine()
 
 void ABaseTurbine::BeginOverlap(AActor* OtherActor)
 {
+	if(OtherActor == nullptr)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] BeginOverlap, Other actor is null!"));
+		return;
+	}
+	
 	UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] BeginOverlap"));
 
 	const auto ThisActor = static_cast<AActor*>(this);
@@ -22,6 +28,7 @@ void ABaseTurbine::BeginOverlap(AActor* OtherActor)
 	UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] BeginOverlap, ThisActor: %s"), *ThisActor->GetName());
 
 	if(OtherActor == ThisActor) return;
+	if(!OtherActor->IsA(ABaseTurbine::StaticClass())) return;
 
 	UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] BeginOverlap, overlapping!"));
 	
@@ -30,11 +37,15 @@ void ABaseTurbine::BeginOverlap(AActor* OtherActor)
 	SelectionMesh->SetMaterial(0, SelectionInvalidMaterial);
 }
 
-void ABaseTurbine::EndOverlap()
+void ABaseTurbine::EndOverlap(AActor* OtherActor)
 {
-	bIsOverlapping = false;
-
-	SelectionMesh->SetMaterial(0, SelectionValidMaterial);
+	if(OtherActor == nullptr)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] EndOverlap, Other actor is null!"));
+		return;
+	}
+	if(!OtherActor->IsA(ABaseTurbine::StaticClass())) return;
+	DisableOverlap();
 }
 
 // Called when the game starts or when spawned
@@ -46,9 +57,7 @@ void ABaseTurbine::BeginPlay()
 
 	PlacementLocation = GetActorLocation();
 
-	EndOverlap();
-	
-	SetUnselected();
+	DisableOverlap();
 }
 
 // Called every frame
@@ -61,7 +70,7 @@ void ABaseTurbine::Tick(float DeltaTime)
 
 void ABaseTurbine::SetSelected()
 {
-	EndOverlap();
+	DisableOverlap();
 	bIsSelected = true;
 	SelectionMesh->SetVisibility(true);
 }
@@ -117,6 +126,12 @@ void ABaseTurbine::EndMovement()
 {
 	UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] EndMovement"));
 	OnMovementComplete.Broadcast(this);
+}
+
+void ABaseTurbine::DisableOverlap()
+{
+	bIsOverlapping = false;
+	SelectionMesh->SetMaterial(0, SelectionValidMaterial);
 }
 
 bool ABaseTurbine::IsInitialPlacement() const

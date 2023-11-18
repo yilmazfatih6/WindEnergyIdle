@@ -61,7 +61,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void BeginOverlap(AActor* OtherActor);
 	UFUNCTION(BlueprintCallable)
-	void EndOverlap();
+	void EndOverlap(AActor* OtherActor);
 
 public:
 	// Sets default values for this actor's properties
@@ -84,6 +84,8 @@ public:
 
 	UFUNCTION()
 	void EndMovement();
+
+	void DisableOverlap();
 
 	bool IsInitialPlacement() const;
 

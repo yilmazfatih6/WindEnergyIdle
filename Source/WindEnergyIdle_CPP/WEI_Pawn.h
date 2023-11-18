@@ -15,7 +15,17 @@ class WINDENERGYIDLE_CPP_API AWEI_Pawn : public APawn
 {
 	GENERATED_BODY()
 
+private:
+	bool bIsLeftMouseDown;
+
 protected:
+	// Expose a mapping context as a property in your header file...
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
+	class UInputMappingContext* InputMapping;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
+	class UInputAction* InputAction;
+
 	// References
 	UPROPERTY(BlueprintReadOnly)
 	APlayerController* PlayerController;
@@ -31,23 +41,6 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UTurbineMerger* TurbineMerger;
-
-private:
-	bool bIsLeftMouseDown;
-
-protected:
-	// Expose a mapping context as a property in your header file...
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
-	class UInputMappingContext* InputMapping;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enhanced Input")
-	class UInputAction* InputAction;
-
-public:
-
-	
-public:
-	// Sets default values for this pawn's properties
-	AWEI_Pawn();
 
 private:
 
@@ -66,6 +59,8 @@ protected:
 
 
 public:	
+	AWEI_Pawn();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -74,6 +69,7 @@ public:
 
 	void OnLeftMouseClickPressed();
 	void OnLeftMouseClickRelease();
-
+	UTurbineSelector* GetTurbineSelector();
+	UTurbinePlacer* GetTurbinePlacer();
 	
 };

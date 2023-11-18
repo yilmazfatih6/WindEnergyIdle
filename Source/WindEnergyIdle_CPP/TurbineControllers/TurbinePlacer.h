@@ -41,6 +41,9 @@ private:
 	
 	UPROPERTY(EditDefaultsOnly, Category="Collision")
 	TEnumAsByte<ECollisionChannel> TraceChannelPropertyGround = ECC_Pawn;
+
+	UPROPERTY(EditAnywhere)
+	UTexture2D* MyTexture2D;
 public:	
 	// Sets default values for this component's properties
 	UTurbinePlacer();
@@ -55,7 +58,7 @@ public:
 
 	void HoverSelectedTurbine();
 	void Place();
-	void MoveBackToPickupLocation();
 	void SetTargetTurbine(ABaseTurbine* Turbine);
 	void SetHover(bool value);
+	// void GetWindMapValue(FHitResult Hit);
 };

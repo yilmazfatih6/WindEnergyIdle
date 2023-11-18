@@ -75,10 +75,19 @@ void AWEI_Pawn::OnLeftMouseClickPressed()
 void AWEI_Pawn::OnLeftMouseClickRelease()
 {
 	// UE_LOG(LogTemp, Log, TEXT("OnLeftMouseClickRelease"));
-
 	bIsLeftMouseDown = false;
 	TurbinePlacer->Place();
 	TurbinePlacer->SetHover(false);
+}
+
+UTurbineSelector* AWEI_Pawn::GetTurbineSelector()
+{
+	return TurbineSelector;
+}
+
+UTurbinePlacer* AWEI_Pawn::GetTurbinePlacer()
+{
+	return TurbinePlacer;
 }
 
 void AWEI_Pawn::OnTurbineSpawned(ABaseTurbine* Turbine)
