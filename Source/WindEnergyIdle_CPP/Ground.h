@@ -31,7 +31,7 @@ class WINDENERGYIDLE_CPP_API AGround : public AActor
 	void OnTimelineFinished();
 	
 public:	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	UStaticMeshComponent* StaticMeshComponent;
 
 	UMaterialInstanceDynamic* MaterialInstanceDynamic;
@@ -54,6 +54,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	float GetWindMapValue(FHitResult HitResult);
 };
