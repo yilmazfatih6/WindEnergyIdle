@@ -38,6 +38,7 @@ float UEnergyManager::IncreaseEnergyPerSecond(const float Value)
 {
 	EnergyPerSecond += Value;
 	OnEnergyPerSecondIncrease.Broadcast(EnergyPerSecond);
+	UE_LOG(LogTemp, Log, TEXT("EnergyPerSecond=%f"), EnergyPerSecond);
 	return EnergyPerSecond;
 }
 
@@ -45,6 +46,7 @@ float UEnergyManager::DecreaseEnergyPerSecond(const float Value)
 {
 	EnergyPerSecond -= Value;
 	OnEnergyPerSecondDecrease.Broadcast(EnergyPerSecond);
+	UE_LOG(LogTemp, Log, TEXT("EnergyPerSecond=%f"), EnergyPerSecond);
 	return EnergyPerSecond;
 }
 

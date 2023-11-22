@@ -29,8 +29,7 @@ private:
 	bool bCanSpawn = true;
 
 	ABaseTurbine* SpawnedTurbine;
-
-	TArray<ABaseTurbine*> SpawnedTurbines;
+	
 	TArray<TArray<ABaseTurbine*>*>* SpawnedTurbinesByLevel;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
@@ -41,6 +40,10 @@ private:
 	// TSubclassOf<class ABaseTurbine> TurbineToSpawn;
 
 protected:
+	
+	UPROPERTY(BlueprintReadOnly)
+	TArray<ABaseTurbine*> SpawnedTurbines;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spawn")
 	FVector SpawnLocation;
 

@@ -73,7 +73,7 @@ public:
 	void SetSelected();
 	void SetUnselected();
 
-	virtual void Place();
+	virtual void Place(float NewWindMultiplier = 0);
 	
 	bool IsOverlapping() const;
 

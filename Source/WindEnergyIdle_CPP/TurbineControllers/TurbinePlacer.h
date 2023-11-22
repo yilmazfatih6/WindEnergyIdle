@@ -29,6 +29,8 @@ private:
 	bool bHover;
 
 	class ABaseTurbine* TargetTurbine;
+
+	float WindMultiplier;
 	
 	// Tracing
 	FCollisionQueryParams QueryParams;
@@ -59,6 +61,11 @@ public:
 	void HoverSelectedTurbine();
 	void Place();
 	void SetTargetTurbine(ABaseTurbine* Turbine);
-	void SetHover(bool value);
-	// void GetWindMapValue(FHitResult Hit);
+	void SetHover(bool bValue);
+
+	UFUNCTION(BlueprintCallable)
+	void SetWindMultiplier(float NewWindMultiplier);
+	
+	UFUNCTION(BlueprintCallable)
+	bool IsPlacing() const;
 };

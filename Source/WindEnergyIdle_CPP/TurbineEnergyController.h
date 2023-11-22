@@ -33,6 +33,6 @@ public:
 
 	float GetWindMultiplier() const;
 
-	void SetEnergy();
+	void SetEnergy(float NewWindMultiplier);
 	void ResetEnergy() const;
 };
