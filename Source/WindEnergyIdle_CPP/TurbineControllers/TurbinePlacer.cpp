@@ -60,22 +60,19 @@ void UTurbinePlacer::HoverSelectedTurbine()
 	if (Hit.bBlockingHit && IsValid(Hit.GetActor()))
 	{
 		TargetTurbine->SetActorLocation(Hit.ImpactPoint);
+		OnPlacementChange.Broadcast(TargetTurbine);
 	}
 }
 
 void UTurbinePlacer::SetTargetTurbine(ABaseTurbine* Turbine)
 {
 	TargetTurbine = Turbine;
+	OnPlacementStart.Broadcast(TargetTurbine);
 }
 
 void UTurbinePlacer::SetHover(bool bValue)
 {
 	bHover = bValue && TargetTurbine != nullptr;
-}
-
-void UTurbinePlacer::SetWindMultiplier(float NewWindMultiplier)
-{
-	WindMultiplier = NewWindMultiplier;
 }
 
 bool UTurbinePlacer::IsPlacing() const
@@ -95,8 +92,8 @@ void UTurbinePlacer::Place()
 	}
 	else
 	{
-		TargetTurbine->Place(WindMultiplier);
-		OnPlace.Broadcast(TargetTurbine);
+		TargetTurbine->Place();
+		OnPlacementSucceed.Broadcast(TargetTurbine);
 		UE_LOG(LogTemp, Log, TEXT("[UTurbinePlacer] Place, Turbine: %s"), *TargetTurbine->GetName());
 	}
 

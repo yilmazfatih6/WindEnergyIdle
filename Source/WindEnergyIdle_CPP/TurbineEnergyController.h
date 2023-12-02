@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Turbines/BaseTurbine.h"
 #include "TurbineEnergyController.generated.h"
 
 
@@ -12,12 +13,21 @@ class WINDENERGYIDLE_CPP_API UTurbineEnergyController : public UActorComponent
 {
 	GENERATED_BODY()
 
+private:
+	
 	class AWindEnergyIdle_CPPGameModeBase* GameMode;
 
 	UPROPERTY(EditDefaultsOnly)
 	float BaseEnergyPerSecond = 5;
+
+	float Energy = 0;
 	float WindMultiplier = 0;
+	
+	float PreviousEnergy = 0;
 	float PreviousWindMultiplier = 0;
+
+	float PreviewedWindMultiplier = 0;
+	float PreviewedEnergy = 0;
 
 public:	
 	// Sets default values for this component's properties
@@ -33,6 +43,17 @@ public:
 
 	float GetWindMultiplier() const;
 
-	void SetEnergy(float NewWindMultiplier);
+	UFUNCTION(BlueprintCallable)
+	void SetPreviewedEnergy(float NewWindMultiplier);
+
+	UFUNCTION(BlueprintCallable)
+	float GetPreviewedEnergy();
+	
+	UFUNCTION(BlueprintCallable)
+	void SetEnergy();
+
+	UFUNCTION(BlueprintCallable)
+	float GetEnergy();
+
 	void ResetEnergy() const;
 };

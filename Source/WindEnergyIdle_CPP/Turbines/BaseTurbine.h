@@ -8,6 +8,7 @@
 #include "BaseTurbine.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTurbineDelegate, ABaseTurbine*, Turbine);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FVoidDelegate);
 
 const int MERGE_TURBINE_AMOUNT = 3;
 
@@ -73,7 +74,7 @@ public:
 	void SetSelected();
 	void SetUnselected();
 
-	virtual void Place(float NewWindMultiplier = 0);
+	virtual void Place();
 	
 	bool IsOverlapping() const;
 
@@ -92,4 +93,7 @@ public:
 	UTurbineEnergyController* GetEnergyController() const;
 	int32 GetLevel() const;
 	FVector GetPlacementLocation() const;
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	FTransform GetEnergyTextPosition() const;
 };

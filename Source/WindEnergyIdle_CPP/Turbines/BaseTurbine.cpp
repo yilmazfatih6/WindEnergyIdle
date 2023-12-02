@@ -81,10 +81,10 @@ void ABaseTurbine::SetUnselected()
 	SelectionMesh->SetVisibility(false);
 }
 
-void ABaseTurbine::Place(float NewWindMultiplier)
+void ABaseTurbine::Place()
 {
 	bIsInitialPlacement = false;
-	TurbineEnergyController->SetEnergy(NewWindMultiplier);
+	TurbineEnergyController->SetEnergy();
 	PlacementLocation = GetActorLocation();
 }
 

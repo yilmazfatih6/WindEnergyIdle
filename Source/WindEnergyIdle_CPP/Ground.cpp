@@ -37,7 +37,7 @@ void AGround::BeginPlay()
 	
 	auto Pawn = static_cast<AWEI_Pawn*>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	Pawn->GetTurbineSelector()->OnSelect.AddDynamic(this, &ThisClass::OnTurbineSelected);
-	Pawn->GetTurbinePlacer()->OnPlace.AddDynamic(this, &ThisClass::OnTurbinePlaced);
+	Pawn->GetTurbinePlacer()->OnPlacementSucceed.AddDynamic(this, &ThisClass::OnTurbinePlaced);
 }
 
 // Called every frame

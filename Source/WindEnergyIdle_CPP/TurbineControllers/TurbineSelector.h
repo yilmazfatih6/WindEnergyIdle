@@ -17,6 +17,9 @@ public:
 	UPROPERTY(BlueprintAssignable);
 	FTurbineDelegate OnSelect;
 	
+	UPROPERTY(BlueprintAssignable);
+	FVoidDelegate OnUnselect;
+	
 private:
 	APlayerController* PlayerController;
 
@@ -52,5 +55,8 @@ public:
 	void SetSelectedTurbine(ABaseTurbine* Turbine);
 	void ResetSelectedTurbine();
 	void LineTraceTurbine();
-	void SetCanSelect(bool value);
+	void SetCanSelect(bool bValue);
+
+	UFUNCTION(BlueprintCallable)
+	ABaseTurbine* GetSelectedTurbine() const;
 };

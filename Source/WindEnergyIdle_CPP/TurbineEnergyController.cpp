@@ -38,11 +38,35 @@ float UTurbineEnergyController::GetWindMultiplier() const
 	return WindMultiplier;
 }
 
-void UTurbineEnergyController::SetEnergy(const float NewWindMultiplier)
+
+// void UTurbineEnergyController::SetWindMultiplier(float NewWindMultiplier)
+// {
+// 	PreviousWindMultiplier = WindMultiplier;
+// 	WindMultiplier = NewWindMultiplier;
+//
+// 	PreviousEnergy = BaseEnergyPerSecond * PreviousWindMultiplier;
+// 	Energy = BaseEnergyPerSecond * WindMultiplier;
+// }
+
+void UTurbineEnergyController::SetPreviewedEnergy(float NewWindMultiplier)
+{
+	PreviewedWindMultiplier = NewWindMultiplier;
+	PreviewedEnergy = BaseEnergyPerSecond * PreviewedWindMultiplier;
+}
+
+float UTurbineEnergyController::GetPreviewedEnergy()
+{
+	return PreviewedEnergy;
+}
+
+void UTurbineEnergyController::SetEnergy()
 {
 	PreviousWindMultiplier = WindMultiplier;
-	WindMultiplier = NewWindMultiplier;
+	WindMultiplier = PreviewedWindMultiplier;
 
+	PreviousEnergy = BaseEnergyPerSecond * PreviousWindMultiplier;
+	Energy = BaseEnergyPerSecond * WindMultiplier;
+	
 	const float EnergyDifference = (BaseEnergyPerSecond * WindMultiplier) - (BaseEnergyPerSecond * PreviousWindMultiplier);
 
 	UE_LOG(LogTemp, Log, TEXT("[BaseTurbine] EnergyDifference = %f"), EnergyDifference);
@@ -57,6 +81,11 @@ void UTurbineEnergyController::SetEnergy(const float NewWindMultiplier)
 		GameMode->EnergyManager->DecreaseEnergyPerSecond(-EnergyDifference);
 		UE_LOG(LogTemp, Log, TEXT("[BaseTurbine] Decrease Energy Per Second!"));
 	}
+}
+
+float UTurbineEnergyController::GetEnergy()
+{
+	return Energy;
 }
 
 void UTurbineEnergyController::ResetEnergy() const

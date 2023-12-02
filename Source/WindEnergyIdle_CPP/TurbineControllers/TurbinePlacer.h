@@ -13,9 +13,15 @@ class WINDENERGYIDLE_CPP_API UTurbinePlacer : public UActorComponent
 	GENERATED_BODY()
 
 public:
+
+	UPROPERTY(BlueprintAssignable);
+	FTurbineDelegate OnPlacementStart;
+
+	UPROPERTY(BlueprintAssignable);
+	FTurbineDelegate OnPlacementChange;
 	
 	UPROPERTY(BlueprintAssignable);
-	FTurbineDelegate OnPlace;
+	FTurbineDelegate OnPlacementSucceed;
 
 	UPROPERTY(BlueprintAssignable);
 	FTurbineDelegate OnPlacementFail;
@@ -29,8 +35,6 @@ private:
 	bool bHover;
 
 	class ABaseTurbine* TargetTurbine;
-
-	float WindMultiplier;
 	
 	// Tracing
 	FCollisionQueryParams QueryParams;
@@ -62,9 +66,6 @@ public:
 	void Place();
 	void SetTargetTurbine(ABaseTurbine* Turbine);
 	void SetHover(bool bValue);
-
-	UFUNCTION(BlueprintCallable)
-	void SetWindMultiplier(float NewWindMultiplier);
 	
 	UFUNCTION(BlueprintCallable)
 	bool IsPlacing() const;

@@ -22,7 +22,7 @@ AWEI_Pawn::AWEI_Pawn()
 	TurbinePlacer = CreateDefaultSubobject<UTurbinePlacer>(TEXT("Turbine Placer"));
 	TurbineSelector = CreateDefaultSubobject<UTurbineSelector>(TEXT("Turbine Selector"));
 	TurbineMerger = CreateDefaultSubobject<UTurbineMerger>(TEXT("Turbine Merger"));
-	TurbineMerger->InjectData(TurbineSpawner, TurbinePlacer);
+	TurbineMerger->InjectData(TurbineSpawner, TurbinePlacer, TurbineSelector);
 }
 
 // Called when the game starts or when spawned
@@ -32,7 +32,7 @@ void AWEI_Pawn::BeginPlay()
 	
 	TurbineSpawner->OnSpawnComplete.AddDynamic(this, &ThisClass::OnTurbineSpawned);
 	TurbineSelector->OnSelect.AddDynamic(this, &ThisClass::OnTurbineSelected);
-	TurbinePlacer->OnPlace.AddDynamic(this, &ThisClass::OnTurbinePlaced);
+	TurbinePlacer->OnPlacementSucceed.AddDynamic(this, &ThisClass::OnTurbinePlaced);
 	TurbinePlacer->OnPlacementFail.AddDynamic(this, &ThisClass::OnTurbinePlacementFailed);
 }
 

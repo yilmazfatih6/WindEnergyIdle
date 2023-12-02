@@ -43,6 +43,7 @@ void UTurbineSelector::ResetSelectedTurbine()
 	SetCanSelect(true);
 	SelectedTurbine->SetUnselected();
 	SelectedTurbine = nullptr;
+	OnUnselect.Broadcast();
 }
 
 void UTurbineSelector::LineTraceTurbine()
@@ -80,7 +81,12 @@ void UTurbineSelector::LineTraceTurbine()
 	// OnTurbinePlacementStart.Broadcast();
 }
 
-void UTurbineSelector::SetCanSelect(bool value)
+void UTurbineSelector::SetCanSelect(const bool bValue)
 {
-	bCanSelect = value;
+	bCanSelect = bValue;
+}
+
+ABaseTurbine* UTurbineSelector::GetSelectedTurbine() const
+{
+	return SelectedTurbine;
 }

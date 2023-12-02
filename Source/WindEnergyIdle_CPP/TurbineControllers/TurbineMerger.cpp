@@ -6,6 +6,7 @@
 #include "TurbinePlacer.h"
 #include "WindEnergyIdle_CPP/TurbineBlueprintData.h"
 // #include "WindEnergyIdle_CPP/TurbineEnergyController.h"
+#include "TurbineSelector.h"
 #include "WindEnergyIdle_CPP/TurbineEnergyController.h"
 #include "WindEnergyIdle_CPP/Turbines/BaseTurbine.h"
 
@@ -17,7 +18,7 @@ UTurbineMerger::UTurbineMerger()
 }
 
 // Sets default values for this component's properties
-void UTurbineMerger::InjectData(UTurbineSpawner* TurbineSpawnerReference, UTurbinePlacer* TurbinePlacerReference)
+void UTurbineMerger::InjectData(UTurbineSpawner* TurbineSpawnerReference, UTurbinePlacer* TurbinePlacerReference, UTurbineSelector* TurbineSelectorReference)
 {
 	UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] InjectData"));
 
@@ -27,6 +28,7 @@ void UTurbineMerger::InjectData(UTurbineSpawner* TurbineSpawnerReference, UTurbi
 
 	TurbineSpawner = TurbineSpawnerReference;
 	TurbinePlacer = TurbinePlacerReference;
+	TurbineSelector = TurbineSelectorReference;
 
 	UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] InjectData, TurbineSpawner: %s"), *TurbineSpawner->GetName());
 	TurbineSpawner->OnSpawnComplete.AddDynamic(this, &ThisClass::OnTurbineSpawn);
@@ -113,6 +115,7 @@ void UTurbineMerger::Merge()
 
 	// Finally Merge!
 	CenterTurbine = (*ClosestTurbines)[CenterTurbineIndex];
+	CenterTurbineWindMultiplier = CenterTurbine->GetEnergyController()->GetWindMultiplier();
 	for (int i = 0; i < ClosestTurbines->Num(); ++i)
 	{
 		const auto Turbine = (*ClosestTurbines)[i];
@@ -243,6 +246,8 @@ void UTurbineMerger::OnMergeMovementComplete(ABaseTurbine* Turbine)
 			UE_LOG(LogTemp, Log, TEXT("[TurbineMerger] OnMergeMovementComplete TurbinePlacer is null!"));
 			return;
 		}
+
+		TurbineSelector->GetSelectedTurbine()->GetEnergyController()->SetPreviewedEnergy(CenterTurbineWindMultiplier);
 		TurbinePlacer->Place();
 	}
 }

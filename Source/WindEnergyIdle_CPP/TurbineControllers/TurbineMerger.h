@@ -25,7 +25,9 @@ private:
 	bool bCanMerge;
 	UTurbineSpawner* TurbineSpawner;
 	UTurbinePlacer* TurbinePlacer;
+	UTurbineSelector* TurbineSelector;
 	ABaseTurbine* CenterTurbine;
+	float CenterTurbineWindMultiplier;
 	TArray<ABaseTurbine*>* ClosestTurbines;
 	int MergeMovementCompleteCount;
 	
@@ -47,7 +49,8 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION()
-	void InjectData(UTurbineSpawner* TurbineSpawnerReference, UTurbinePlacer* TurbinePlacerReference);
+	void InjectData(UTurbineSpawner* TurbineSpawnerReference, UTurbinePlacer* TurbinePlacerReference, UTurbineSelector*
+	                TurbineSelectorReference);
 	
 	UFUNCTION(BlueprintCallable)
 	void Merge();	
