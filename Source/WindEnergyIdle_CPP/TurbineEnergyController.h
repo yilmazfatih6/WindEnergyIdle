@@ -41,13 +41,17 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintCallable)
 	float GetWindMultiplier() const;
+
+	UFUNCTION(BlueprintCallable)
+	float GetPreviousWindMultiplier() const;
 
 	UFUNCTION(BlueprintCallable)
 	void SetPreviewedEnergy(float NewWindMultiplier);
 
 	UFUNCTION(BlueprintCallable)
-	float GetPreviewedEnergy();
+	float GetPreviewedEnergy() const;
 	
 	UFUNCTION(BlueprintCallable)
 	void SetEnergy();

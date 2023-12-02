@@ -38,15 +38,10 @@ float UTurbineEnergyController::GetWindMultiplier() const
 	return WindMultiplier;
 }
 
-
-// void UTurbineEnergyController::SetWindMultiplier(float NewWindMultiplier)
-// {
-// 	PreviousWindMultiplier = WindMultiplier;
-// 	WindMultiplier = NewWindMultiplier;
-//
-// 	PreviousEnergy = BaseEnergyPerSecond * PreviousWindMultiplier;
-// 	Energy = BaseEnergyPerSecond * WindMultiplier;
-// }
+float UTurbineEnergyController::GetPreviousWindMultiplier() const
+{
+	return PreviewedWindMultiplier;
+}
 
 void UTurbineEnergyController::SetPreviewedEnergy(float NewWindMultiplier)
 {
@@ -54,7 +49,7 @@ void UTurbineEnergyController::SetPreviewedEnergy(float NewWindMultiplier)
 	PreviewedEnergy = BaseEnergyPerSecond * PreviewedWindMultiplier;
 }
 
-float UTurbineEnergyController::GetPreviewedEnergy()
+float UTurbineEnergyController::GetPreviewedEnergy() const
 {
 	return PreviewedEnergy;
 }
