@@ -14,9 +14,10 @@ class WINDENERGYIDLE_CPP_API AGround : public AActor
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, Category = "Movement");
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	;
 	UCurveFloat* CurveFloat;
-	
+
 	FTimeline CurveTimeline;
 	FOnTimelineFloat OnTimelineUpdate;
 	FOnTimelineEvent OnTimelineFinish;
@@ -29,8 +30,8 @@ class WINDENERGYIDLE_CPP_API AGround : public AActor
 
 	UFUNCTION()
 	void OnTimelineFinished();
-	
-public:	
+
+public:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
 	UStaticMeshComponent* StaticMeshComponent;
 
@@ -42,7 +43,7 @@ private:
 
 	UFUNCTION()
 	void OnTurbinePlaced(ABaseTurbine* Turbine);
-	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -50,7 +51,7 @@ protected:
 public:
 	// Sets default values for this actor's properties
 	AGround();
-	
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

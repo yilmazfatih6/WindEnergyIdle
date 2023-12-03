@@ -22,7 +22,6 @@ void UUpgrade::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
 }
 
 
@@ -38,4 +37,3 @@ void UUpgrade::Use()
 {
 	// if(Data->PriceGraph->GetCurves().)
 }
-

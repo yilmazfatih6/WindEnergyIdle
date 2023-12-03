@@ -35,15 +35,14 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UTurbineSelector* TurbineSelector;
-	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UTurbinePlacer* TurbinePlacer;
-	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UTurbineMerger* TurbineMerger;
 
 private:
-
 	UFUNCTION()
 	void OnTurbineSpawned(ABaseTurbine* Turbine);
 	UFUNCTION()
@@ -52,13 +51,12 @@ private:
 	void OnTurbinePlaced(ABaseTurbine* Turbine);
 	UFUNCTION()
 	void OnTurbinePlacementFailed(ABaseTurbine* Turbine);
-	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-
-public:	
+public:
 	AWEI_Pawn();
 
 	// Called every frame
@@ -71,5 +69,4 @@ public:
 	void OnLeftMouseClickRelease();
 	UTurbineSelector* GetTurbineSelector();
 	UTurbinePlacer* GetTurbinePlacer();
-	
 };

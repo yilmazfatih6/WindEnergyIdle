@@ -26,7 +26,6 @@ void UUpgradeManager::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
 }
 
 
@@ -37,4 +36,3 @@ void UUpgradeManager::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 	// ...
 }
-

@@ -15,12 +15,15 @@ class WINDENERGYIDLE_CPP_API UUpgradeDataAsset : public UDataAsset
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly);
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	;
 	FString Name;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	;
 	UTexture* Image;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	;
 	UCurveFloat* PriceGraph;
 };

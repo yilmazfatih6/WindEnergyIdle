@@ -8,9 +8,10 @@
 #include "BaseTurbine.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTurbineDelegate, ABaseTurbine*, Turbine);
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FVoidDelegate);
 
-const int MERGE_TURBINE_AMOUNT = 3;
+constexpr int MERGE_TURBINE_AMOUNT = 3;
 
 UCLASS()
 class WINDENERGYIDLE_CPP_API ABaseTurbine : public AActor
@@ -18,29 +19,30 @@ class WINDENERGYIDLE_CPP_API ABaseTurbine : public AActor
 	GENERATED_BODY()
 
 public:
-
-	UPROPERTY(BlueprintAssignable);
+	UPROPERTY(BlueprintAssignable)
+	;
 	FTurbineDelegate OnMovementComplete;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UTurbineEnergyController* TurbineEnergyController;
-	
+
 private:
 	bool bIsInitialPlacement = true;
 	bool bIsSelected;
 	bool bIsOverlapping;
-	
+
 	UPROPERTY(EditAnywhere)
 	int32 Level = 1;
-	
-	UPROPERTY(EditAnywhere, Category = "Movement");
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	;
 	UCurveFloat* CurveFloat;
-	
+
 	FTimeline CurveTimeline;
 	FVector MovementStartLocation;
 	FVector PlacementLocation;
 	FVector MovementLocation;
-	
+
 	bool bMove;
 
 protected:
@@ -58,7 +60,7 @@ private:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
+
 	UFUNCTION(BlueprintCallable)
 	void BeginOverlap(AActor* OtherActor);
 	UFUNCTION(BlueprintCallable)
@@ -67,7 +69,7 @@ protected:
 public:
 	// Sets default values for this actor's properties
 	ABaseTurbine();
-	
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -75,7 +77,7 @@ public:
 	void SetUnselected();
 
 	virtual void Place();
-	
+
 	bool IsOverlapping() const;
 
 	void StartMovement(const FVector& TargetMovementLocation);

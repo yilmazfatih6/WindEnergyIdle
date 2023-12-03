@@ -5,13 +5,13 @@
 
 #include "WEI_Pawn.h"
 #include "Kismet/GameplayStatics.h"
-#include "TurbineControllers/TurbinePlacer.h"
-#include "TurbineControllers/TurbineSelector.h"
+#include "WindEnergyIdle_CPP/PawnComponents/TurbinePlacer.h"
+#include "WindEnergyIdle_CPP/PawnComponents/TurbineSelector.h"
 
 // Sets default values
 AGround::AGround()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
@@ -32,9 +32,9 @@ void AGround::BeginPlay()
 	CurveTimeline.AddInterpFloat(CurveFloat, OnTimelineUpdate);
 	CurveTimeline.SetTimelineFinishedFunc(OnTimelineFinish);
 	CurveTimeline.SetLooping(false);
-	
+
 	StaticMeshComponent->SetMaterial(0, MaterialInstanceDynamic);
-	
+
 	auto Pawn = static_cast<AWEI_Pawn*>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	Pawn->GetTurbineSelector()->OnSelect.AddDynamic(this, &ThisClass::OnTurbineSelected);
 	Pawn->GetTurbinePlacer()->OnPlacementSucceed.AddDynamic(this, &ThisClass::OnTurbinePlaced);
@@ -63,7 +63,7 @@ void AGround::OnTurbinePlaced(ABaseTurbine* Turbine)
 void AGround::EnableWindMap()
 {
 	UE_LOG(LogTemp, Log, TEXT("[AGround] EnableWindMap"));
-	
+
 	CurveTimeline.PlayFromStart();
 }
 
@@ -87,4 +87,3 @@ float AGround::GetWindMapValue_Implementation(FHitResult HitResult)
 	UE_LOG(LogTemp, Log, TEXT("[AGround] GetWindMapValue_Implementation"));
 	return 1.f;
 }
-

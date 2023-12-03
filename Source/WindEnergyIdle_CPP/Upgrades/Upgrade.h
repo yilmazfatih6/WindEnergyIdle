@@ -7,29 +7,28 @@
 #include "Upgrade.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class WINDENERGYIDLE_CPP_API UUpgrade : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UUpgrade();
-
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 	int Level = 1;
-	
-public:	
+
+public:
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
+	                           FActorComponentTickFunction* ThisTickFunction) override;
 
 	virtual void Use();
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	class UUpgradeDataAsset* Data;
-	
 };

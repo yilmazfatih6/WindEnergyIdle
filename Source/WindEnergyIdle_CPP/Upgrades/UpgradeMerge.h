@@ -13,5 +13,4 @@ UCLASS()
 class WINDENERGYIDLE_CPP_API UUpgradeMerge : public UUpgrade
 {
 	GENERATED_BODY()
-	
 };

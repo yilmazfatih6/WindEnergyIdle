@@ -2,12 +2,12 @@
 
 #include "BaseTurbine.h"
 
-#include "WindEnergyIdle_CPP/TurbineEnergyController.h"
+#include "WindEnergyIdle_CPP/Turbines/TurbineEnergyController.h"
 
 // Sets default values
 ABaseTurbine::ABaseTurbine()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	TurbineEnergyController = CreateDefaultSubobject<UTurbineEnergyController>(TEXT("Energy Controller"));
@@ -15,23 +15,29 @@ ABaseTurbine::ABaseTurbine()
 
 void ABaseTurbine::BeginOverlap(AActor* OtherActor)
 {
-	if(OtherActor == nullptr)
+	if (OtherActor == nullptr)
 	{
 		UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] BeginOverlap, Other actor is null!"));
 		return;
 	}
-	
+
 	UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] BeginOverlap"));
 
 	const auto ThisActor = static_cast<AActor*>(this);
 	UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] BeginOverlap, OtherActor: %s"), *OtherActor->GetName());
 	UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] BeginOverlap, ThisActor: %s"), *ThisActor->GetName());
 
-	if(OtherActor == ThisActor) return;
-	if(!OtherActor->IsA(ABaseTurbine::StaticClass())) return;
+	if (OtherActor == ThisActor)
+	{
+		return;
+	}
+	if (!OtherActor->IsA(StaticClass()))
+	{
+		return;
+	}
 
 	UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] BeginOverlap, overlapping!"));
-	
+
 	bIsOverlapping = true;
 
 	SelectionMesh->SetMaterial(0, SelectionInvalidMaterial);
@@ -39,12 +45,15 @@ void ABaseTurbine::BeginOverlap(AActor* OtherActor)
 
 void ABaseTurbine::EndOverlap(AActor* OtherActor)
 {
-	if(OtherActor == nullptr)
+	if (OtherActor == nullptr)
 	{
 		UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] EndOverlap, Other actor is null!"));
 		return;
 	}
-	if(!OtherActor->IsA(ABaseTurbine::StaticClass())) return;
+	if (!OtherActor->IsA(StaticClass()))
+	{
+		return;
+	}
 	DisableOverlap();
 }
 
@@ -102,20 +111,20 @@ void ABaseTurbine::Move(float Value)
 
 void ABaseTurbine::StartMovement(const FVector& TargetMovementLocation)
 {
-	if(CurveFloat == nullptr)
+	if (CurveFloat == nullptr)
 	{
 		return;
 	}
-	
+
 	MovementLocation = TargetMovementLocation;
 	MovementStartLocation = GetActorLocation();
-	
+
 	FOnTimelineFloat OnTimelineUpdate;
 	FOnTimelineEvent OnTimelineFinish;
-	
+
 	OnTimelineUpdate.BindDynamic(this, &ThisClass::Move);
 	OnTimelineFinish.BindDynamic(this, &ThisClass::EndMovement);
-	
+
 	CurveTimeline.AddInterpFloat(CurveFloat, OnTimelineUpdate);
 	CurveTimeline.SetTimelineFinishedFunc(OnTimelineFinish);
 	CurveTimeline.SetLooping(false);
