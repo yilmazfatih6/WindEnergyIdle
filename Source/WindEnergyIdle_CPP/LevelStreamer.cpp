@@ -3,32 +3,72 @@
 
 #include "LevelStreamer.h"
 
+#include "DefaultSaveGame.h"
 #include "WEI_GameInstance.h"
+#include "DataAssets/LevelListDataAsset.h"
 
-// Sets default values
 ALevelStreamer::ALevelStreamer()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
+	PrimaryActorTick.bCanEverTick = false;
 }
+
+void ALevelStreamer::InjectData(UWEI_GameInstance* CurrentGameInstance)
+{
+	GameInstance = CurrentGameInstance;
+	DefaultSaveGame = GameInstance->GetSaveGame();
+}
+
 
 // Called when the game starts or when spawned
 void ALevelStreamer::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void ALevelStreamer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
-void ALevelStreamer::LoadCurrentLevel()
+int ALevelStreamer::GetLevelIndex(int LevelNumber)
 {
-	auto gameInstance = static_cast<UWEI_GameInstance>(GetGameInstance());
+	const auto NumberOfLevels = LevelList->Levels.Num();
+	UE_LOG(LogTemp, Log, TEXT("[ALevelStreamer] GetLevelIndex_Implementation, NumberOfLevels: %d"), NumberOfLevels);
+	const auto CurrentIndex = LevelNumber - 1;
+	auto Index = CurrentIndex;
+	const auto LoopCount = static_cast<float>(CurrentIndex) / NumberOfLevels;
+	if(LoopCount >= 1)
+	{
+		constexpr auto LoopLevelFrom = 1;
+		const auto LoopedLevelCount = NumberOfLevels - LoopLevelFrom + 1;
+		Index = (CurrentIndex - NumberOfLevels) % LoopedLevelCount;
+		Index += LoopLevelFrom - 1;
+	}
+
+	return Index;
 }
 
+void ALevelStreamer::LoadMaxLevel()
+{
+	const auto LevelNumber = DefaultSaveGame->GetMaxLevelNumber();
+	LoadLevel(LevelNumber);
+}
+
+void ALevelStreamer::LoadLastLevel()
+{
+	const auto LevelNumber = DefaultSaveGame->GetLastLevelNumber();
+	LoadLevel(LevelNumber);
+}
+
+void ALevelStreamer::LoadPreviousLevel()
+{
+	const auto LevelNumber = DefaultSaveGame->GetLastLevelNumber() - 1;
+	LoadLevel(LevelNumber);
+}
+
+void ALevelStreamer::LoadNextLevel()
+{
+	const auto LevelNumber = DefaultSaveGame->GetLastLevelNumber() + 1;
+	LoadLevel(LevelNumber);
+}

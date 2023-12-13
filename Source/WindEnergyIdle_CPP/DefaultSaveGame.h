@@ -15,6 +15,20 @@ class WINDENERGYIDLE_CPP_API UDefaultSaveGame : public USaveGame
 	GENERATED_BODY()
 
 private:
-	int CurrentLevel;
+	int MaxLevelNumber = 1;
+	int LastLevelNumber = 1;
 	
+public:
+
+	UFUNCTION(BlueprintCallable)
+	int GetMaxLevelNumber() const;
+
+	UFUNCTION(BlueprintCallable)
+	int SetMaxLevelNumber(int Value);
+
+	UFUNCTION(BlueprintCallable)
+	int GetLastLevelNumber() const;
+
+	UFUNCTION(BlueprintCallable)
+	int SetLastLevelNumber(int Value);
 };

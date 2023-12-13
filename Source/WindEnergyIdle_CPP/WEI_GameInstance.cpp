@@ -26,24 +26,28 @@ void UWEI_GameInstance::Save()
 
 	FAsyncSaveGameToSlotDelegate SavedDelegate;
 	SavedDelegate.BindUObject(this, &ThisClass::OnSaveCompleted);
-	UGameplayStatics::AsyncSaveGameToSlot(DefaultSaveGame, SaveGameSlotName, UserIndex, SavedDelegate);
+	UGameplayStatics::AsyncSaveGameToSlot(DefaultSaveGame, "Save Game", 0, SavedDelegate);
 }
 
 void UWEI_GameInstance::Load()
 {
-	const bool bDoesSaveGameExist = UGameplayStatics::DoesSaveGameExist(SaveGameSlotName, UserIndex);
+	const bool bDoesSaveGameExist = UGameplayStatics::DoesSaveGameExist("Save Game", 0);
 	if(bDoesSaveGameExist)
 	{
-		USaveGame* SaveGame = UGameplayStatics::LoadGameFromSlot(SaveGameSlotName, UserIndex);
+		USaveGame* SaveGame = UGameplayStatics::LoadGameFromSlot("Save Game", 0);
 		if(SaveGame->IsA(UDefaultSaveGame::StaticClass()))
 		{
 			DefaultSaveGame = static_cast<UDefaultSaveGame*>(SaveGame);
 		}
 		else
 		{
-			const auto CreatedSaveGame = UGameplayStatics::CreateSaveGameObject(UDefaultSaveGame::StaticClass());
-			DefaultSaveGame = static_cast<UDefaultSaveGame*>(CreatedSaveGame);
+			UE_LOG(LogTemp, Log, TEXT("[UWEI_GameInstance] Created Save Game is not type of UDefaultSaveGame"));
 		}
+	}
+	else
+	{
+		const auto CreatedSaveGame = UGameplayStatics::CreateSaveGameObject(UDefaultSaveGame::StaticClass());
+		DefaultSaveGame = static_cast<UDefaultSaveGame*>(CreatedSaveGame);
 	}
 }
 

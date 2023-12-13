@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Math/UnrealMathUtility.h"
 #include "EnhancedInputSubsystems.h"
+#include "LevelStreamer.h"
 #include "EnhancedInput/Public/EnhancedInputComponent.h"
 #include "WindEnergyIdle_CPP/PawnComponents/TurbineMerger.h"
 #include "WindEnergyIdle_CPP/PawnComponents/TurbinePlacer.h"

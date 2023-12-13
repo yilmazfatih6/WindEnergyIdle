@@ -21,6 +21,7 @@ private:
 	const int UserIndex = 0;
 	
 public:
+	
 	UFUNCTION(BlueprintCallable)
 	UDefaultSaveGame* GetSaveGame();
 	void Save();
