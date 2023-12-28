@@ -16,11 +16,13 @@ int UDefaultSaveGame::SetMaxLevelNumber(int Value)
 
 int UDefaultSaveGame::GetLastLevelNumber() const
 {
+	UE_LOG(LogTemp, Log, TEXT("[UDefaultSaveGame]GetLastLevelNumber()=%d"), LastLevelNumber);
 	return LastLevelNumber;
 }
 
 int UDefaultSaveGame::SetLastLevelNumber(int Value)
 {
+	UE_LOG(LogTemp, Log, TEXT("[UDefaultSaveGame] SetLastLevelNumber() Value = %d"), Value);
 	LastLevelNumber = Value;
 	return LastLevelNumber;
 }

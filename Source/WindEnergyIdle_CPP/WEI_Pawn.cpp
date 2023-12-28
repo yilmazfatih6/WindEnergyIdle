@@ -31,10 +31,31 @@ void AWEI_Pawn::BeginPlay()
 {
 	Super::BeginPlay();
 
-	TurbineSpawner->OnSpawnComplete.AddDynamic(this, &ThisClass::OnTurbineSpawned);
-	TurbineSelector->OnSelect.AddDynamic(this, &ThisClass::OnTurbineSelected);
-	TurbinePlacer->OnPlacementSucceed.AddDynamic(this, &ThisClass::OnTurbinePlaced);
-	TurbinePlacer->OnPlacementFail.AddDynamic(this, &ThisClass::OnTurbinePlacementFailed);
+	if(TurbineSpawner == nullptr)
+	{
+	}
+	else
+	{
+		TurbineSpawner->OnSpawnComplete.AddDynamic(this, &ThisClass::OnTurbineSpawned);
+	}
+
+	if(TurbineSelector == nullptr)
+	{
+	}
+	else
+	{
+		TurbineSelector->OnSelect.AddDynamic(this, &ThisClass::OnTurbineSelected);
+	}
+	
+	if(TurbinePlacer == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[AWEI_Pawn] TurbinePlacer is nullptr!"))
+	}
+	else
+	{
+		TurbinePlacer->OnPlacementSucceed.AddDynamic(this, &ThisClass::OnTurbinePlaced);
+		TurbinePlacer->OnPlacementFail.AddDynamic(this, &ThisClass::OnTurbinePlacementFailed);
+	}
 }
 
 // Called every frame
