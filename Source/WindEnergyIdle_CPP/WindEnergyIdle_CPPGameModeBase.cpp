@@ -6,6 +6,11 @@
 #include "Managers/UpgradeManager.h"
 #include "WindEnergyIdle_CPP/Managers/EnergyManager.h"
 
+void AWindEnergyIdle_CPPGameModeBase::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 AWindEnergyIdle_CPPGameModeBase::AWindEnergyIdle_CPPGameModeBase()
 {
 	EnergyManager = CreateDefaultSubobject<UEnergyManager>(TEXT("Energy Manager"));

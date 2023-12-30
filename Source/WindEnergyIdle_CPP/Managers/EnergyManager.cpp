@@ -3,6 +3,9 @@
 
 #include "EnergyManager.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "WindEnergyIdle_CPP/WindEnergyIdle_CPPGameModeBase.h"
+
 // Sets default values for this component's properties
 UEnergyManager::UEnergyManager()
 {
@@ -22,7 +25,7 @@ void UEnergyManager::BeginPlay()
 	// ...
 
 	EnergyPerSecond = 0;
-	OnEnergyPerSecondDecrease.Broadcast(EnergyPerSecond);
+	OnEnergyPerSecondDecrease.Broadcast(EnergyPerSecond, TargetEnergyPerSecond);
 }
 
 
@@ -37,20 +40,32 @@ void UEnergyManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 float UEnergyManager::IncreaseEnergyPerSecond(const float Value)
 {
 	EnergyPerSecond += Value;
-	OnEnergyPerSecondIncrease.Broadcast(EnergyPerSecond);
-	UE_LOG(LogTemp, Log, TEXT("EnergyPerSecond=%f"), EnergyPerSecond);
+	EnergyPerSecond = FMath::Clamp(EnergyPerSecond, 0 , TargetEnergyPerSecond);
+	OnEnergyPerSecondIncrease.Broadcast(EnergyPerSecond, TargetEnergyPerSecond);
+	// UE_LOG(LogTemp, Log, TEXT("EnergyPerSecond=%f"), EnergyPerSecond);
 	return EnergyPerSecond;
 }
 
 float UEnergyManager::DecreaseEnergyPerSecond(const float Value)
 {
 	EnergyPerSecond -= Value;
-	OnEnergyPerSecondDecrease.Broadcast(EnergyPerSecond);
-	UE_LOG(LogTemp, Log, TEXT("EnergyPerSecond=%f"), EnergyPerSecond);
+	EnergyPerSecond = FMath::Clamp(EnergyPerSecond, 0 , TargetEnergyPerSecond);
+	OnEnergyPerSecondDecrease.Broadcast(EnergyPerSecond, TargetEnergyPerSecond);
+	// UE_LOG(LogTemp, Log, TEXT("EnergyPerSecond=%f"), EnergyPerSecond);
 	return EnergyPerSecond;
 }
 
 float UEnergyManager::GetEnergyPerSecond() const
 {
 	return EnergyPerSecond;
+}
+
+float UEnergyManager::GetTargetEnergy() const
+{
+	return TargetEnergyPerSecond;
+}
+
+void UEnergyManager::SetDependencies(const float TargetEnergy)
+{
+	TargetEnergyPerSecond = TargetEnergy;
 }

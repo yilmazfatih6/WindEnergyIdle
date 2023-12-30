@@ -33,7 +33,7 @@ void ALevelStreamer::Tick(float DeltaTime)
 
 int ALevelStreamer::GetLevelIndex(int LevelNumber)
 {
-	const auto NumberOfLevels = LevelList->Levels.Num();
+	const auto NumberOfLevels = LevelList->LevelsDataAssets.Num();
 	UE_LOG(LogTemp, Log, TEXT("[ALevelStreamer] GetLevelIndex_Implementation, NumberOfLevels: %d"), NumberOfLevels);
 	const auto CurrentIndex = LevelNumber - 1;
 	auto Index = CurrentIndex;

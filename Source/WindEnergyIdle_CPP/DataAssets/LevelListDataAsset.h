@@ -6,6 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "LevelListDataAsset.generated.h"
 
+class ULevelDataAsset;
 /**
  * 
  */
@@ -16,5 +17,5 @@ class WINDENERGYIDLE_CPP_API ULevelListDataAsset : public UDataAsset
 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<TSoftObjectPtr<UWorld>> Levels;
+	TArray<ULevelDataAsset*> LevelsDataAssets;
 };

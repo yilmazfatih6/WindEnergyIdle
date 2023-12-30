@@ -15,6 +15,9 @@ class WINDENERGYIDLE_CPP_API AWindEnergyIdle_CPPGameModeBase : public AGameModeB
 	GENERATED_BODY()
 
 public:
+
+	virtual void BeginPlay() override;
+	
 	UPROPERTY(BlueprintReadOnly)
 	class UEnergyManager* EnergyManager;
 

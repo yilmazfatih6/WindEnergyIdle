@@ -42,7 +42,7 @@ void ULevelLoader::InjectData()
 
 int ULevelLoader::GetLevelIndex(int LevelNumber)
 {
-	const auto NumberOfLevels = LevelList->Levels.Num();
+	const auto NumberOfLevels = LevelList->LevelsDataAssets.Num();
 	UE_LOG(LogTemp, Log, TEXT("[ULevelLoader] GetLevelIndex_Implementation, NumberOfLevels: %d"), NumberOfLevels);
 	const auto CurrentIndex = LevelNumber - 1;
 	auto Index = CurrentIndex;
@@ -55,7 +55,13 @@ int ULevelLoader::GetLevelIndex(int LevelNumber)
 		Index += LoopLevelFrom - 1;
 	}
 
+	CurrentLevelIndex = Index;
 	return Index;
+}
+
+ULevelDataAsset* ULevelLoader::GetCurrentLevelData() const
+{
+	return LevelList->LevelsDataAssets[CurrentLevelIndex];
 }
 
 void ULevelLoader::LoadMaxLevel()

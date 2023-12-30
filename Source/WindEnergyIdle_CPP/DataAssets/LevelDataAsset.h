@@ -16,5 +16,8 @@ class WINDENERGYIDLE_CPP_API ULevelDataAsset : public UDataAsset
 
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSoftObjectPtr<UWorld> Level;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float TargetEnergy;
 };

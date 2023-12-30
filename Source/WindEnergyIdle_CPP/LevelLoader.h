@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "LevelLoader.generated.h"
 
+class ULevelDataAsset;
 class UDefaultSaveGame;
 class UWEI_GameInstance;
 class ULevelListDataAsset;
@@ -24,7 +25,7 @@ protected:
 	UDefaultSaveGame* DefaultSaveGame;
 
 	UPROPERTY(BlueprintReadWrite)
-	TSoftObjectPtr<UWorld> CurrentLevel;
+	int CurrentLevelIndex;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -47,6 +48,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	int GetLevelIndex(int LevelNumber);
+
+	UFUNCTION(BlueprintCallable)
+	ULevelDataAsset* GetCurrentLevelData() const;
 	
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void UnloadLevel();

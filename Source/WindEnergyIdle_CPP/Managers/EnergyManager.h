@@ -6,16 +6,14 @@
 #include "Components/ActorComponent.h"
 #include "EnergyManager.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEnergyEvent, float, EnergyPerSecond);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEnergyEvent, float, EnergyPerSecond, float, TargetEnergy);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class WINDENERGYIDLE_CPP_API UEnergyManager : public UActorComponent
 {
-	UPROPERTY(BlueprintAssignable)
-	;
+	UPROPERTY(BlueprintAssignable);
 	FEnergyEvent OnEnergyPerSecondIncrease;
-	UPROPERTY(BlueprintAssignable)
-	;
+	UPROPERTY(BlueprintAssignable);
 	FEnergyEvent OnEnergyPerSecondDecrease;
 
 	GENERATED_BODY()
@@ -30,8 +28,7 @@ protected:
 
 public:
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
 	float IncreaseEnergyPerSecond(float Value);
@@ -39,7 +36,12 @@ public:
 	float DecreaseEnergyPerSecond(float Value);
 	UFUNCTION(BlueprintCallable)
 	float GetEnergyPerSecond() const;
-
+	UFUNCTION(BlueprintCallable)
+	float GetTargetEnergy() const;
+	UFUNCTION(BlueprintCallable)
+	virtual void SetDependencies(float TargetEnergy);
+	
 private:
 	float EnergyPerSecond;
+	float TargetEnergyPerSecond;
 };
