@@ -86,5 +86,5 @@ float UTurbineEnergyController::GetEnergy()
 
 void UTurbineEnergyController::ResetEnergy() const
 {
-	GameMode->EnergyManager->DecreaseEnergyPerSecond(BaseEnergyPerSecond * WindMultiplier);
+	GameMode->EnergyManager->DecreaseEnergyPerSecond(BaseEnergyPerSecond * WindMultiplier, true);
 }

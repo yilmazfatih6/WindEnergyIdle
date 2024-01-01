@@ -29,8 +29,12 @@ private:
 	void GetBuildings();
 
 	UFUNCTION()
-	void OnEnergyPerSecondChange(float CurrentEnergy, float TargetEnergy);
+	void OnEnergyPerSecondIncrease(float CurrentEnergy, float TargetEnergy);
 
+	UFUNCTION()
+	void OnEnergyPerSecondDecrease(float CurrentEnergy, float TargetEnergy, bool IsTurbineDespawned);
+
+	void SetLights(float Ratio);
 	void TurnOnRandomLight();
 	void TurnOffRandomLight();
 	

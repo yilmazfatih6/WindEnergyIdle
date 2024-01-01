@@ -6,16 +6,17 @@
 #include "Components/ActorComponent.h"
 #include "EnergyManager.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEnergyEvent, float, EnergyPerSecond, float, TargetEnergy);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEnergyIncreaseEvent, float, EnergyPerSecond, float, TargetEnergy);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FEnergyDecreaseEvent, float, EnergyPerSecond, float, TargetEnergy, bool, IsTurbineDespawned);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class WINDENERGYIDLE_CPP_API UEnergyManager : public UActorComponent
 {
 public:
 	UPROPERTY(BlueprintAssignable);
-	FEnergyEvent OnEnergyPerSecondIncrease;
+	FEnergyIncreaseEvent OnEnergyPerSecondIncrease;
 	UPROPERTY(BlueprintAssignable);
-	FEnergyEvent OnEnergyPerSecondDecrease;
+	FEnergyDecreaseEvent OnEnergyPerSecondDecrease;
 
 	GENERATED_BODY()
 
@@ -34,7 +35,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float IncreaseEnergyPerSecond(float Value);
 	UFUNCTION(BlueprintCallable)
-	float DecreaseEnergyPerSecond(float Value);
+	float DecreaseEnergyPerSecond(float Value, const bool IsTurbineDespawned = false);
 	UFUNCTION(BlueprintCallable)
 	float GetEnergyPerSecond() const;
 	UFUNCTION(BlueprintCallable)

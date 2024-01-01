@@ -25,7 +25,7 @@ void UEnergyManager::BeginPlay()
 	// ...
 
 	EnergyPerSecond = 0;
-	OnEnergyPerSecondDecrease.Broadcast(EnergyPerSecond, TargetEnergyPerSecond);
+	OnEnergyPerSecondDecrease.Broadcast(EnergyPerSecond, TargetEnergyPerSecond, false);
 }
 
 
@@ -46,11 +46,11 @@ float UEnergyManager::IncreaseEnergyPerSecond(const float Value)
 	return EnergyPerSecond;
 }
 
-float UEnergyManager::DecreaseEnergyPerSecond(const float Value)
+float UEnergyManager::DecreaseEnergyPerSecond(const float Value, const bool IsTurbineDespawned)
 {
 	EnergyPerSecond -= Value;
 	EnergyPerSecond = FMath::Clamp(EnergyPerSecond, 0 , TargetEnergyPerSecond);
-	OnEnergyPerSecondDecrease.Broadcast(EnergyPerSecond, TargetEnergyPerSecond);
+	OnEnergyPerSecondDecrease.Broadcast(EnergyPerSecond, TargetEnergyPerSecond, IsTurbineDespawned);
 	// UE_LOG(LogTemp, Log, TEXT("EnergyPerSecond=%f"), EnergyPerSecond);
 	return EnergyPerSecond;
 }

@@ -21,8 +21,8 @@ void ACity::BeginPlay()
 	Super::BeginPlay();
 	
 	const auto GameMode = static_cast<AWindEnergyIdle_CPPGameModeBase*>(UGameplayStatics::GetGameMode(GetWorld()));
-	GameMode->EnergyManager->OnEnergyPerSecondIncrease.AddDynamic(this, &ThisClass::OnEnergyPerSecondChange);
-	GameMode->EnergyManager->OnEnergyPerSecondDecrease.AddDynamic(this, &ThisClass::OnEnergyPerSecondChange);
+	GameMode->EnergyManager->OnEnergyPerSecondIncrease.AddDynamic(this, &ThisClass::OnEnergyPerSecondIncrease);
+	GameMode->EnergyManager->OnEnergyPerSecondDecrease.AddDynamic(this, &ThisClass::OnEnergyPerSecondDecrease);
 	
 	GetBuildings();
 }
@@ -52,10 +52,22 @@ void ACity::GetBuildings()
 	UE_LOG(LogTemp, Log, TEXT("[ACity] ACity(), LightCount = %d"), LightCount);
 }
 
-void ACity::OnEnergyPerSecondChange(const float CurrentEnergy, const float TargetEnergy)
+void ACity::OnEnergyPerSecondIncrease(const float CurrentEnergy, const float TargetEnergy)
+{
+	const auto Ratio = CurrentEnergy / TargetEnergy;
+	SetLights(Ratio);
+}
+
+void ACity::OnEnergyPerSecondDecrease(const float CurrentEnergy, const float TargetEnergy, bool IsTurbineDespawned)
+{
+	if(IsTurbineDespawned) return;
+	const auto Ratio = CurrentEnergy / TargetEnergy;
+	SetLights(Ratio);
+}
+
+void ACity::SetLights(float Ratio)
 {
 	UE_LOG(LogTemp, Log, TEXT("[ACity] OnEnergyPerSecondChange()"));
-	const auto Ratio = CurrentEnergy / TargetEnergy;
 	UE_LOG(LogTemp, Log, TEXT("[ACity] OnEnergyPerSecondChange(), Ratio = %f"), Ratio);
 	OnLightCount = FMath::FloorToInt(LightCount * Ratio);	
 	UE_LOG(LogTemp, Log, TEXT("[ACity] OnEnergyPerSecondChange(), OnLightCount = %d"), OnLightCount);
