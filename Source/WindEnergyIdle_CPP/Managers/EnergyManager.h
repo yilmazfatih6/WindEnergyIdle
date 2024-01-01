@@ -11,6 +11,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEnergyEvent, float, EnergyPerSecon
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class WINDENERGYIDLE_CPP_API UEnergyManager : public UActorComponent
 {
+public:
 	UPROPERTY(BlueprintAssignable);
 	FEnergyEvent OnEnergyPerSecondIncrease;
 	UPROPERTY(BlueprintAssignable);
