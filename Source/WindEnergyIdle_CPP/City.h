@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "City.generated.h"
 
-class ABuilding;
+class AWindEnergyIdle_CPPGameModeBase;class ABuilding;
 
 UCLASS()
 class WINDENERGYIDLE_CPP_API ACity : public AActor
@@ -23,6 +23,8 @@ private:
 	TArray<ABuilding*> CompletelyOffBuildings;
 	TArray<ABuilding*> CompletelyOnBuildings;
 	TArray<ABuilding*> SemiOnBuildings;
+
+	AWindEnergyIdle_CPPGameModeBase* GameMode;
 
 private:
 	UFUNCTION(BlueprintCallable)

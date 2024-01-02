@@ -24,5 +24,8 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	class UUpgradeManager* UpgradeManager;
 
+	UPROPERTY(BlueprintReadOnly)
+	class ULevelManager* LevelManager;
+
 	AWindEnergyIdle_CPPGameModeBase();
 };

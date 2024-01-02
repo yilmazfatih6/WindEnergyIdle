@@ -7,6 +7,7 @@
 #include "Buildings/Building.h"
 #include "Kismet/GameplayStatics.h"
 #include "Managers/EnergyManager.h"
+#include "Managers/LevelManager.h"
 
 // Sets default values
 ACity::ACity()
@@ -20,7 +21,7 @@ void ACity::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	const auto GameMode = static_cast<AWindEnergyIdle_CPPGameModeBase*>(UGameplayStatics::GetGameMode(GetWorld()));
+	GameMode = static_cast<AWindEnergyIdle_CPPGameModeBase*>(UGameplayStatics::GetGameMode(GetWorld()));
 	GameMode->EnergyManager->OnEnergyPerSecondIncrease.AddDynamic(this, &ThisClass::OnEnergyPerSecondIncrease);
 	GameMode->EnergyManager->OnEnergyPerSecondDecrease.AddDynamic(this, &ThisClass::OnEnergyPerSecondDecrease);
 	
@@ -80,7 +81,6 @@ void ACity::SetLights(float Ratio)
 	{
 		for (int i = 0; i < OnLightCount - CurrentOnLightCount; i++)
 		{
-			// TODO: Turn random light on.
 			TurnOnRandomLight();
 		}
 	}
@@ -88,7 +88,6 @@ void ACity::SetLights(float Ratio)
 	{
 		for (int i = 0; i < CurrentOnLightCount - OnLightCount ; i++)
 		{
-			// TODO: Turn random light off.
 			TurnOffRandomLight();
 		}
 	}
@@ -144,11 +143,14 @@ void ACity::TurnOnRandomLight()
 	}
 
 	/*
-	 * TODO: Complete level from here.
+	 * Complete level from here.
 	 */
+	UE_LOG(LogTemp, Log, TEXT("[ACity] SemiOnBuildings.Num() = %d"), SemiOnBuildings.Num());
+	UE_LOG(LogTemp, Log, TEXT("[ACity] CompletelyOffBuildings.Num() = %d"), CompletelyOffBuildings.Num());
 	if(SemiOnBuildings.Num() == 0 && CompletelyOffBuildings.Num() == 0)
 	{
 		UE_LOG(LogTemp, Log, TEXT("[ACity] All lights are turned on!"));
+		GameMode->LevelManager->CompleteLevel();
 	}
 }
 
