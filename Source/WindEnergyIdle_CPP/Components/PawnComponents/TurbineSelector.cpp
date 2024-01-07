@@ -4,7 +4,7 @@
 #include "TurbineSelector.h"
 
 #include "Kismet/GameplayStatics.h"
-#include "WindEnergyIdle_CPP/Turbines/BaseTurbine.h"
+#include "WindEnergyIdle_CPP/Actors/Turbine.h"
 
 // Sets default values for this component's properties
 UTurbineSelector::UTurbineSelector()
@@ -29,7 +29,7 @@ void UTurbineSelector::TickComponent(float DeltaTime, ELevelTick TickType,
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-void UTurbineSelector::SetSelectedTurbine(ABaseTurbine* Turbine)
+void UTurbineSelector::SetSelectedTurbine(ATurbine* Turbine)
 {
 	SetCanSelect(false);
 	SelectedTurbine = Turbine;
@@ -71,7 +71,7 @@ void UTurbineSelector::LineTraceTurbine()
 		UE_LOG(LogTemp, Log, TEXT("Select turbine trace. Hit actor is null!"));
 		return;
 	}
-	ABaseTurbine* HitTurbine = Cast<ABaseTurbine>(Hit.GetActor());
+	ATurbine* HitTurbine = Cast<ATurbine>(Hit.GetActor());
 
 	if (HitTurbine == nullptr)
 	{
@@ -90,7 +90,7 @@ void UTurbineSelector::SetCanSelect(const bool bValue)
 	bCanSelect = bValue;
 }
 
-ABaseTurbine* UTurbineSelector::GetSelectedTurbine() const
+ATurbine* UTurbineSelector::GetSelectedTurbine() const
 {
 	return SelectedTurbine;
 }

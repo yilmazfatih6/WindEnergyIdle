@@ -1,13 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "WEI_GameInstance.h"
+#include "WEI_GI.h"
 
-#include "DefaultSaveGame.h"
+#include "WindEnergyIdle_CPP/Systems/DefaultSaveGame.h"
 #include "GameFramework/SaveGame.h"
 #include "Kismet/GameplayStatics.h"
 
-UDefaultSaveGame* UWEI_GameInstance::GetSaveGame()
+UDefaultSaveGame* UWEI_GI::GetSaveGame()
 {
 	if(DefaultSaveGame == nullptr)
 	{
@@ -17,7 +17,7 @@ UDefaultSaveGame* UWEI_GameInstance::GetSaveGame()
 	return DefaultSaveGame;
 }
 
-void UWEI_GameInstance::Save()
+void UWEI_GI::Save()
 {
 	if(DefaultSaveGame == nullptr)
 	{
@@ -29,7 +29,7 @@ void UWEI_GameInstance::Save()
 	UGameplayStatics::AsyncSaveGameToSlot(DefaultSaveGame, "Save Game", 0, SavedDelegate);
 }
 
-void UWEI_GameInstance::Load()
+void UWEI_GI::Load()
 {
 	const bool bDoesSaveGameExist = UGameplayStatics::DoesSaveGameExist("Save Game", 0);
 	if(bDoesSaveGameExist)
@@ -51,6 +51,6 @@ void UWEI_GameInstance::Load()
 	}
 }
 
-void UWEI_GameInstance::OnSaveCompleted(const FString& UsedSlotName, const int32 UsedUserIndex, bool bWasSuccessful)
+void UWEI_GI::OnSaveCompleted(const FString& UsedSlotName, const int32 UsedUserIndex, bool bWasSuccessful)
 {
 }

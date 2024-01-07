@@ -3,8 +3,8 @@
 
 #include "LevelLoader.h"
 #include "DefaultSaveGame.h"
-#include "WEI_GameInstance.h"
-#include "DataAssets/LevelListDataAsset.h"
+#include "WindEnergyIdle_CPP/Core/WEI_GI.h"
+#include "WindEnergyIdle_CPP/DataAssets/LevelListDataAsset.h"
 
 // Sets default values for this component's properties
 ULevelLoader::ULevelLoader()
@@ -25,7 +25,7 @@ void ULevelLoader::BeginPlay()
 
 void ULevelLoader::InjectData()
 {
-	GameInstance = static_cast<UWEI_GameInstance*>(UGameplayStatics::GetGameInstance(GetWorld()));
+	GameInstance = static_cast<UWEI_GI*>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if(GameInstance == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("[ULevelLoader] GameInstance is null!"));

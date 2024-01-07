@@ -5,16 +5,16 @@
 #include "CoreMinimal.h"
 #include "Components/TimelineComponent.h"
 #include "GameFramework/Actor.h"
-#include "BaseTurbine.generated.h"
+#include "Turbine.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTurbineDelegate, ABaseTurbine*, Turbine);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTurbineDelegate, ATurbine*, Turbine);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FVoidDelegate);
 
 constexpr int MERGE_TURBINE_AMOUNT = 3;
 
 UCLASS()
-class WINDENERGYIDLE_CPP_API ABaseTurbine : public AActor
+class WINDENERGYIDLE_CPP_API ATurbine : public AActor
 {
 	GENERATED_BODY()
 
@@ -68,7 +68,7 @@ protected:
 
 public:
 	// Sets default values for this actor's properties
-	ABaseTurbine();
+	ATurbine();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

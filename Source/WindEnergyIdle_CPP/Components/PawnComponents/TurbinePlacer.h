@@ -36,7 +36,7 @@ private:
 
 	bool bHover;
 
-	class ABaseTurbine* TargetTurbine;
+	class ATurbine* TargetTurbine;
 
 	// Tracing
 	FCollisionQueryParams QueryParams;
@@ -68,7 +68,7 @@ public:
 
 	void HoverSelectedTurbine();
 	void Place();
-	void SetTargetTurbine(ABaseTurbine* Turbine);
+	void SetTargetTurbine(ATurbine* Turbine);
 	void SetHover(bool bValue);
 
 	UFUNCTION(BlueprintCallable)

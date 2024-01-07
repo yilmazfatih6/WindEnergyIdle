@@ -4,7 +4,7 @@
 #include "TurbineSpawner.h"
 
 #include "WindEnergyIdle_CPP/DataAssets/TurbineBlueprintData.h"
-#include "WindEnergyIdle_CPP/Turbines/BaseTurbine.h"
+#include "WindEnergyIdle_CPP/Actors/Turbine.h"
 
 // Sets default values for this component's properties
 UTurbineSpawner::UTurbineSpawner()
@@ -39,7 +39,7 @@ void UTurbineSpawner::SetCanSpawn(bool value)
 	bCanSpawn = value;
 }
 
-ABaseTurbine* UTurbineSpawner::SpawnTurbine(const int Level, bool& bWasSuccessful)
+ATurbine* UTurbineSpawner::SpawnTurbine(const int Level, bool& bWasSuccessful)
 {
 	if (!bCanSpawn)
 	{
@@ -53,7 +53,7 @@ ABaseTurbine* UTurbineSpawner::SpawnTurbine(const int Level, bool& bWasSuccessfu
 
 	bWasSuccessful = true;
 	bCanSpawn = false;
-	SpawnedTurbine = GetWorld()->SpawnActor<ABaseTurbine>(TurbineBlueprints->Turbines[Level - 1], SpawnLocation,
+	SpawnedTurbine = GetWorld()->SpawnActor<ATurbine>(TurbineBlueprints->Turbines[Level - 1], SpawnLocation,
 	                                                      SpawnRotation);
 	SpawnedTurbines.Add(SpawnedTurbine);
 
@@ -65,7 +65,7 @@ ABaseTurbine* UTurbineSpawner::SpawnTurbine(const int Level, bool& bWasSuccessfu
 	return SpawnedTurbine;
 }
 
-void UTurbineSpawner::RemoveTurbineFromArray(ABaseTurbine* Turbine)
+void UTurbineSpawner::RemoveTurbineFromArray(ATurbine* Turbine)
 {
 	UE_LOG(LogTemp, Log, TEXT("[UTurbineSpawner] RemoveTurbineFromArray %s"), *Turbine->GetName());
 
@@ -74,12 +74,12 @@ void UTurbineSpawner::RemoveTurbineFromArray(ABaseTurbine* Turbine)
 	RemoveToTurbinesByLevels(Turbine);
 }
 
-void UTurbineSpawner::DespawnTurbine(ABaseTurbine* Turbine)
+void UTurbineSpawner::DespawnTurbine(ATurbine* Turbine)
 {
 	Turbine->Destroy();
 }
 
-const TArray<TArray<ABaseTurbine*>*>* UTurbineSpawner::GetSpawnedTurbinesByLevel() const
+const TArray<TArray<ATurbine*>*>* UTurbineSpawner::GetSpawnedTurbinesByLevel() const
 {
 	return SpawnedTurbinesByLevel;
 }
@@ -89,12 +89,12 @@ const UTurbineBlueprintData* UTurbineSpawner::GetTurbineBlueprints() const
 	return TurbineBlueprints;
 }
 
-void UTurbineSpawner::AddToTurbinesByLevels(ABaseTurbine* Turbine, int Level)
+void UTurbineSpawner::AddToTurbinesByLevels(ATurbine* Turbine, int Level)
 {
 	// Init TArray if null
 	if (SpawnedTurbinesByLevel == nullptr)
 	{
-		SpawnedTurbinesByLevel = new TArray<TArray<ABaseTurbine*>*>();
+		SpawnedTurbinesByLevel = new TArray<TArray<ATurbine*>*>();
 	}
 
 	// Add TArrays to TArray till required amount is reached.
@@ -102,7 +102,7 @@ void UTurbineSpawner::AddToTurbinesByLevels(ABaseTurbine* Turbine, int Level)
 	{
 		while (SpawnedTurbinesByLevel->Num() < Level)
 		{
-			TArray<ABaseTurbine*>* NewRecord = new TArray<ABaseTurbine*>;
+			TArray<ATurbine*>* NewRecord = new TArray<ATurbine*>;
 			SpawnedTurbinesByLevel->Add(NewRecord);
 		}
 	}
@@ -115,7 +115,7 @@ void UTurbineSpawner::AddToTurbinesByLevels(ABaseTurbine* Turbine, int Level)
 	       Level, TurbinesOfThisLevel->Num());
 }
 
-void UTurbineSpawner::RemoveToTurbinesByLevels(ABaseTurbine* Turbine) const
+void UTurbineSpawner::RemoveToTurbinesByLevels(ATurbine* Turbine) const
 {
 	for (int i = 0; i < SpawnedTurbinesByLevel->Num(); ++i)
 	{

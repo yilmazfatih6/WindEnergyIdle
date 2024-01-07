@@ -5,12 +5,11 @@
 #include "Kismet/GameplayStatics.h"
 #include "Math/UnrealMathUtility.h"
 #include "EnhancedInputSubsystems.h"
-#include "LevelStreamer.h"
 #include "EnhancedInput/Public/EnhancedInputComponent.h"
-#include "WindEnergyIdle_CPP/PawnComponents/TurbineMerger.h"
-#include "WindEnergyIdle_CPP/PawnComponents/TurbinePlacer.h"
-#include "WindEnergyIdle_CPP/PawnComponents/TurbineSelector.h"
-#include "WindEnergyIdle_CPP/PawnComponents/TurbineSpawner.h"
+#include "WindEnergyIdle_CPP/Components/PawnComponents/TurbineMerger.h"
+#include "WindEnergyIdle_CPP/Components/PawnComponents/TurbinePlacer.h"
+#include "WindEnergyIdle_CPP/Components/PawnComponents/TurbineSelector.h"
+#include "WindEnergyIdle_CPP/Components/PawnComponents/TurbineSpawner.h"
 
 // Sets default values
 AWEI_Pawn::AWEI_Pawn()
@@ -112,24 +111,24 @@ UTurbinePlacer* AWEI_Pawn::GetTurbinePlacer()
 	return TurbinePlacer;
 }
 
-void AWEI_Pawn::OnTurbineSpawned(ABaseTurbine* Turbine)
+void AWEI_Pawn::OnTurbineSpawned(ATurbine* Turbine)
 {
 	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] OnTurbineSpawned"));
 	TurbineSelector->SetSelectedTurbine(Turbine);
 }
 
-void AWEI_Pawn::OnTurbineSelected(ABaseTurbine* Turbine)
+void AWEI_Pawn::OnTurbineSelected(ATurbine* Turbine)
 {
 	TurbinePlacer->SetTargetTurbine(Turbine);
 }
 
-void AWEI_Pawn::OnTurbinePlaced(ABaseTurbine* Turbine)
+void AWEI_Pawn::OnTurbinePlaced(ATurbine* Turbine)
 {
 	TurbineSpawner->SetCanSpawn(true);
 	TurbineSelector->ResetSelectedTurbine();
 }
 
-void AWEI_Pawn::OnTurbinePlacementFailed(ABaseTurbine* Turbine)
+void AWEI_Pawn::OnTurbinePlacementFailed(ATurbine* Turbine)
 {
 	if (Turbine->IsInitialPlacement())
 	{

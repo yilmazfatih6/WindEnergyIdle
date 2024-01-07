@@ -28,8 +28,8 @@ private:
 	bool bCanSelect = true;
 
 	// Turbine references
-	ABaseTurbine* SelectedTurbine;
-	ABaseTurbine* PreviouslySelectedTurbine;
+	ATurbine* SelectedTurbine;
+	ATurbine* PreviouslySelectedTurbine;
 
 	FCollisionQueryParams QueryParams;
 	FHitResult Hit;
@@ -55,11 +55,11 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
-	void SetSelectedTurbine(ABaseTurbine* Turbine);
+	void SetSelectedTurbine(ATurbine* Turbine);
 	void ResetSelectedTurbine();
 	void LineTraceTurbine();
 	void SetCanSelect(bool bValue);
 
 	UFUNCTION(BlueprintCallable)
-	ABaseTurbine* GetSelectedTurbine() const;
+	ATurbine* GetSelectedTurbine() const;
 };

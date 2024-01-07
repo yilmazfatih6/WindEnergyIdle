@@ -3,10 +3,10 @@
 
 #include "Ground.h"
 
-#include "WEI_Pawn.h"
+#include "WindEnergyIdle_CPP/Core/WEI_Pawn.h"
+#include "WindEnergyIdle_CPP/Components/PawnComponents/TurbineSelector.h"
+#include "WindEnergyIdle_CPP/Components/PawnComponents/TurbinePlacer.h"
 #include "Kismet/GameplayStatics.h"
-#include "WindEnergyIdle_CPP/PawnComponents/TurbinePlacer.h"
-#include "WindEnergyIdle_CPP/PawnComponents/TurbineSelector.h"
 
 // Sets default values
 AGround::AGround()
@@ -48,13 +48,13 @@ void AGround::Tick(float DeltaTime)
 	CurveTimeline.TickTimeline(DeltaTime);
 }
 
-void AGround::OnTurbineSelected(ABaseTurbine* Turbine)
+void AGround::OnTurbineSelected(ATurbine* Turbine)
 {
 	UE_LOG(LogTemp, Log, TEXT("[AGround] OnTurbineSelected"));
 	EnableWindMap();
 }
 
-void AGround::OnTurbinePlaced(ABaseTurbine* Turbine)
+void AGround::OnTurbinePlaced(ATurbine* Turbine)
 {
 	UE_LOG(LogTemp, Log, TEXT("[AGround] OnTurbinePlaced"));
 	DisableWindMap();

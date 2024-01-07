@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "BaseTurbine.h"
+#include "Turbine.h"
 
-#include "WindEnergyIdle_CPP/Turbines/TurbineEnergyController.h"
+#include "WindEnergyIdle_CPP/Components/TurbineComponents/TurbineEnergyController.h"
 
 // Sets default values
-ABaseTurbine::ABaseTurbine()
+ATurbine::ATurbine()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -13,7 +13,7 @@ ABaseTurbine::ABaseTurbine()
 	TurbineEnergyController = CreateDefaultSubobject<UTurbineEnergyController>(TEXT("Energy Controller"));
 }
 
-void ABaseTurbine::BeginOverlap(AActor* OtherActor)
+void ATurbine::BeginOverlap(AActor* OtherActor)
 {
 	if (OtherActor == nullptr)
 	{
@@ -43,7 +43,7 @@ void ABaseTurbine::BeginOverlap(AActor* OtherActor)
 	SelectionMesh->SetMaterial(0, SelectionInvalidMaterial);
 }
 
-void ABaseTurbine::EndOverlap(AActor* OtherActor)
+void ATurbine::EndOverlap(AActor* OtherActor)
 {
 	if (OtherActor == nullptr)
 	{
@@ -58,7 +58,7 @@ void ABaseTurbine::EndOverlap(AActor* OtherActor)
 }
 
 // Called when the game starts or when spawned
-void ABaseTurbine::BeginPlay()
+void ATurbine::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -70,46 +70,46 @@ void ABaseTurbine::BeginPlay()
 }
 
 // Called every frame
-void ABaseTurbine::Tick(float DeltaTime)
+void ATurbine::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 	CurveTimeline.TickTimeline(DeltaTime);
 }
 
-void ABaseTurbine::SetSelected()
+void ATurbine::SetSelected()
 {
 	DisableOverlap();
 	bIsSelected = true;
 	SelectionMesh->SetVisibility(true);
 }
 
-void ABaseTurbine::SetUnselected()
+void ATurbine::SetUnselected()
 {
 	bIsSelected = false;
 	SelectionMesh->SetVisibility(false);
 }
 
-void ABaseTurbine::Place()
+void ATurbine::Place()
 {
 	bIsInitialPlacement = false;
 	TurbineEnergyController->SetEnergy();
 	PlacementLocation = GetActorLocation();
 }
 
-bool ABaseTurbine::IsOverlapping() const
+bool ATurbine::IsOverlapping() const
 {
 	return bIsOverlapping;
 }
 
-void ABaseTurbine::Move(float Value)
+void ATurbine::Move(float Value)
 {
 	// if(!bMove) return;
 	const FVector NewLocation = FMath::Lerp(MovementStartLocation, MovementLocation, Value);
 	SetActorLocation(NewLocation);
 }
 
-void ABaseTurbine::StartMovement(const FVector& TargetMovementLocation)
+void ATurbine::StartMovement(const FVector& TargetMovementLocation)
 {
 	if (CurveFloat == nullptr)
 	{
@@ -131,34 +131,34 @@ void ABaseTurbine::StartMovement(const FVector& TargetMovementLocation)
 	CurveTimeline.PlayFromStart();
 }
 
-void ABaseTurbine::EndMovement()
+void ATurbine::EndMovement()
 {
 	UE_LOG(LogTemp, Log, TEXT("[ABaseTurbine] EndMovement"));
 	OnMovementComplete.Broadcast(this);
 }
 
-void ABaseTurbine::DisableOverlap()
+void ATurbine::DisableOverlap()
 {
 	bIsOverlapping = false;
 	SelectionMesh->SetMaterial(0, SelectionValidMaterial);
 }
 
-bool ABaseTurbine::IsInitialPlacement() const
+bool ATurbine::IsInitialPlacement() const
 {
 	return bIsInitialPlacement;
 }
 
-UTurbineEnergyController* ABaseTurbine::GetEnergyController() const
+UTurbineEnergyController* ATurbine::GetEnergyController() const
 {
 	return TurbineEnergyController;
 }
 
-int32 ABaseTurbine::GetLevel() const
+int32 ATurbine::GetLevel() const
 {
 	return Level;
 }
 
-FVector ABaseTurbine::GetPlacementLocation() const
+FVector ATurbine::GetPlacementLocation() const
 {
 	return PlacementLocation;
 }

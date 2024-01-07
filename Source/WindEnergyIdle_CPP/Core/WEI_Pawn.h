@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Turbines/BaseTurbine.h"
+#include "../Actors/Turbine.h"
 #include "GameFramework/HUD.h"
 #include "GameFramework/Pawn.h"
 #include "InputMappingContext.h"
@@ -47,13 +47,13 @@ protected:
 
 private:
 	UFUNCTION()
-	void OnTurbineSpawned(ABaseTurbine* Turbine);
+	void OnTurbineSpawned(ATurbine* Turbine);
 	UFUNCTION()
-	void OnTurbineSelected(ABaseTurbine* Turbine);
+	void OnTurbineSelected(ATurbine* Turbine);
 	UFUNCTION()
-	void OnTurbinePlaced(ABaseTurbine* Turbine);
+	void OnTurbinePlaced(ATurbine* Turbine);
 	UFUNCTION()
-	void OnTurbinePlacementFailed(ABaseTurbine* Turbine);
+	void OnTurbinePlacementFailed(ATurbine* Turbine);
 
 protected:
 	// Called when the game starts or when spawned

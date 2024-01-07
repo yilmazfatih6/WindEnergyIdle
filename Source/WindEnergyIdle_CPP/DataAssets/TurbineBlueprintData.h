@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
-#include "WindEnergyIdle_CPP/Turbines/BaseTurbine.h"
+#include "WindEnergyIdle_CPP/Actors/Turbine.h"
 #include "TurbineBlueprintData.generated.h"
 
 /**
@@ -17,5 +17,5 @@ class WINDENERGYIDLE_CPP_API UTurbineBlueprintData : public UDataAsset
 
 public:
 	UPROPERTY(EditAnywhere)
-	TArray<TSubclassOf<class ABaseTurbine>> Turbines;
+	TArray<TSubclassOf<class ATurbine>> Turbines;
 };

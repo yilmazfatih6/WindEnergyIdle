@@ -8,7 +8,7 @@
 #include "TurbineMerger.generated.h"
 
 
-class ABaseTurbine;
+class ATurbine;
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class WINDENERGYIDLE_CPP_API UTurbineMerger : public UActorComponent
@@ -24,19 +24,19 @@ private:
 	UTurbineSpawner* TurbineSpawner;
 	UTurbinePlacer* TurbinePlacer;
 	UTurbineSelector* TurbineSelector;
-	ABaseTurbine* CenterTurbine;
+	ATurbine* CenterTurbine;
 	float CenterTurbineWindMultiplier;
-	TArray<ABaseTurbine*>* ClosestTurbines;
+	TArray<ATurbine*>* ClosestTurbines;
 	int MergeMovementCompleteCount;
 
 	UFUNCTION()
-	void OnTurbineSpawn(ABaseTurbine* Turbine);
+	void OnTurbineSpawn(ATurbine* Turbine);
 
 	void SetCanMerge();
-	void FindClosestObjects(TArray<ABaseTurbine*>* Turbines, bool& bWasSuccessful) const;
+	void FindClosestObjects(TArray<ATurbine*>* Turbines, bool& bWasSuccessful) const;
 
 	UFUNCTION()
-	void OnMergeMovementComplete(ABaseTurbine* Turbine);
+	void OnMergeMovementComplete(ATurbine* Turbine);
 
 protected:
 	// Called when the game starts

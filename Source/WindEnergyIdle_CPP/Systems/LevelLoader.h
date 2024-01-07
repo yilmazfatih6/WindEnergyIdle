@@ -8,7 +8,7 @@
 
 class ULevelDataAsset;
 class UDefaultSaveGame;
-class UWEI_GameInstance;
+class UWEI_GI;
 class ULevelListDataAsset;
 
 UCLASS(ClassGroup = (Custom), BlueprintType, Blueprintable, meta = (BlueprintSpawnableComponent))
@@ -19,7 +19,7 @@ class WINDENERGYIDLE_CPP_API ULevelLoader : public UActorComponent
 protected:
 
 	UPROPERTY(BlueprintReadOnly)
-	UWEI_GameInstance* GameInstance;
+	UWEI_GI* GameInstance;
 	
 	UPROPERTY(BlueprintReadOnly)
 	UDefaultSaveGame* DefaultSaveGame;

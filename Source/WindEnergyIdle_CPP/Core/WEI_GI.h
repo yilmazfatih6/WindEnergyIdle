@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "Kismet/GameplayStatics.h"
-#include "WEI_GameInstance.generated.h"
+#include "WEI_GI.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class WINDENERGYIDLE_CPP_API UWEI_GameInstance : public UGameInstance
+class WINDENERGYIDLE_CPP_API UWEI_GI : public UGameInstance
 {
 	GENERATED_BODY()
 

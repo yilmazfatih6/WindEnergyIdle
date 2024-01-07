@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "WindEnergyIdle_CPPGameModeBase.generated.h"
+#include "WEI_GM.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class WINDENERGYIDLE_CPP_API AWindEnergyIdle_CPPGameModeBase : public AGameModeBase
+class WINDENERGYIDLE_CPP_API AWEI_GM : public AGameModeBase
 {
 	GENERATED_BODY()
 
@@ -27,5 +27,5 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	class ULevelManager* LevelManager;
 
-	AWindEnergyIdle_CPPGameModeBase();
+	AWEI_GM();
 };

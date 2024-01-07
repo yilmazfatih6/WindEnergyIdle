@@ -3,11 +3,11 @@
 
 #include "City.h"
 
-#include "WindEnergyIdle_CPPGameModeBase.h"
-#include "Buildings/Building.h"
+#include "WindEnergyIdle_CPP/Core/WEI_GM.h"
+#include "WindEnergyIdle_CPP/Actors/Building.h"
+#include "WindEnergyIdle_CPP/Managers/EnergyManager.h"
+#include "WindEnergyIdle_CPP/Managers/LevelManager.h"
 #include "Kismet/GameplayStatics.h"
-#include "Managers/EnergyManager.h"
-#include "Managers/LevelManager.h"
 
 // Sets default values
 ACity::ACity()
@@ -21,7 +21,7 @@ void ACity::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	GameMode = static_cast<AWindEnergyIdle_CPPGameModeBase*>(UGameplayStatics::GetGameMode(GetWorld()));
+	GameMode = static_cast<AWEI_GM*>(UGameplayStatics::GetGameMode(GetWorld()));
 	GameMode->EnergyManager->OnEnergyPerSecondIncrease.AddDynamic(this, &ThisClass::OnEnergyPerSecondIncrease);
 	GameMode->EnergyManager->OnEnergyPerSecondDecrease.AddDynamic(this, &ThisClass::OnEnergyPerSecondDecrease);
 	

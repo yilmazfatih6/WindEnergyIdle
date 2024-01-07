@@ -4,7 +4,7 @@
 #include "EnergyManager.h"
 
 #include "Kismet/GameplayStatics.h"
-#include "WindEnergyIdle_CPP/WindEnergyIdle_CPPGameModeBase.h"
+#include "WindEnergyIdle_CPP/Core/WEI_GM.h"
 
 // Sets default values for this component's properties
 UEnergyManager::UEnergyManager()

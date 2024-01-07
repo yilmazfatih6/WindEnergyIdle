@@ -4,15 +4,15 @@
 #include "LevelStreamer.h"
 
 #include "DefaultSaveGame.h"
-#include "WEI_GameInstance.h"
-#include "DataAssets/LevelListDataAsset.h"
+#include "WindEnergyIdle_CPP/Core/WEI_GI.h"
+#include "WindEnergyIdle_CPP/DataAssets/LevelListDataAsset.h"
 
 ALevelStreamer::ALevelStreamer()
 {
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-void ALevelStreamer::InjectData(UWEI_GameInstance* CurrentGameInstance)
+void ALevelStreamer::InjectData(UWEI_GI* CurrentGameInstance)
 {
 	GameInstance = CurrentGameInstance;
 	DefaultSaveGame = GameInstance->GetSaveGame();

@@ -7,7 +7,7 @@
 #include "LevelStreamer.generated.h"
 
 class UDefaultSaveGame;
-class UWEI_GameInstance;
+class UWEI_GI;
 class ULevelListDataAsset;
 
 UCLASS()
@@ -18,7 +18,7 @@ class WINDENERGYIDLE_CPP_API ALevelStreamer : public AActor
 protected:
 
 	UPROPERTY(BlueprintReadOnly)
-	UWEI_GameInstance* GameInstance;
+	UWEI_GI* GameInstance;
 	
 	UPROPERTY(BlueprintReadOnly)
 	UDefaultSaveGame* DefaultSaveGame;
@@ -41,7 +41,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	void InjectData(UWEI_GameInstance* CurrentGameInstance);
+	void InjectData(UWEI_GI* CurrentGameInstance);
 	
 	UFUNCTION(BlueprintCallable)
 	int GetLevelIndex(int LevelNumber);

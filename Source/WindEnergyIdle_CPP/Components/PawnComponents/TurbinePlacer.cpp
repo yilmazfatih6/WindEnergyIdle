@@ -4,10 +4,10 @@
 #include "TurbinePlacer.h"
 
 #include "Kismet/GameplayStatics.h"
-#include "WindEnergyIdle_CPP/Ground.h"
-#include "WindEnergyIdle_CPP/Turbines/BaseTurbine.h"
+#include "WindEnergyIdle_CPP/Actors/Ground.h"
+#include "WindEnergyIdle_CPP/Actors/Turbine.h"
 
-class ABaseTurbine;
+class ATurbine;
 // Sets default values for this component's properties
 UTurbinePlacer::UTurbinePlacer()
 {
@@ -69,7 +69,7 @@ void UTurbinePlacer::HoverSelectedTurbine()
 	}
 }
 
-void UTurbinePlacer::SetTargetTurbine(ABaseTurbine* Turbine)
+void UTurbinePlacer::SetTargetTurbine(ATurbine* Turbine)
 {
 	TargetTurbine = Turbine;
 	OnPlacementStart.Broadcast(TargetTurbine);

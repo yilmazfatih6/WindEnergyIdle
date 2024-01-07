@@ -7,7 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "Ground.generated.h"
 
-class ABaseTurbine;
+class ATurbine;
 
 UCLASS()
 class WINDENERGYIDLE_CPP_API AGround : public AActor
@@ -39,10 +39,10 @@ public:
 
 private:
 	UFUNCTION()
-	void OnTurbineSelected(ABaseTurbine* Turbine);
+	void OnTurbineSelected(ATurbine* Turbine);
 
 	UFUNCTION()
-	void OnTurbinePlaced(ABaseTurbine* Turbine);
+	void OnTurbinePlaced(ATurbine* Turbine);
 
 protected:
 	// Called when the game starts or when spawned

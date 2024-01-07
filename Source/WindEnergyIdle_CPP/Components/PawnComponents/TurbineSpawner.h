@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "WindEnergyIdle_CPP/Turbines/BaseTurbine.h"
+#include "WindEnergyIdle_CPP/Actors/Turbine.h"
 #include "TurbineSpawner.generated.h"
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -30,9 +30,9 @@ public:
 private:
 	bool bCanSpawn = true;
 
-	ABaseTurbine* SpawnedTurbine;
+	ATurbine* SpawnedTurbine;
 
-	TArray<TArray<ABaseTurbine*>*>* SpawnedTurbinesByLevel;
+	TArray<TArray<ATurbine*>*>* SpawnedTurbinesByLevel;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
 	FRotator SpawnRotation;
@@ -43,7 +43,7 @@ private:
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
-	TArray<ABaseTurbine*> SpawnedTurbines;
+	TArray<ATurbine*> SpawnedTurbines;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spawn")
 	FVector SpawnLocation;
@@ -53,8 +53,8 @@ protected:
 #pragma region "Functions"
 
 private:
-	void AddToTurbinesByLevels(ABaseTurbine* Turbine, int Level);
-	void RemoveToTurbinesByLevels(ABaseTurbine* Turbine) const;
+	void AddToTurbinesByLevels(ATurbine* Turbine, int Level);
+	void RemoveToTurbinesByLevels(ATurbine* Turbine) const;
 
 protected:
 	// Called when the game starts
@@ -71,12 +71,12 @@ public:
 	void SetCanSpawn(bool value);
 
 	UFUNCTION(BlueprintCallable)
-	ABaseTurbine* SpawnTurbine(int Level, bool& bWasSuccessful);
+	ATurbine* SpawnTurbine(int Level, bool& bWasSuccessful);
 
-	void RemoveTurbineFromArray(ABaseTurbine* Turbine);
-	void DespawnTurbine(ABaseTurbine* Turbine);
+	void RemoveTurbineFromArray(ATurbine* Turbine);
+	void DespawnTurbine(ATurbine* Turbine);
 
-	const TArray<TArray<ABaseTurbine*>*>* GetSpawnedTurbinesByLevel() const;
+	const TArray<TArray<ATurbine*>*>* GetSpawnedTurbinesByLevel() const;
 
 	const UTurbineBlueprintData* GetTurbineBlueprints() const;
 

@@ -13,7 +13,7 @@ class WINDENERGYIDLE_CPP_API UTurbineEnergyController : public UActorComponent
 	GENERATED_BODY()
 
 private:
-	class AWindEnergyIdle_CPPGameModeBase* GameMode;
+	class AWEI_GM* GameMode;
 
 	UPROPERTY(EditDefaultsOnly)
 	float BaseEnergyPerSecond = 5;

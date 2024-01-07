@@ -6,14 +6,14 @@
 #include "TurbinePlacer.h"
 #include "TurbineSelector.h"
 #include "WindEnergyIdle_CPP/DataAssets/TurbineBlueprintData.h"
-#include "WindEnergyIdle_CPP/Turbines/TurbineEnergyController.h"
-#include "WindEnergyIdle_CPP/Turbines/BaseTurbine.h"
+#include "WindEnergyIdle_CPP/Components/TurbineComponents//TurbineEnergyController.h"
+#include "WindEnergyIdle_CPP/Actors/Turbine.h"
 
 UTurbineMerger::UTurbineMerger()
 {
 	UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] UTurbineMerger"));
 
-	ClosestTurbines = new TArray<ABaseTurbine*>;
+	ClosestTurbines = new TArray<ATurbine*>;
 }
 
 // Sets default values for this component's properties
@@ -140,7 +140,7 @@ void UTurbineMerger::Merge()
 	}
 }
 
-void UTurbineMerger::OnTurbineSpawn(ABaseTurbine* Turbine)
+void UTurbineMerger::OnTurbineSpawn(ATurbine* Turbine)
 {
 	// UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] OnTurbineSpawn"));
 	// SetCanMerge();
@@ -172,7 +172,7 @@ void UTurbineMerger::SetCanMerge()
 	}
 }
 
-void UTurbineMerger::FindClosestObjects(TArray<ABaseTurbine*>* Turbines, bool& bWasSuccessful) const
+void UTurbineMerger::FindClosestObjects(TArray<ATurbine*>* Turbines, bool& bWasSuccessful) const
 {
 	bWasSuccessful = false;
 
@@ -189,16 +189,16 @@ void UTurbineMerger::FindClosestObjects(TArray<ABaseTurbine*>* Turbines, bool& b
 
 	for (int32 i = 0; i < NumObjects - 2; i++)
 	{
-		ABaseTurbine* ObjectA = (*Turbines)[i];
+		ATurbine* ObjectA = (*Turbines)[i];
 
 		for (int32 j = i + 1; j < NumObjects - 1; j++)
 		{
-			ABaseTurbine* ObjectB = (*Turbines)[j];
+			ATurbine* ObjectB = (*Turbines)[j];
 			const float DistanceAB = FVector::Distance(ObjectA->GetActorLocation(), ObjectB->GetActorLocation());
 
 			for (int32 k = j + 1; k < NumObjects; k++)
 			{
-				ABaseTurbine* ObjectC = (*Turbines)[k];
+				ATurbine* ObjectC = (*Turbines)[k];
 				FVector Position = ObjectC->GetActorLocation();
 				const float DistanceAC = FVector::Distance(ObjectA->GetActorLocation(), Position);
 				const float DistanceBC = FVector::Distance(ObjectB->GetActorLocation(), Position);
@@ -221,7 +221,7 @@ void UTurbineMerger::FindClosestObjects(TArray<ABaseTurbine*>* Turbines, bool& b
 	bWasSuccessful = true;
 }
 
-void UTurbineMerger::OnMergeMovementComplete(ABaseTurbine* Turbine)
+void UTurbineMerger::OnMergeMovementComplete(ATurbine* Turbine)
 {
 	UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] OnMergeMovementComplete"));
 	Turbine->OnMovementComplete.RemoveDynamic(this, &ThisClass::OnMergeMovementComplete);
