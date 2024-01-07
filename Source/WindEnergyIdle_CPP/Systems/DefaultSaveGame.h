@@ -6,6 +6,7 @@
 #include "GameFramework/SaveGame.h"
 #include "DefaultSaveGame.generated.h"
 
+class UResourceDataAsset;
 /**
  * 
  */
@@ -17,6 +18,7 @@ class WINDENERGYIDLE_CPP_API UDefaultSaveGame : public USaveGame
 private:
 	int MaxLevelNumber = 1;
 	int LastLevelNumber = 1;
+	TArray<UResourceDataAsset*> Resources;
 	
 public:
 

@@ -26,6 +26,9 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	class ULevelManager* LevelManager;
-
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	class UResourceManager* ResourceManager;
+	
 	AWEI_GM();
 };

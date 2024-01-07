@@ -69,7 +69,7 @@ void ULevelLoader::LoadMaxLevel()
 	if(DefaultSaveGame == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("[ULevelLoader] DefaultSaveGame is null!"));
-		return;
+		InjectData();
 	}
 	
 	const auto LevelNumber = DefaultSaveGame->GetMaxLevelNumber();
@@ -81,7 +81,7 @@ void ULevelLoader::LoadLastLevel()
 	if(DefaultSaveGame == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("[ULevelLoader] DefaultSaveGame is null!"));
-		return;
+		InjectData();
 	}
 	
 	const auto LevelNumber = DefaultSaveGame->GetLastLevelNumber();
@@ -94,7 +94,7 @@ void ULevelLoader::LoadPreviousLevel()
 	if(DefaultSaveGame == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("[ULevelLoader] DefaultSaveGame is null!"));
-		return;
+		InjectData();
 	}
 	
 	const auto LevelNumber = DefaultSaveGame->GetLastLevelNumber() - 1;
@@ -106,7 +106,7 @@ void ULevelLoader::LoadNextLevel()
 	if(DefaultSaveGame == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("[ULevelLoader] DefaultSaveGame is null!"));
-		return;
+		InjectData();
 	}
 
 	const auto LevelNumber = DefaultSaveGame->GetLastLevelNumber() + 1;

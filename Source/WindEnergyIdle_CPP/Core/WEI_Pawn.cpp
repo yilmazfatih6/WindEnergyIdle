@@ -30,31 +30,38 @@ void AWEI_Pawn::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if(TurbineSpawner == nullptr)
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
 	{
-	}
-	else
-	{
-		TurbineSpawner->OnSpawnComplete.AddDynamic(this, &ThisClass::OnTurbineSpawned);
-	}
+		UE_LOG(LogTemp, Warning, TEXT("This text will appear in the console 3 seconds after execution"));
+		if(TurbineSpawner == nullptr)
+		{
+			UE_LOG(LogTemp, Error, TEXT("[AWEI_Pawn] TurbineSpawner is nullptr!"))
+		}
+		else
+		{
+			TurbineSpawner->OnSpawnComplete.AddDynamic(this, &ThisClass::OnTurbineSpawned);
+		}
 
-	if(TurbineSelector == nullptr)
-	{
-	}
-	else
-	{
-		TurbineSelector->OnSelect.AddDynamic(this, &ThisClass::OnTurbineSelected);
-	}
+		if(TurbineSelector == nullptr)
+		{
+			UE_LOG(LogTemp, Error, TEXT("[AWEI_Pawn] TurbineSelector is nullptr!"))
+		}
+		else
+		{
+			TurbineSelector->OnSelect.AddDynamic(this, &ThisClass::OnTurbineSelected);
+		}
 	
-	if(TurbinePlacer == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("[AWEI_Pawn] TurbinePlacer is nullptr!"))
-	}
-	else
-	{
-		TurbinePlacer->OnPlacementSucceed.AddDynamic(this, &ThisClass::OnTurbinePlaced);
-		TurbinePlacer->OnPlacementFail.AddDynamic(this, &ThisClass::OnTurbinePlacementFailed);
-	}
+		if(TurbinePlacer == nullptr)
+		{
+			UE_LOG(LogTemp, Error, TEXT("[AWEI_Pawn] TurbinePlacer is nullptr!"))
+		}
+		else
+		{
+			TurbinePlacer->OnPlacementSucceed.AddDynamic(this, &ThisClass::OnTurbinePlaced);
+			TurbinePlacer->OnPlacementFail.AddDynamic(this, &ThisClass::OnTurbinePlacementFailed);
+		}
+	}, .5f, false);
 }
 
 // Called every frame
