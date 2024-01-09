@@ -68,16 +68,16 @@ void UResourceManager::RemoveResource(const EGameResourceType Type, const int Am
 	}
 }
 
-int UResourceManager::GetResource(EGameResourceType Type)
+ UResourceDataAsset* UResourceManager::GetResource(EGameResourceType Type)
 {
 	for (const auto Resource : Resources)
 	{
 		if(Resource->Type == Type)
 		{
-			return Resource->Amount;
+			return Resource;
 		}
 	}
-	return -1;
+	return nullptr;
 }
 
 

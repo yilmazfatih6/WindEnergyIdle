@@ -41,6 +41,6 @@ public:
 	void RemoveResource(EGameResourceType Type, int Amount);
 
 	UFUNCTION(BlueprintCallable)
-	int GetResource(EGameResourceType Type);
+	UResourceDataAsset* GetResource(EGameResourceType Type);
 	
 };
