@@ -1,5 +1,5 @@
 UENUM(BlueprintType)
-enum class EResourceType : uint8
+enum class EGameResourceType : uint8
 {
 	Money = 0 UMETA(DisplayName = "Money"),
 };

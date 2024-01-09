@@ -36,7 +36,7 @@ void UResourceManager::TickComponent(float DeltaTime, ELevelTick TickType,
 	// ...
 }
 
-void UResourceManager::AddResource(EResourceType Type, int Amount)
+void UResourceManager::AddResource(EGameResourceType Type, int Amount)
 {
 	for (const auto Resource : Resources)
 	{
@@ -49,7 +49,7 @@ void UResourceManager::AddResource(EResourceType Type, int Amount)
 	}
 }
 
-void UResourceManager::RemoveResource(const EResourceType Type, const int Amount)
+void UResourceManager::RemoveResource(const EGameResourceType Type, const int Amount)
 {
 	for (const auto Resource : Resources)
 	{
@@ -68,7 +68,7 @@ void UResourceManager::RemoveResource(const EResourceType Type, const int Amount
 	}
 }
 
-int UResourceManager::GetResource(EResourceType Type)
+int UResourceManager::GetResource(EGameResourceType Type)
 {
 	for (const auto Resource : Resources)
 	{

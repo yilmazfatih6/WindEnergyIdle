@@ -35,12 +35,12 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
-	void AddResource(EResourceType Type, int Amount);
+	void AddResource(EGameResourceType Type, int Amount);
 
 	UFUNCTION(BlueprintCallable)
-	void RemoveResource(EResourceType Type, int Amount);
+	void RemoveResource(EGameResourceType Type, int Amount);
 
 	UFUNCTION(BlueprintCallable)
-	int GetResource(EResourceType Type);
+	int GetResource(EGameResourceType Type);
 	
 };

@@ -7,6 +7,9 @@
 #include "Kismet/GameplayStatics.h"
 #include "WEI_GI.generated.h"
 
+class UMapLoader;
+class UDefaultSaveGame;
+class ULevelListDataAsset;
 /**
  * 
  */
@@ -14,17 +17,32 @@ UCLASS()
 class WINDENERGYIDLE_CPP_API UWEI_GI : public UGameInstance
 {
 	GENERATED_BODY()
-
-private:
-	class UDefaultSaveGame* DefaultSaveGame;
-	const FString& SaveGameSlotName = "Save Game";
-	const int UserIndex = 0;
 	
 public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	ULevelListDataAsset* LevelList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UMapLoader* CurrentMapLoader;
 	
-	UFUNCTION(BlueprintCallable)
-	UDefaultSaveGame* GetSaveGame();
-	void Save();
-	void Load();
-	void OnSaveCompleted(const FString& UsedSlotName, const int32 UsedUserIndex, bool bWasSuccessful);
+	UWEI_GI();
+
+	virtual void Init() override;
+
+	UPROPERTY(BlueprintReadOnly)
+	FString SaveGameSlotName;
+	
+	UPROPERTY(BlueprintReadWrite, Category = "Settings")
+	UDefaultSaveGame* SaveGameObject;
+
+	UFUNCTION(BlueprintCallable, Category = "Game Manager")
+	void LoadGame();
+
+	UFUNCTION(BlueprintCallable, Category = "Game Manager")
+	void SaveGame();
+
+private:
+	void LogIfGameWasSavedOrNot(const bool IsSaved);
+	
 };

@@ -6,7 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "ResourceDataAsset.generated.h"
 
-enum class EResourceType : uint8;
+enum class EGameResourceType : uint8;
 /**
  * 
  */
@@ -20,7 +20,7 @@ public:
 	UTexture2D* Image;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	EResourceType Type;
+	EGameResourceType Type;
 
 	UPROPERTY(EditDefaultsOnly)
 	int DefaultAmount;
