@@ -23,8 +23,8 @@ public:
 	EGameResourceType Type;
 
 	UPROPERTY(EditDefaultsOnly)
-	int DefaultAmount;
+	float DefaultAmount;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	int Amount;
+	float Amount;
 };

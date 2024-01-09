@@ -3,8 +3,10 @@
 
 #include "EnergyManager.h"
 
+#include "ResourceManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "WindEnergyIdle_CPP/Core/WEI_GM.h"
+#include "WindEnergyIdle_CPP/Enums/GameResourceType.h"
 
 // Sets default values for this component's properties
 UEnergyManager::UEnergyManager()
@@ -16,6 +18,10 @@ UEnergyManager::UEnergyManager()
 	// ...
 }
 
+void UEnergyManager::InjectData(UResourceManager* NewResourceManager)
+{
+	ResourceManager = NewResourceManager;
+}
 
 // Called when the game starts
 void UEnergyManager::BeginPlay()
@@ -26,6 +32,17 @@ void UEnergyManager::BeginPlay()
 
 	EnergyPerSecond = 0;
 	OnEnergyPerSecondDecrease.Broadcast(EnergyPerSecond, TargetEnergyPerSecond, false);
+
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+	{
+		if(ResourceManager)
+		{
+			UE_LOG(LogTemp, Log, TEXT("EnergyPerSecond %f"), (EnergyPerSecond))
+			UE_LOG(LogTemp, Log, TEXT("IncomePerEnergy %f"), (IncomePerEnergy))
+			ResourceManager->AddResource(EGameResourceType::Money, EnergyPerSecond * IncomePerEnergy * .1f);
+		}
+	}, .1f, true);
 }
 
 

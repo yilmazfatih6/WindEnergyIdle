@@ -36,12 +36,14 @@ void UResourceManager::TickComponent(float DeltaTime, ELevelTick TickType,
 	// ...
 }
 
-void UResourceManager::AddResource(EGameResourceType Type, int Amount)
+void UResourceManager::AddResource(EGameResourceType Type, float Amount)
 {
+	Amount = FMath::Clamp(Amount, 0, Amount);
 	for (const auto Resource : Resources)
 	{
 		if(Resource->Type == Type)
 		{
+			UE_LOG(LogTemp, Log, TEXT("AddResource, Type %d, Amount %d"), Resource->Type, Amount);
 			Resource->Amount += Amount;
 			OnResourceAdded.Broadcast(Resource);
 			return;
@@ -49,8 +51,10 @@ void UResourceManager::AddResource(EGameResourceType Type, int Amount)
 	}
 }
 
-void UResourceManager::RemoveResource(const EGameResourceType Type, const int Amount)
+void UResourceManager::RemoveResource(const EGameResourceType Type, float Amount)
 {
+	Amount = FMath::Clamp(Amount, 0, Amount);
+
 	for (const auto Resource : Resources)
 	{
 		if(Resource->Type == Type)
@@ -60,7 +64,8 @@ void UResourceManager::RemoveResource(const EGameResourceType Type, const int Am
 				UE_LOG(LogTemp, Log, TEXT("[UResourceManager] RemoveResource, Amount of %hhd is less than %d"), Type, Amount);
 				return;
 			}
-			
+
+			UE_LOG(LogTemp, Log, TEXT("RemoveResource, Type %d, Amount %d"), Resource->Type, Amount);
 			Resource->Amount -= Amount;
 			OnResourceRemoved.Broadcast(Resource);
 			return;

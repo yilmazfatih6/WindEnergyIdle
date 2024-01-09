@@ -61,6 +61,7 @@ void UTurbineEnergyController::SetEnergy()
 
 	PreviousEnergy = BaseEnergyPerSecond * PreviousWindMultiplier;
 	Energy = BaseEnergyPerSecond * WindMultiplier;
+	
 
 	const float EnergyDifference = (BaseEnergyPerSecond * WindMultiplier) - (BaseEnergyPerSecond *
 		PreviousWindMultiplier);

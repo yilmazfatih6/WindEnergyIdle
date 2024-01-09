@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ResourceManager.h"
 #include "Components/ActorComponent.h"
 #include "EnergyManager.generated.h"
 
@@ -24,6 +25,8 @@ public:
 	// Sets default values for this component's properties
 	UEnergyManager();
 
+	void InjectData(UResourceManager* NewResourceManager);
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -44,6 +47,8 @@ public:
 	virtual void SetDependencies(float TargetEnergy);
 	
 private:
+	UResourceManager* ResourceManager;
+	float IncomePerEnergy = .1f;
 	float EnergyPerSecond;
 	float TargetEnergyPerSecond;
 };
