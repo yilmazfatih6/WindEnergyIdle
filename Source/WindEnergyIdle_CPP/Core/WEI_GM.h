@@ -21,7 +21,7 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	class UEnergyManager* EnergyManager;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	class UUpgradeManager* UpgradeManager;
 
 	UPROPERTY(BlueprintReadOnly)

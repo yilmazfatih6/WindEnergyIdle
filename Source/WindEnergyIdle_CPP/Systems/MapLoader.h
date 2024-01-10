@@ -38,4 +38,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	ULevelDataAsset* GetCurrentLevelData() const;
 	void LoadLevel(int LevelNumber) const;
+	UFUNCTION(BlueprintCallable)
+	int GetLevelNumber();
 };

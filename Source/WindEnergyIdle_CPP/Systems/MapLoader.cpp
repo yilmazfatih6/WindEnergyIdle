@@ -67,3 +67,8 @@ void UMapLoader::LoadLevel(const int LevelNumber) const
 	UGameplayStatics::OpenLevelBySoftObjectPtr(GameInstance->GetWorld(), Level);
 	UE_LOG(LogTemp, Warning, TEXT("Load level %s is completed"), *Level.GetLongPackageName());
 }
+
+int UMapLoader::GetLevelNumber()
+{
+	return DefaultSaveGame->Level;
+}
