@@ -94,7 +94,7 @@ void UResourceManager::RemoveResource(const EGameResourceType Type, float Amount
 	}
 }
 
- UResourceDataAsset* UResourceManager::GetResource(EGameResourceType Type)
+UResourceDataAsset* UResourceManager::GetResource(const EGameResourceType Type) const
 {
 	if(&Resources == nullptr)
 	{

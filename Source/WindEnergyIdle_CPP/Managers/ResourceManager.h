@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "WindEnergyIdle_CPP/Enums/GameResourceType.h"
 #include "ResourceManager.generated.h"
 
 enum class EResourceType : uint8;
@@ -40,7 +41,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RemoveResource(EGameResourceType Type, float Amount);
 
-	UFUNCTION(BlueprintCallable)
-	UResourceDataAsset* GetResource(EGameResourceType Type);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UResourceDataAsset* GetResource(EGameResourceType Type) const;
 	
 };
