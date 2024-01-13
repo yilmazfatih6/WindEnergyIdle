@@ -19,6 +19,7 @@ class WINDENERGYIDLE_CPP_API UUpgrade : public UActorComponent
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(BlueprintAssignable)
 	FUpgradeLevelIncreaseEvent OnLevelIncrease;
 
 protected:
