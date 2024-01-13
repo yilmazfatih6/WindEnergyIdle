@@ -32,7 +32,6 @@ private:
 	UFUNCTION()
 	void OnTurbineSpawn(ATurbine* Turbine);
 
-	void SetCanMerge();
 	void FindClosestObjects(TArray<ATurbine*>* Turbines, bool& bWasSuccessful) const;
 
 	UFUNCTION()
@@ -52,5 +51,5 @@ public:
 	                TurbineSelectorReference);
 
 	UFUNCTION(BlueprintCallable)
-	void Merge();
+	void Merge(bool& bWasSuccessful);
 };

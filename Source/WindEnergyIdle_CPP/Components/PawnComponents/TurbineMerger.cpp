@@ -52,8 +52,9 @@ void UTurbineMerger::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	// ...
 }
 
-void UTurbineMerger::Merge()
+void UTurbineMerger::Merge(bool& bWasSuccessful)
 {
+	bWasSuccessful = false;
 	UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] Merge"));
 
 	if (TurbineSpawner == nullptr)
@@ -138,38 +139,13 @@ void UTurbineMerger::Merge()
 		}
 		TurbineSpawner->RemoveTurbineFromArray(Turbine);
 	}
+	bWasSuccessful = true;
 }
 
 void UTurbineMerger::OnTurbineSpawn(ATurbine* Turbine)
 {
 	// UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] OnTurbineSpawn"));
 	// SetCanMerge();
-}
-
-void UTurbineMerger::SetCanMerge()
-{
-	UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] SetCanMerge"));
-
-	if (TurbineSpawner == nullptr)
-	{
-		UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] SetCanMerge, TurbineSpawner is null!"));
-		return;
-	}
-
-	bCanMerge = false;
-
-	const auto SpawnedTurbinesByLevel = TurbineSpawner->GetSpawnedTurbinesByLevel();
-
-	for (int i = 0; i < SpawnedTurbinesByLevel->Num(); i++)
-	{
-		const auto SpawnedTurbines = (*SpawnedTurbinesByLevel)[i];
-
-		if (SpawnedTurbines->Num() >= MERGE_TURBINE_AMOUNT)
-		{
-			bCanMerge = true;
-			return;
-		}
-	}
 }
 
 void UTurbineMerger::FindClosestObjects(TArray<ATurbine*>* Turbines, bool& bWasSuccessful) const

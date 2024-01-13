@@ -7,8 +7,8 @@
 
 void UUpgradeMerge::Use()
 {
-	Super::Use();
-	
+	SetCanUse();
+
 	if(!CanUse) return;
 
 	if(Pawn == nullptr)
@@ -24,5 +24,10 @@ void UUpgradeMerge::Use()
 		return;
 	}
 
-	TurbineMerger->Merge();
+	bool bWasSuccessful = false;
+	TurbineMerger->Merge(bWasSuccessful);
+	if(bWasSuccessful)
+	{
+		Super::Use();
+		}
 }
