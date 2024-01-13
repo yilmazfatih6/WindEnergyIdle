@@ -4,13 +4,27 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "WindEnergyIdle_CPP/Core/WEI_Pawn.h"
 #include "Upgrade.generated.h"
 
+
+class AWEI_Pawn;
+class UResourceManager;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FUpgradeLevelIncreaseEvent, int, NewLevel, float, NewPrice);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class WINDENERGYIDLE_CPP_API UUpgrade : public UActorComponent
 {
 	GENERATED_BODY()
+
+public:
+	FUpgradeLevelIncreaseEvent OnLevelIncrease;
+
+protected:
+	UResourceManager* ResourceManager;
+	AWEI_Pawn* Pawn;
+	bool CanUse;
 
 public:
 	// Sets default values for this component's properties
@@ -27,8 +41,14 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
+	virtual void InjectData(UResourceManager* NewResourceManager, AWEI_Pawn* NewPawn);
+	virtual void SetCanUse();
+	
+	UFUNCTION(BlueprintCallable)
 	virtual void Use();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	class UUpgradeDataAsset* Data;
+
+	float GetPrice() const;
 };

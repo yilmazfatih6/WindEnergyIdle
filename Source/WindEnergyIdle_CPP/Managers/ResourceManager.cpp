@@ -22,8 +22,10 @@ void UResourceManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	
+	for (const auto Resource : Resources)
+	{
+		Resource->Amount = Resource->DefaultAmount;
+	}
 }
 
 
@@ -39,11 +41,24 @@ void UResourceManager::TickComponent(float DeltaTime, ELevelTick TickType,
 void UResourceManager::AddResource(EGameResourceType Type, float Amount)
 {
 	Amount = FMath::Clamp(Amount, 0, Amount);
+
+	if(&Resources == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[UResourceManager] AddResource, Resources is null!"));
+		return;
+	}
+	
 	for (const auto Resource : Resources)
 	{
+		if(Resource == nullptr)
+		{
+			UE_LOG(LogTemp, Error, TEXT("[UResourceManager] AddResource, Resource is null!"));
+			break;
+		}
+		
 		if(Resource->Type == Type)
 		{
-			UE_LOG(LogTemp, Log, TEXT("AddResource, Type %d, Amount %d"), Resource->Type, Amount);
+			UE_LOG(LogTemp, Log, TEXT("[UResourceManager] AddResource, Type %d, Amount %d"), Resource->Type, Amount);
 			Resource->Amount += Amount;
 			OnResourceAdded.Broadcast(Resource);
 			return;
@@ -55,17 +70,23 @@ void UResourceManager::RemoveResource(const EGameResourceType Type, float Amount
 {
 	Amount = FMath::Clamp(Amount, 0, Amount);
 
+	if(&Resources == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[UResourceManager] RemoveResource, Resources is null!"));
+		return;
+	}
+	
 	for (const auto Resource : Resources)
 	{
 		if(Resource->Type == Type)
 		{
 			if(Resource->Amount < Amount)
 			{
-				UE_LOG(LogTemp, Log, TEXT("[UResourceManager] RemoveResource, Amount of %hhd is less than %d"), Type, Amount);
+				UE_LOG(LogTemp, Log, TEXT("[UResourceManager] RemoveResource, Amount of %hhd is less than %f"), Type, Amount);
 				return;
 			}
 
-			UE_LOG(LogTemp, Log, TEXT("RemoveResource, Type %d, Amount %d"), Resource->Type, Amount);
+			UE_LOG(LogTemp, Log, TEXT("[UResourceManager] RemoveResource, Type %hhd, Amount %f"), Resource->Type, Amount);
 			Resource->Amount -= Amount;
 			OnResourceRemoved.Broadcast(Resource);
 			return;
@@ -75,6 +96,12 @@ void UResourceManager::RemoveResource(const EGameResourceType Type, float Amount
 
  UResourceDataAsset* UResourceManager::GetResource(EGameResourceType Type)
 {
+	if(&Resources == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[UResourceManager] AddResource, Resources is null!"));
+		return nullptr;
+	}
+	
 	for (const auto Resource : Resources)
 	{
 		if(Resource->Type == Type)

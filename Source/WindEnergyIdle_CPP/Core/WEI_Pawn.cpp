@@ -118,6 +118,16 @@ UTurbinePlacer* AWEI_Pawn::GetTurbinePlacer()
 	return TurbinePlacer;
 }
 
+UTurbineMerger* AWEI_Pawn::GetTurbineMerger()
+{
+	return TurbineMerger;
+}
+
+UTurbineSpawner* AWEI_Pawn::GetTurbineSpawner()
+{
+	return TurbineSpawner;
+}
+
 void AWEI_Pawn::OnTurbineSpawned(ATurbine* Turbine)
 {
 	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] OnTurbineSpawned"));

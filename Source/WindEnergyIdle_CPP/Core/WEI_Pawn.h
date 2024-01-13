@@ -72,4 +72,6 @@ public:
 	void OnLeftMouseClickRelease();
 	UTurbineSelector* GetTurbineSelector();
 	UTurbinePlacer* GetTurbinePlacer();
+	UTurbineMerger* GetTurbineMerger();
+	UTurbineSpawner* GetTurbineSpawner();
 };

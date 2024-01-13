@@ -11,6 +11,9 @@
 void AWEI_GM::BeginPlay()
 {
 	Super::BeginPlay();
+
+	EnergyManager->InjectData(ResourceManager);
+	UpgradeManager->InjectData(ResourceManager);
 }
 
 AWEI_GM::AWEI_GM()
@@ -19,6 +22,4 @@ AWEI_GM::AWEI_GM()
 	UpgradeManager = CreateDefaultSubobject<UUpgradeManager>(TEXT("Upgrade Manager"));
 	LevelManager = CreateDefaultSubobject<ULevelManager>(TEXT("Level Manager"));
 	ResourceManager = CreateDefaultSubobject<UResourceManager>(TEXT("Resource Manager"));
-
-	EnergyManager->InjectData(ResourceManager);
 }

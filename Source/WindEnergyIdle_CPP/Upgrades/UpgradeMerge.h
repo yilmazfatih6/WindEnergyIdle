@@ -13,4 +13,8 @@ UCLASS()
 class WINDENERGYIDLE_CPP_API UUpgradeMerge : public UUpgrade
 {
 	GENERATED_BODY()
+
+public:
+	virtual void Use() override;
+
 };

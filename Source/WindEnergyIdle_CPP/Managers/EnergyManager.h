@@ -48,7 +48,7 @@ public:
 	
 private:
 	UResourceManager* ResourceManager;
-	float IncomePerEnergy = .1f;
+	float IncomePerEnergy = .00001f;
 	float EnergyPerSecond;
 	float TargetEnergyPerSecond;
 };

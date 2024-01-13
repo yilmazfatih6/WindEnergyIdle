@@ -38,11 +38,16 @@ void UEnergyManager::BeginPlay()
 	{
 		if(ResourceManager)
 		{
-			UE_LOG(LogTemp, Log, TEXT("EnergyPerSecond %f"), (EnergyPerSecond))
-			UE_LOG(LogTemp, Log, TEXT("IncomePerEnergy %f"), (IncomePerEnergy))
-			ResourceManager->AddResource(EGameResourceType::Money, EnergyPerSecond * IncomePerEnergy * .1f);
+			// UE_LOG(LogTemp, Log, TEXT("EnergyPerSecond %f"), (EnergyPerSecond));
+			// UE_LOG(LogTemp, Log, TEXT("IncomePerEnergy %f"), (IncomePerEnergy));
+
+			const int Amount = EnergyPerSecond * IncomePerEnergy * .33f;
+			if(Amount > 0)
+			{
+				ResourceManager->AddResource(EGameResourceType::Money, Amount);
+			}
 		}
-	}, .1f, true);
+	}, .33f, true);
 }
 
 

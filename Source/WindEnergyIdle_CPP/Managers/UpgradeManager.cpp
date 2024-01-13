@@ -3,17 +3,14 @@
 
 #include "UpgradeManager.h"
 
+#include "Kismet/GameplayStatics.h"
 #include "WindEnergyIdle_CPP/Upgrades/UpgradeAdd.h"
 
 // Sets default values for this component's properties
 UUpgradeManager::UUpgradeManager()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
-
+	PrimaryComponentTick.bCanEverTick = false;
+	
 	UpgradeAdd = CreateDefaultSubobject<UUpgradeAdd>(TEXT("Upgrade Add"));
 	UpgradeMerge = CreateDefaultSubobject<UUpgradeMerge>(TEXT("Upgrade Merge"));
 	UpgradeIncome = CreateDefaultSubobject<UUpgradeIncome>(TEXT("Upgrade Income"));
@@ -24,8 +21,6 @@ UUpgradeManager::UUpgradeManager()
 void UUpgradeManager::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
 }
 
 
@@ -35,4 +30,27 @@ void UUpgradeManager::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+void UUpgradeManager::InjectData(UResourceManager* NewResourceManager)
+{
+	ResourceManager = NewResourceManager;
+
+	const auto Pawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	if(Pawn == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[UUpgradeManager] BeginPlay(), Pawn is null!"));
+		return;
+	}
+
+	const auto WEI_Pawn = Cast<AWEI_Pawn>(Pawn);
+	if(WEI_Pawn == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[UUpgradeManager] BeginPlay(), WEI_Pawn is null!"));
+		return;
+	}
+	
+	UpgradeAdd->InjectData(ResourceManager, WEI_Pawn);
+	UpgradeMerge->InjectData(ResourceManager, WEI_Pawn);
+	UpgradeIncome->InjectData(ResourceManager, WEI_Pawn);
 }
