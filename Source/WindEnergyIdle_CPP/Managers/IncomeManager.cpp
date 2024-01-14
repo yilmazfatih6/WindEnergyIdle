@@ -27,13 +27,17 @@ void UIncomeManager::BeginPlay()
 				UE_LOG(LogTemp, Error, TEXT("[UIncomeManager] Data is null!"));
 				return;
 			}
-			const int Amount = EnergyManager->GetEnergyPerSecond() * Data->GetIncomePerEnergy() * .33f * CurrentBoost;
+			
+			const auto IncomePerSecond = EnergyManager->GetEnergyPerSecond() * Data->GetIncomePerEnergy() * CurrentBoost;
+			OnIncomePerSecondChanged.Broadcast(IncomePerSecond);
+			
+			const int Amount = IncomePerSecond * Data->GetIncomeUpdateInterval();
 			if(Amount > 0)
 			{
 				ResourceManager->AddResource(EGameResourceType::Money, Amount);
 			}
 		}
-	}, .33f, true);
+	}, Data->GetIncomeUpdateInterval(), true);
 }
 
 void UIncomeManager::InjectData(UResourceManager* NewResourceManager, UEnergyManager* NewEnergyManager, AWEI_Pawn* NewPawn)
@@ -63,9 +67,6 @@ void UIncomeManager::OnEmptyAreaClicked()
 	NewBoost = FMath::Clamp(NewBoost, 1 , Data->GetMaxBoost());
 	CurrentBoost = NewBoost;
 	UE_LOG(LogTemp, Error, TEXT("[UIncomeManager] OnEmptyAreaClicked, CurrentBoost = %f"), CurrentBoost);
-
-	const auto IncomePerSecond = EnergyManager->GetEnergyPerSecond() * Data->GetIncomePerEnergy() * CurrentBoost;
-	OnIncomePerSecondChanged.Broadcast(IncomePerSecond);
 }
 
 void UIncomeManager::FadeCurrentBoost(float DeltaTime)
@@ -80,7 +81,4 @@ void UIncomeManager::FadeCurrentBoost(float DeltaTime)
 	NewBoost = FMath::Clamp(NewBoost, 1 , NewBoost);
 	CurrentBoost = NewBoost;
 	UE_LOG(LogTemp, Error, TEXT("[UIncomeManager] FadeCurrentBoost, CurrentBoost = %f"), CurrentBoost);
-
-	const auto IncomePerSecond = EnergyManager->GetEnergyPerSecond() * Data->GetIncomePerEnergy() * CurrentBoost;
-	OnIncomePerSecondChanged.Broadcast(IncomePerSecond);
 }

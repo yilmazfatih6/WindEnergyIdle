@@ -3,6 +3,11 @@
 
 #include "UIncomeManagerDataAsset.h"
 
+float UUIncomeManagerDataAsset::GetIncomeUpdateInterval() const
+{
+	return IncomeUpdateInterval;
+}
+
 inline float UUIncomeManagerDataAsset::GetIncomePerEnergy() const
 {
 	return IncomePerEnergy;

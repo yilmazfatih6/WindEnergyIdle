@@ -16,6 +16,9 @@ class WINDENERGYIDLE_CPP_API UUIncomeManagerDataAsset : public UDataAsset
 
 private:
 	UPROPERTY(EditDefaultsOnly)
+	float IncomeUpdateInterval = .5f;
+	
+	UPROPERTY(EditDefaultsOnly)
 	float IncomePerEnergy = .00001f;
 	
 	UPROPERTY(EditDefaultsOnly)
@@ -28,6 +31,7 @@ private:
 	float BoostFadeDuration = 2;
 
 public:
+	float GetIncomeUpdateInterval() const;
 	float GetIncomePerEnergy() const;
 	float GetBoostStep() const;
 	float GetMaxBoost() const;
