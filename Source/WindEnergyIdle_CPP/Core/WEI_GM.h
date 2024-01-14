@@ -18,7 +18,7 @@ public:
 
 	virtual void BeginPlay() override;
 	
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	class UEnergyManager* EnergyManager;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -29,6 +29,9 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	class UResourceManager* ResourceManager;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	class UIncomeManager* IncomeManager;
 	
 	AWEI_GM();
 };

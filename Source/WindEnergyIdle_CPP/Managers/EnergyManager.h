@@ -7,25 +7,29 @@
 #include "Components/ActorComponent.h"
 #include "EnergyManager.generated.h"
 
+class AWEI_Pawn;
+class UEnergyManagerDataAsset;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEnergyIncreaseEvent, float, EnergyPerSecond, float, TargetEnergy);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FEnergyDecreaseEvent, float, EnergyPerSecond, float, TargetEnergy, bool, IsTurbineDespawned);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class WINDENERGYIDLE_CPP_API UEnergyManager : public UActorComponent
 {
+	GENERATED_BODY()
+
 public:
 	UPROPERTY(BlueprintAssignable);
 	FEnergyIncreaseEvent OnEnergyPerSecondIncrease;
 	UPROPERTY(BlueprintAssignable);
 	FEnergyDecreaseEvent OnEnergyPerSecondDecrease;
 
-	GENERATED_BODY()
+private:
+	float EnergyPerSecond;
+	float TargetEnergyPerSecond;
 
 public:
 	// Sets default values for this component's properties
 	UEnergyManager();
-
-	void InjectData(UResourceManager* NewResourceManager);
 
 protected:
 	// Called when the game starts
@@ -45,10 +49,4 @@ public:
 	float GetTargetEnergy() const;
 	UFUNCTION(BlueprintCallable)
 	virtual void SetDependencies(float TargetEnergy);
-	
-private:
-	UResourceManager* ResourceManager;
-	float IncomePerEnergy = .00001f;
-	float EnergyPerSecond;
-	float TargetEnergyPerSecond;
 };

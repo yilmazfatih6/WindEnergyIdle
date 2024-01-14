@@ -57,7 +57,7 @@ public:
 
 	void SetSelectedTurbine(ATurbine* Turbine);
 	void ResetSelectedTurbine();
-	void LineTraceTurbine();
+	void LineTraceTurbine(bool& bIsHit);
 	void SetCanSelect(bool bValue);
 
 	UFUNCTION(BlueprintCallable)

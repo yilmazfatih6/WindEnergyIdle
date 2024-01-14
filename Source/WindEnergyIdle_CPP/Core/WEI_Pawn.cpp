@@ -96,8 +96,15 @@ void AWEI_Pawn::OnLeftMouseClickPressed()
 	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] OnLeftMouseClickPressed"));
 
 	bIsLeftMouseDown = true;
-	TurbineSelector->LineTraceTurbine();
+	bool bIsHit = false;
+	TurbineSelector->LineTraceTurbine(bIsHit);
 	TurbinePlacer->SetHover(true);
+
+	if(!TurbinePlacer->IsPlacing())
+	{
+		UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] OnLeftMouseClickPressed(), OnEmptyAreaClicked"));
+		OnEmptyAreaClicked.Broadcast();
+	}
 }
 
 void AWEI_Pawn::OnLeftMouseClickRelease()

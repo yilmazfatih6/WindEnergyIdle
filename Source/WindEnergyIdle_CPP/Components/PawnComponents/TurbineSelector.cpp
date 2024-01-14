@@ -47,8 +47,9 @@ void UTurbineSelector::ResetSelectedTurbine()
 	OnUnselect.Broadcast();
 }
 
-void UTurbineSelector::LineTraceTurbine()
+void UTurbineSelector::LineTraceTurbine(bool& bIsHit)
 {
+	bIsHit = false;
 	if (!bCanSelect)
 	{
 		return;
@@ -80,6 +81,7 @@ void UTurbineSelector::LineTraceTurbine()
 	}
 	UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] SelectTurbine, Turbine: %s"), *HitTurbine->GetName());
 
+	bIsHit = true;
 	SetSelectedTurbine(HitTurbine);
 
 	// OnTurbinePlacementStart.Broadcast();

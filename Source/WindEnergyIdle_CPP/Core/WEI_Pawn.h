@@ -10,10 +10,16 @@
 #include "WEI_Pawn.generated.h"
 
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FVoidEvent);
+
 UCLASS()
 class WINDENERGYIDLE_CPP_API AWEI_Pawn : public APawn
 {
 	GENERATED_BODY()
+
+public:
+	UPROPERTY(BlueprintAssignable)
+	FVoidEvent OnEmptyAreaClicked;
 
 private:
 	bool bIsLeftMouseDown;
