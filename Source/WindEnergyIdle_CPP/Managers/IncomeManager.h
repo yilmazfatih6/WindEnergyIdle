@@ -11,10 +11,15 @@ class UEnergyManager;
 class UResourceManager;
 class UUIncomeManagerDataAsset;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FFloatEvent, float, Value);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class WINDENERGYIDLE_CPP_API UIncomeManager : public UActorComponent
 {
 	GENERATED_BODY()
+public:
+	UPROPERTY(BlueprintAssignable)
+	FFloatEvent OnIncomePerSecondChanged;
 	
 private:
 	UPROPERTY(EditDefaultsOnly)
@@ -24,7 +29,7 @@ private:
 	UResourceManager* ResourceManager;
 	UEnergyManager* EnergyManager;
 
-	float CurrentBoost;
+	float CurrentBoost = 1;
 
 protected:
 	virtual void BeginPlay() override;
