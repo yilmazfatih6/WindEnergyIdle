@@ -18,6 +18,11 @@ float UUIncomeManagerDataAsset::GetBoostStep() const
 	return BoostStep;
 }
 
+float UUIncomeManagerDataAsset::GetMinBoost()
+{
+	return 1;
+}
+
 float UUIncomeManagerDataAsset::GetMaxBoost() const
 {
 	return MaxBoost;

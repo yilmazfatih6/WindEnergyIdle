@@ -16,11 +16,9 @@ class WINDENERGYIDLE_CPP_API UTurbineSpawner : public UActorComponent
 
 public:
 	UPROPERTY(BlueprintAssignable)
-	;
 	FTurbineDelegate OnSpawnStart;
 
 	UPROPERTY(BlueprintAssignable)
-	;
 	FTurbineDelegate OnSpawnComplete;
 
 #pragma endregion

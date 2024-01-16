@@ -220,7 +220,7 @@ void UTurbineMerger::OnMergeMovementComplete(ATurbine* Turbine)
 		}
 
 		// Spawn next level turbine
-		const auto TurbineLevel = FirstClosestTurbine->GetLevel();
+		const auto TurbineLevel = FirstClosestTurbine->GetTurbineLevel();
 		const auto NextTurbineLevel = TurbineLevel + 1;
 		bool bWasSuccessful = false;
 		const auto SpawnedTurbine = TurbineSpawner->SpawnTurbine(NextTurbineLevel, bWasSuccessful);

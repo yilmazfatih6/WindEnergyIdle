@@ -15,11 +15,9 @@ class WINDENERGYIDLE_CPP_API UTurbineSelector : public UActorComponent
 
 public:
 	UPROPERTY(BlueprintAssignable)
-	;
 	FTurbineDelegate OnSelect;
 
 	UPROPERTY(BlueprintAssignable)
-	;
 	FVoidDelegate OnUnselect;
 
 private:

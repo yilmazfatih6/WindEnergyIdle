@@ -2,7 +2,10 @@
 
 
 #include "TurbineEnergyController.h"
+
+#include "Kismet/GameplayStatics.h"
 #include "WindEnergyIdle_CPP/Core/WEI_GM.h"
+#include "WindEnergyIdle_CPP/Core/WEI_Pawn.h"
 #include "WindEnergyIdle_CPP/Managers/EnergyManager.h"
 
 // Sets default values for this component's properties
@@ -19,7 +22,6 @@ void UTurbineEnergyController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
 	GameMode = static_cast<AWEI_GM*>(GetWorld()->GetAuthGameMode());
 }
 

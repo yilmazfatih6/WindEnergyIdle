@@ -60,7 +60,7 @@ void UTurbinePlacer::HoverSelectedTurbine()
 		return;
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("Hit %s"), *Hit.GetActor()->GetName());
+	// UE_LOG(LogTemp, Log, TEXT("Hit %s"), *Hit.GetActor()->GetName());
 
 	if (Hit.bBlockingHit && IsValid(Hit.GetActor()))
 	{

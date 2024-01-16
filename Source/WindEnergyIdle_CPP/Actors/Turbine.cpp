@@ -2,7 +2,12 @@
 
 #include "Turbine.h"
 
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/RotatingMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "WindEnergyIdle_CPP/Components/TurbineComponents/TurbineEnergyController.h"
+#include "WindEnergyIdle_CPP/Core/WEI_GM.h"
+#include "WindEnergyIdle_CPP/Managers/IncomeManager.h"
 
 // Sets default values
 ATurbine::ATurbine()
@@ -11,6 +16,20 @@ ATurbine::ATurbine()
 	PrimaryActorTick.bCanEverTick = true;
 
 	TurbineEnergyController = CreateDefaultSubobject<UTurbineEnergyController>(TEXT("Energy Controller"));
+	RotatingMovementComponent = CreateDefaultSubobject<URotatingMovementComponent>(TEXT("Rotating Movement Component"));
+	RootSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root Component"));
+	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Component"));
+	PropellerRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Propeller Root"));
+	PlacementStatusMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Placement Status Mesh"));
+	TurbineBodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Turbine Body Mesh"));
+	TurbinePropellerMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Turbine Propeller Mesh"));
+
+	SetRootComponent(RootSceneComponent);
+	CapsuleComponent->SetupAttachment(RootSceneComponent);
+	PropellerRoot->SetupAttachment(CapsuleComponent);
+	PlacementStatusMesh->SetupAttachment(CapsuleComponent);
+	TurbineBodyMesh->SetupAttachment(CapsuleComponent);
+	TurbinePropellerMesh->SetupAttachment(PropellerRoot);
 }
 
 void ATurbine::BeginOverlap(AActor* OtherActor)
@@ -40,7 +59,12 @@ void ATurbine::BeginOverlap(AActor* OtherActor)
 
 	bIsOverlapping = true;
 
-	SelectionMesh->SetMaterial(0, SelectionInvalidMaterial);
+	if(PlacementStatusMesh == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[ABaseTurbine] SelectionMesh is null!"));
+		return;
+	}
+	PlacementStatusMesh->SetMaterial(0, SelectionInvalidMaterial);
 }
 
 void ATurbine::EndOverlap(AActor* OtherActor)
@@ -57,16 +81,41 @@ void ATurbine::EndOverlap(AActor* OtherActor)
 	DisableOverlap();
 }
 
+void ATurbine::OnBoostRatioChanged(float Value)
+{
+	BoostRatio = Value;
+}
+
 // Called when the game starts or when spawned
 void ATurbine::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Log, TEXT("[BaseTurbine] BeginPlay"));
+	UE_LOG(LogTemp, Log, TEXT("[ATurbine] BeginPlay"));
 
 	PlacementLocation = GetActorLocation();
 
 	DisableOverlap();
+
+	RotatingMovementComponent->SetUpdatedComponent(PropellerRoot);
+	
+	DefaultRotationRate = RotatingMovementComponent->RotationRate;
+	
+	const auto GM = UGameplayStatics::GetGameMode(GetWorld());
+	if(GM == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[ATurbine] GM is null!"));
+		return;
+	}
+
+	GameMode = Cast<AWEI_GM>(GM);
+	if(GameMode == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[ATurbine] GameMode is null!"));
+		return;
+	}
+
+	GameMode->IncomeManager->OnBoostRatioChanged.AddDynamic(this, &ThisClass::OnBoostRatioChanged);
 }
 
 // Called every frame
@@ -81,13 +130,23 @@ void ATurbine::SetSelected()
 {
 	DisableOverlap();
 	bIsSelected = true;
-	SelectionMesh->SetVisibility(true);
+	if(PlacementStatusMesh == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[ABaseTurbine] SelectionMesh is null!"));
+		return;
+	}
+	PlacementStatusMesh->SetVisibility(true);
 }
 
 void ATurbine::SetUnselected()
 {
 	bIsSelected = false;
-	SelectionMesh->SetVisibility(false);
+	if(PlacementStatusMesh == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[ABaseTurbine] SelectionMesh is null!"));
+		return;
+	}
+	PlacementStatusMesh->SetVisibility(false);
 }
 
 void ATurbine::Place()
@@ -140,7 +199,14 @@ void ATurbine::EndMovement()
 void ATurbine::DisableOverlap()
 {
 	bIsOverlapping = false;
-	SelectionMesh->SetMaterial(0, SelectionValidMaterial);
+
+	if(PlacementStatusMesh == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[ABaseTurbine] SelectionMesh is null!"));
+		return;
+	}
+	
+	PlacementStatusMesh->SetMaterial(0, SelectionValidMaterial);
 }
 
 bool ATurbine::IsInitialPlacement() const
@@ -153,7 +219,7 @@ UTurbineEnergyController* ATurbine::GetEnergyController() const
 	return TurbineEnergyController;
 }
 
-int32 ATurbine::GetLevel() const
+int32 ATurbine::GetTurbineLevel() const
 {
 	return Level;
 }
@@ -161,4 +227,22 @@ int32 ATurbine::GetLevel() const
 FVector ATurbine::GetPlacementLocation() const
 {
 	return PlacementLocation;
+}
+
+void ATurbine::SetWindMapValue(float Value)
+{
+	WindMapValue = Value;
+	SetPropellerRotationRate();
+}
+
+void ATurbine::SetPropellerRotationRate()
+{
+	const auto Rate = (BoostRatio + 1) * RotationSpeedMultiplier * WindMapValue * DefaultRotationRate;
+	UE_LOG(LogTemp, Log, TEXT("[ATurbine] SetPropellerRotationRate(), BoostRatio = %f"), BoostRatio);
+	UE_LOG(LogTemp, Log, TEXT("[ATurbine] SetPropellerRotationRate(), RotationSpeedMultiplier = %f"), RotationSpeedMultiplier);
+	UE_LOG(LogTemp, Log, TEXT("[ATurbine] SetPropellerRotationRate(), WindMapValue = %f"), WindMapValue);
+	UE_LOG(LogTemp, Log, TEXT("[ATurbine] SetPropellerRotationRate(), DefaultRotationRate = %f, %f, %f"), DefaultRotationRate.Roll, DefaultRotationRate.Pitch, DefaultRotationRate.Yaw);
+	UE_LOG(LogTemp, Log, TEXT("[ATurbine] SetPropellerRotationRate(), Rate = %f, %f, %f"), Rate.Roll, Rate.Pitch, Rate.Yaw);
+	RotatingMovementComponent->RotationRate = Rate;
+				
 }

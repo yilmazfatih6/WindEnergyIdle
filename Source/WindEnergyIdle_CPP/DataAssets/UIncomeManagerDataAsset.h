@@ -34,6 +34,7 @@ public:
 	float GetIncomeUpdateInterval() const;
 	float GetIncomePerEnergy() const;
 	float GetBoostStep() const;
+	static float GetMinBoost();
 	float GetMaxBoost() const;
 	float GetBoostFadeDuration() const;
 };

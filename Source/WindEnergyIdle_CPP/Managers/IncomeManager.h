@@ -20,6 +20,9 @@ class WINDENERGYIDLE_CPP_API UIncomeManager : public UActorComponent
 public:
 	UPROPERTY(BlueprintAssignable)
 	FFloatEvent OnIncomePerSecondChanged;
+
+	UPROPERTY(BlueprintAssignable)
+	FFloatEvent OnBoostRatioChanged;
 	
 private:
 	UPROPERTY(EditDefaultsOnly)
@@ -43,4 +46,5 @@ private:
 	UFUNCTION()
 	void OnEmptyAreaClicked();
 	void FadeCurrentBoost(float DeltaTime);
+	void SetCurrentBoost(float NewBoost);
 };

@@ -14,19 +14,15 @@ class WINDENERGYIDLE_CPP_API UTurbinePlacer : public UActorComponent
 
 public:
 	UPROPERTY(BlueprintAssignable)
-	;
 	FTurbineDelegate OnPlacementStart;
 
 	UPROPERTY(BlueprintAssignable)
-	;
 	FTurbineDelegate OnPlacementChange;
 
 	UPROPERTY(BlueprintAssignable)
-	;
 	FTurbineDelegate OnPlacementSucceed;
 
 	UPROPERTY(BlueprintAssignable)
-	;
 	FTurbineDelegate OnPlacementFail;
 
 #pragma endregion

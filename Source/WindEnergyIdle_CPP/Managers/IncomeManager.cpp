@@ -63,10 +63,8 @@ void UIncomeManager::OnEmptyAreaClicked()
 		return;
 	}
 
-	auto NewBoost = CurrentBoost + Data->GetBoostStep();
-	NewBoost = FMath::Clamp(NewBoost, 1 , Data->GetMaxBoost());
-	CurrentBoost = NewBoost;
-	UE_LOG(LogTemp, Error, TEXT("[UIncomeManager] OnEmptyAreaClicked, CurrentBoost = %f"), CurrentBoost);
+	const auto NewBoost = CurrentBoost + Data->GetBoostStep();
+	SetCurrentBoost(NewBoost);
 }
 
 void UIncomeManager::FadeCurrentBoost(float DeltaTime)
@@ -76,9 +74,18 @@ void UIncomeManager::FadeCurrentBoost(float DeltaTime)
 		UE_LOG(LogTemp, Error, TEXT("[UIncomeManager] Data is null!"));
 		return;
 	}
-	
-	auto NewBoost = CurrentBoost - DeltaTime * Data->GetBoostFadeDuration() * Data->GetMaxBoost();
-	NewBoost = FMath::Clamp(NewBoost, 1 , NewBoost);
+
+	const auto NewBoost = CurrentBoost - DeltaTime * Data->GetBoostFadeDuration() * Data->GetMaxBoost();
+	SetCurrentBoost(NewBoost);
+}
+
+void UIncomeManager::SetCurrentBoost(float NewBoost)
+{
+	NewBoost = FMath::Clamp(NewBoost, 1 , Data->GetMaxBoost());
 	CurrentBoost = NewBoost;
-	UE_LOG(LogTemp, Error, TEXT("[UIncomeManager] FadeCurrentBoost, CurrentBoost = %f"), CurrentBoost);
+	const auto Ratio = (CurrentBoost - Data->GetMinBoost()) / (Data->GetMaxBoost() - Data->GetMinBoost());
+	// UE_LOG(LogTemp, Log, TEXT("[UIncomeManager] CurrentBoost = %f"), CurrentBoost);
+	// UE_LOG(LogTemp, Log, TEXT("[UIncomeManager] Data->GetMaxBoost() = %f"), Data->GetMaxBoost());
+	// UE_LOG(LogTemp, Log, TEXT("[UIncomeManager] Ratio = %f"), Ratio);
+	OnBoostRatioChanged.Broadcast(Ratio);
 }

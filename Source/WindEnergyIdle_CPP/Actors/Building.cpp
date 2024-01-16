@@ -10,7 +10,7 @@ ABuilding::ABuilding()
 	PrimaryActorTick.bCanEverTick = true;
 
 	BuildingMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("Building Mesh");
-	BuildingMeshComponent->SetupAttachment(RootComponent);
+	SetRootComponent(BuildingMeshComponent);
 }
 
 // Called when the game starts or when spawned

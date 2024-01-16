@@ -44,8 +44,8 @@ void UUpgrade::SetCanUse()
 	
 	const auto Price = GetPrice();
 	const auto Money = ResourceManager->GetResource(EGameResourceType::Money)->Amount;
-	UE_LOG(LogTemp, Warning, TEXT("[UUpgrade] SetCanUse(), Price = %f"), Price);
-	UE_LOG(LogTemp, Warning, TEXT("[UUpgrade] SetCanUse(), Money = %f"), Money);
+	// UE_LOG(LogTemp, Warning, TEXT("[UUpgrade] SetCanUse(), Price = %f"), Price);
+	// UE_LOG(LogTemp, Warning, TEXT("[UUpgrade] SetCanUse(), Money = %f"), Money);
 	CanUse = Price <= Money;
 	if(!CanUse)
 	{
@@ -66,7 +66,7 @@ void UUpgrade::Use()
 	if(!CanUse) return;
 
 	const auto Price = GetPrice();
-	UE_LOG(LogTemp, Error, TEXT("[UUpgrade] SetCanUse(), Price = %f"), Price);
+	// UE_LOG(LogTemp, Error, TEXT("[UUpgrade] SetCanUse(), Price = %f"), Price);
 	ResourceManager->RemoveResource(EGameResourceType::Money, Price);
 
 	// Increase level.

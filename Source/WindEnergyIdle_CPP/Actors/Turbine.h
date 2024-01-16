@@ -18,24 +18,23 @@ class WINDENERGYIDLE_CPP_API ATurbine : public AActor
 {
 	GENERATED_BODY()
 
+#pragma region Delegates
 public:
 	UPROPERTY(BlueprintAssignable)
-	;
 	FTurbineDelegate OnMovementComplete;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	class UTurbineEnergyController* TurbineEnergyController;
+#pragma endregion
 
+#pragma region Variables
 private:
 	bool bIsInitialPlacement = true;
 	bool bIsSelected;
 	bool bIsOverlapping;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	int32 Level = 1;
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
-	;
 	UCurveFloat* CurveFloat;
 
 	FTimeline CurveTimeline;
@@ -45,18 +44,55 @@ private:
 
 	bool bMove;
 
-protected:
-	UPROPERTY(Category="References", BlueprintReadWrite)
-	UStaticMeshComponent* SelectionMesh;
+	FRotator DefaultRotationRate;
+	float BoostRatio = 1;
 
+	UPROPERTY(EditDefaultsOnly)
+	float RotationSpeedMultiplier = 1;
+	
+protected:
+	UPROPERTY(Category="References", BlueprintReadOnly)
+	class AWEI_GM* GameMode;
+	
 	UPROPERTY(Category="References", EditDefaultsOnly, BlueprintReadOnly)
 	UMaterialInstance* SelectionInvalidMaterial;
 
 	UPROPERTY(Category="References", EditDefaultsOnly, BlueprintReadOnly)
 	UMaterialInstance* SelectionValidMaterial;
+	
+	UPROPERTY(Category="Components", BlueprintReadOnly)
+	class UTurbineEnergyController* TurbineEnergyController;
 
+	UPROPERTY(Category="Components", EditDefaultsOnly, BlueprintReadOnly)
+	class URotatingMovementComponent* RotatingMovementComponent;
+
+	UPROPERTY(Category="Components", EditDefaultsOnly, BlueprintReadOnly)
+	USceneComponent* RootSceneComponent;
+	
+	UPROPERTY(Category="Components", EditDefaultsOnly, BlueprintReadOnly)
+	class UCapsuleComponent* CapsuleComponent;
+
+	UPROPERTY(Category="Components", EditDefaultsOnly, BlueprintReadOnly)
+	USceneComponent* PropellerRoot;
+
+	UPROPERTY(Category="Components", EditDefaultsOnly, BlueprintReadOnly)
+	UStaticMeshComponent* PlacementStatusMesh;
+
+	UPROPERTY(Category="Components", EditDefaultsOnly, BlueprintReadOnly)
+	UStaticMeshComponent* TurbineBodyMesh;
+
+	UPROPERTY(Category="Components", EditDefaultsOnly, BlueprintReadOnly)
+	UStaticMeshComponent* TurbinePropellerMesh;
+
+	UPROPERTY(BlueprintReadOnly)
+	float WindMapValue;
+#pragma endregion
+
+#pragma region Functions
 private:
-
+	UFUNCTION()
+	void OnBoostRatioChanged(float Value);
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -93,9 +129,16 @@ public:
 	bool IsInitialPlacement() const;
 
 	UTurbineEnergyController* GetEnergyController() const;
-	int32 GetLevel() const;
+	int32 GetTurbineLevel() const;
 	FVector GetPlacementLocation() const;
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	FTransform GetEnergyTextPosition() const;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void SetWindMapValue(float Value);
+
+	UFUNCTION(BlueprintCallable)
+	void SetPropellerRotationRate();
+#pragma endregion
 };
