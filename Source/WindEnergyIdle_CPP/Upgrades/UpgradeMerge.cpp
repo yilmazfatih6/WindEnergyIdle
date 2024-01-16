@@ -29,5 +29,5 @@ void UUpgradeMerge::Use()
 	if(bWasSuccessful)
 	{
 		Super::Use();
-		}
+	}
 }

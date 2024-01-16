@@ -28,7 +28,7 @@ void AWEI_GM::BeginPlay()
 		return;
 	}
 	
-	IncomeManager->InjectData(ResourceManager, EnergyManager, WEI_Pawn);
+	IncomeManager->InjectData(ResourceManager, EnergyManager, UpgradeManager, WEI_Pawn);
 	UpgradeManager->InjectData(ResourceManager);
 }
 

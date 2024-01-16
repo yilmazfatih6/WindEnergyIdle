@@ -30,6 +30,9 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float BoostFadeDuration = 2;
 
+	UPROPERTY(EditDefaultsOnly)
+	UCurveFloat* IncomePerSecondGraph;
+
 public:
 	float GetIncomeUpdateInterval() const;
 	float GetIncomePerEnergy() const;
@@ -37,4 +40,5 @@ public:
 	static float GetMinBoost();
 	float GetMaxBoost() const;
 	float GetBoostFadeDuration() const;
+	UCurveFloat* GetIncomePerSecondGraph() const;
 };

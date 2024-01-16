@@ -76,5 +76,10 @@ void UUpgrade::Use()
 
 float UUpgrade::GetPrice() const
 {
-	return Data->PriceGraph->GetFloatValue(Level);
+	return FMath::FloorToInt(Data->PriceGraph->GetFloatValue(Level));
+}
+
+int UUpgrade::GetLevel() const
+{
+	return Level;
 }

@@ -32,3 +32,8 @@ float UUIncomeManagerDataAsset::GetBoostFadeDuration() const
 {
 	return BoostFadeDuration;
 }
+
+UCurveFloat* UUIncomeManagerDataAsset::GetIncomePerSecondGraph() const
+{
+	return IncomePerSecondGraph;
+}

@@ -58,7 +58,7 @@ void UResourceManager::AddResource(EGameResourceType Type, float Amount)
 		
 		if(Resource->Type == Type)
 		{
-			UE_LOG(LogTemp, Log, TEXT("[UResourceManager] AddResource, Type %d, Amount %d"), Resource->Type, Amount);
+			// UE_LOG(LogTemp, Log, TEXT("[UResourceManager] AddResource, Type %d, Amount %d"), Resource->Type, Amount);
 			Resource->Amount += Amount;
 			OnResourceAdded.Broadcast(Resource);
 			return;

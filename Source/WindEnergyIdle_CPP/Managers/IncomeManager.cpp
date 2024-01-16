@@ -5,6 +5,7 @@
 
 #include "EnergyManager.h"
 #include "ResourceManager.h"
+#include "UpgradeManager.h"
 #include "WindEnergyIdle_CPP/Core/WEI_Pawn.h"
 #include "WindEnergyIdle_CPP/DataAssets/UIncomeManagerDataAsset.h"
 
@@ -27,8 +28,10 @@ void UIncomeManager::BeginPlay()
 				UE_LOG(LogTemp, Error, TEXT("[UIncomeManager] Data is null!"));
 				return;
 			}
-			
-			const auto IncomePerSecond = EnergyManager->GetEnergyPerSecond() * Data->GetIncomePerEnergy() * CurrentBoost;
+
+			const auto IncomeUpgradeLevel = UpgradeManager->UpgradeIncome->GetLevel();
+			const auto IncomeUpgradeMultiplier = Data->GetIncomePerSecondGraph()->GetFloatValue(IncomeUpgradeLevel);
+			const auto IncomePerSecond = EnergyManager->GetEnergyPerSecond() * Data->GetIncomePerEnergy() * CurrentBoost * IncomeUpgradeMultiplier;
 			OnIncomePerSecondChanged.Broadcast(IncomePerSecond);
 			
 			const int Amount = IncomePerSecond * Data->GetIncomeUpdateInterval();
@@ -40,10 +43,11 @@ void UIncomeManager::BeginPlay()
 	}, Data->GetIncomeUpdateInterval(), true);
 }
 
-void UIncomeManager::InjectData(UResourceManager* NewResourceManager, UEnergyManager* NewEnergyManager, AWEI_Pawn* NewPawn)
+void UIncomeManager::InjectData(UResourceManager* NewResourceManager, UEnergyManager* NewEnergyManager, UUpgradeManager* NewUpgradeManager, AWEI_Pawn* NewPawn)
 {
 	EnergyManager = NewEnergyManager;
 	ResourceManager = NewResourceManager;
+	UpgradeManager = NewUpgradeManager;
 	Pawn = NewPawn;
 	Pawn->OnEmptyAreaClicked.AddUniqueDynamic(this, &ThisClass::OnEmptyAreaClicked);
 }

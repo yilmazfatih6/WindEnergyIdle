@@ -6,11 +6,6 @@
 #include "Components/ActorComponent.h"
 #include "IncomeManager.generated.h"
 
-class AWEI_Pawn;
-class UEnergyManager;
-class UResourceManager;
-class UUIncomeManagerDataAsset;
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FFloatEvent, float, Value);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -26,11 +21,12 @@ public:
 	
 private:
 	UPROPERTY(EditDefaultsOnly)
-	UUIncomeManagerDataAsset* Data;
+	class UUIncomeManagerDataAsset* Data;
 
-	AWEI_Pawn* Pawn;
-	UResourceManager* ResourceManager;
-	UEnergyManager* EnergyManager;
+	class AWEI_Pawn* Pawn;
+	class UResourceManager* ResourceManager;
+	class UEnergyManager* EnergyManager;
+	class UUpgradeManager* UpgradeManager;
 
 	float CurrentBoost = 1;
 
@@ -40,7 +36,7 @@ protected:
 public:	
 	UIncomeManager();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	void InjectData(UResourceManager* NewResourceManager, UEnergyManager* NewEnergyManager, AWEI_Pawn* NewPawn);
+	void InjectData(UResourceManager* NewResourceManager, UEnergyManager* NewEnergyManager, UUpgradeManager* UpgradeManager, AWEI_Pawn* NewPawn);
 
 private:
 	UFUNCTION()

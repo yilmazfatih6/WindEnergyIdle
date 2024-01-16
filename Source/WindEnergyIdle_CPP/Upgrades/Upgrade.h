@@ -25,11 +25,11 @@ public:
 protected:
 	UResourceManager* ResourceManager;
 	AWEI_Pawn* Pawn;
+	AWEI_GM* GM;
 	bool CanUse;
 
-public:
-	// Sets default values for this component's properties
-	UUpgrade();
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	class UUpgradeDataAsset* Data;
 
 protected:
 	// Called when the game starts
@@ -38,7 +38,8 @@ protected:
 	int Level = 1;
 
 public:
-	// Called every frame
+	UUpgrade();
+
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
@@ -48,8 +49,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void Use();
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	class UUpgradeDataAsset* Data;
-
 	float GetPrice() const;
+
+	int GetLevel() const;
 };

@@ -94,9 +94,9 @@ void UTurbineMerger::Merge(bool& bWasSuccessful)
 			continue;
 		}
 
-		bool bWasSuccessful = false;
-		FindClosestObjects(Turbines, bWasSuccessful);
-		if (bWasSuccessful)
+		bool bFoundObjects = false;
+		FindClosestObjects(Turbines, bFoundObjects);
+		if (bFoundObjects)
 		{
 			break;
 		}
