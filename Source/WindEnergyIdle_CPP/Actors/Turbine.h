@@ -27,6 +27,9 @@ public:
 
 #pragma region Variables
 private:
+	UPROPERTY(EditDefaultsOnly)
+	class UTurbineDataAsset* Data;
+	
 	bool bIsInitialPlacement = true;
 	bool bIsSelected;
 	bool bIsOverlapping;
@@ -45,10 +48,7 @@ private:
 	bool bMove;
 
 	FRotator DefaultRotationRate;
-	float BoostRatio = 1;
-
-	UPROPERTY(EditDefaultsOnly)
-	float RotationSpeedMultiplier = 1;
+	float BoostRatio = 0;
 	
 protected:
 	UPROPERTY(Category="References", BlueprintReadOnly)

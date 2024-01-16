@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "WindEnergyIdle_CPP/Components/TurbineComponents/TurbineEnergyController.h"
 #include "WindEnergyIdle_CPP/Core/WEI_GM.h"
+#include "WindEnergyIdle_CPP/DataAssets/TurbineDataAsset.h"
 #include "WindEnergyIdle_CPP/Managers/IncomeManager.h"
 
 // Sets default values
@@ -84,6 +85,7 @@ void ATurbine::EndOverlap(AActor* OtherActor)
 void ATurbine::OnBoostRatioChanged(float Value)
 {
 	BoostRatio = Value;
+	SetPropellerRotationRate();
 }
 
 // Called when the game starts or when spawned
@@ -237,12 +239,13 @@ void ATurbine::SetWindMapValue(float Value)
 
 void ATurbine::SetPropellerRotationRate()
 {
-	const auto Rate = (BoostRatio + 1) * RotationSpeedMultiplier * WindMapValue * DefaultRotationRate;
-	UE_LOG(LogTemp, Log, TEXT("[ATurbine] SetPropellerRotationRate(), BoostRatio = %f"), BoostRatio);
-	UE_LOG(LogTemp, Log, TEXT("[ATurbine] SetPropellerRotationRate(), RotationSpeedMultiplier = %f"), RotationSpeedMultiplier);
-	UE_LOG(LogTemp, Log, TEXT("[ATurbine] SetPropellerRotationRate(), WindMapValue = %f"), WindMapValue);
-	UE_LOG(LogTemp, Log, TEXT("[ATurbine] SetPropellerRotationRate(), DefaultRotationRate = %f, %f, %f"), DefaultRotationRate.Roll, DefaultRotationRate.Pitch, DefaultRotationRate.Yaw);
-	UE_LOG(LogTemp, Log, TEXT("[ATurbine] SetPropellerRotationRate(), Rate = %f, %f, %f"), Rate.Roll, Rate.Pitch, Rate.Yaw);
+	const auto Rate = (Data->GetBoostRotationMultiplier() * BoostRatio + 1) * Data->GetRotationMultiplier() * WindMapValue * DefaultRotationRate;
+	// UE_LOG(LogTemp, Log, TEXT("[ATurbine] SetPropellerRotationRate(), BoostRatio = %f"), BoostRatio);
+	// UE_LOG(LogTemp, Log, TEXT("[ATurbine] SetPropellerRotationRate(), BoostRotationMultiplier = %f"), Data->GetBoostRotationMultiplier());
+	// UE_LOG(LogTemp, Log, TEXT("[ATurbine] SetPropellerRotationRate(), RotationSpeedMultiplier = %f"), Data->GetRotationMultiplier());
+	// UE_LOG(LogTemp, Log, TEXT("[ATurbine] SetPropellerRotationRate(), WindMapValue = %f"), WindMapValue);
+	// UE_LOG(LogTemp, Log, TEXT("[ATurbine] SetPropellerRotationRate(), DefaultRotationRate = %f, %f, %f"), DefaultRotationRate.Roll, DefaultRotationRate.Pitch, DefaultRotationRate.Yaw);
+	// UE_LOG(LogTemp, Log, TEXT("[ATurbine] SetPropellerRotationRate(), Rate = %f, %f, %f"), Rate.Roll, Rate.Pitch, Rate.Yaw);
 	RotatingMovementComponent->RotationRate = Rate;
 				
 }

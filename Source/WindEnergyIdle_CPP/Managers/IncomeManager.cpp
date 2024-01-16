@@ -45,7 +45,7 @@ void UIncomeManager::InjectData(UResourceManager* NewResourceManager, UEnergyMan
 	EnergyManager = NewEnergyManager;
 	ResourceManager = NewResourceManager;
 	Pawn = NewPawn;
-	Pawn->OnEmptyAreaClicked.AddDynamic(this, &ThisClass::OnEmptyAreaClicked);
+	Pawn->OnEmptyAreaClicked.AddUniqueDynamic(this, &ThisClass::OnEmptyAreaClicked);
 }
 
 void UIncomeManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
