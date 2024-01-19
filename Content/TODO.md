@@ -9,6 +9,6 @@
 2. Minor Fixes
    - ~~Disable merge button if merge is not possible.~~
    - ~~Rotate merged turbine.~~
-   - Enable wind map on all grounds
+   - ~~Enable wind map on all grounds (Fixed camera angle instead and deleted other grounds)~~
    - Display income on turbines.
    - Add VFX to Turbines
