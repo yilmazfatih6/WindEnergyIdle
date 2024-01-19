@@ -5,10 +5,13 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/RotatingMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "WindEnergyIdle_CPP/Components/PawnComponents/TurbineSpawner.h"
 #include "WindEnergyIdle_CPP/Components/TurbineComponents/TurbineEnergyController.h"
 #include "WindEnergyIdle_CPP/Core/WEI_GM.h"
+#include "WindEnergyIdle_CPP/Core/WEI_Pawn.h"
 #include "WindEnergyIdle_CPP/DataAssets/TurbineDataAsset.h"
 #include "WindEnergyIdle_CPP/Managers/IncomeManager.h"
+#include "WindEnergyIdle_CPP/Utilities/GameplayReferences.h"
 
 // Sets default values
 ATurbine::ATurbine()
@@ -102,21 +105,11 @@ void ATurbine::BeginPlay()
 	RotatingMovementComponent->SetUpdatedComponent(PropellerRoot);
 	
 	DefaultRotationRate = RotatingMovementComponent->RotationRate;
+
+	WEI_Pawn = GameplayReferences::GetWEIPawn(GetWorld());
+
+	GameMode = GameplayReferences::GetWEIGameMode(GetWorld());
 	
-	const auto GM = UGameplayStatics::GetGameMode(GetWorld());
-	if(GM == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("[ATurbine] GM is null!"));
-		return;
-	}
-
-	GameMode = Cast<AWEI_GM>(GM);
-	if(GameMode == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("[ATurbine] GameMode is null!"));
-		return;
-	}
-
 	GameMode->IncomeManager->OnBoostRatioChanged.AddDynamic(this, &ThisClass::OnBoostRatioChanged);
 }
 
@@ -153,6 +146,10 @@ void ATurbine::SetUnselected()
 
 void ATurbine::Place()
 {
+	if(bIsInitialPlacement)
+	{
+		WEI_Pawn->GetTurbineSpawner()->AddToTurbinesByLevels(this, Level);
+	}
 	bIsInitialPlacement = false;
 	TurbineEnergyController->SetEnergy();
 	PlacementLocation = GetActorLocation();

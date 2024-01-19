@@ -5,6 +5,7 @@
 
 #include "Kismet/GameplayStatics.h"
 #include "WindEnergyIdle_CPP/Upgrades/UpgradeAdd.h"
+#include "WindEnergyIdle_CPP/Utilities/GameplayReferences.h"
 
 // Sets default values for this component's properties
 UUpgradeManager::UUpgradeManager()
@@ -36,19 +37,7 @@ void UUpgradeManager::InjectData(UResourceManager* NewResourceManager)
 {
 	ResourceManager = NewResourceManager;
 
-	const auto Pawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-	if(Pawn == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("[UUpgradeManager] BeginPlay(), Pawn is null!"));
-		return;
-	}
-
-	const auto WEI_Pawn = Cast<AWEI_Pawn>(Pawn);
-	if(WEI_Pawn == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("[UUpgradeManager] BeginPlay(), WEI_Pawn is null!"));
-		return;
-	}
+	const auto WEI_Pawn = GameplayReferences::GetWEIPawn(GetWorld());
 	
 	UpgradeAdd->InjectData(ResourceManager, WEI_Pawn);
 	UpgradeMerge->InjectData(ResourceManager, WEI_Pawn);

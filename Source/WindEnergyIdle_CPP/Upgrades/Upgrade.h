@@ -52,4 +52,7 @@ public:
 	float GetPrice() const;
 
 	int GetLevel() const;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	AWEI_Pawn* GetWEIPawn();
 };

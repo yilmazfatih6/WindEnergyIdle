@@ -9,24 +9,13 @@
 #include "WindEnergyIdle_CPP/Managers/EnergyManager.h"
 #include "WindEnergyIdle_CPP/Managers/IncomeManager.h"
 #include "WindEnergyIdle_CPP/Managers/ResourceManager.h"
+#include "WindEnergyIdle_CPP/Utilities/GameplayReferences.h"
 
 void AWEI_GM::BeginPlay()
 {
 	Super::BeginPlay();
 
-	const auto Pawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-	if(Pawn == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("[AWEI_GM] BeginPlay, Pawn is null!"));
-		return;
-	}
-	
-	const auto WEI_Pawn = Cast<AWEI_Pawn>(Pawn);
-	if(WEI_Pawn == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("[AWEI_GM] BeginPlay, WEI_Pawn is null!"));
-		return;
-	}
+	const auto WEI_Pawn = GameplayReferences::GetWEIPawn(GetWorld());
 	
 	IncomeManager->InjectData(ResourceManager, EnergyManager, UpgradeManager, WEI_Pawn);
 	UpgradeManager->InjectData(ResourceManager);

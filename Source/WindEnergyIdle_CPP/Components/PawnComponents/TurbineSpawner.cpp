@@ -53,11 +53,10 @@ ATurbine* UTurbineSpawner::SpawnTurbine(const int Level, bool& bWasSuccessful)
 
 	bWasSuccessful = true;
 	bCanSpawn = false;
-	SpawnedTurbine = GetWorld()->SpawnActor<ATurbine>(TurbineBlueprints->Turbines[Level - 1], SpawnLocation,
-	                                                      SpawnRotation);
-	SpawnedTurbines.Add(SpawnedTurbine);
+	SpawnedTurbine = GetWorld()->SpawnActor<ATurbine>(TurbineBlueprints->Turbines[Level - 1], SpawnLocation, SpawnRotation);
+	// SpawnedTurbines.Add(SpawnedTurbine);
 
-	AddToTurbinesByLevels(SpawnedTurbine, Level);
+	// AddToTurbinesByLevels(SpawnedTurbine, Level);
 
 	// Raise event.
 	OnSpawnComplete.Broadcast(SpawnedTurbine);
@@ -69,7 +68,7 @@ void UTurbineSpawner::RemoveTurbineFromArray(ATurbine* Turbine)
 {
 	UE_LOG(LogTemp, Log, TEXT("[UTurbineSpawner] RemoveTurbineFromArray %s"), *Turbine->GetName());
 
-	SpawnedTurbines.Remove(Turbine);
+	// SpawnedTurbines.Remove(Turbine);
 
 	RemoveToTurbinesByLevels(Turbine);
 }
@@ -91,19 +90,13 @@ const UTurbineBlueprintData* UTurbineSpawner::GetTurbineBlueprints() const
 
 void UTurbineSpawner::AddToTurbinesByLevels(ATurbine* Turbine, int Level)
 {
-	// Init TArray if null
-	if (SpawnedTurbinesByLevel == nullptr)
-	{
-		SpawnedTurbinesByLevel = new TArray<TArray<ATurbine*>*>();
-	}
-
-	// Add TArrays to TArray till required amount is reached.
+		// Add TArrays to TArray till required amount is reached.
 	if (SpawnedTurbinesByLevel->Num() < Level)
 	{
 		while (SpawnedTurbinesByLevel->Num() < Level)
 		{
 			TArray<ATurbine*>* NewRecord = new TArray<ATurbine*>;
-			SpawnedTurbinesByLevel->Add(NewRecord);
+			SpawnedTurbinesByLevel->AddUnique(NewRecord);
 		}
 	}
 
@@ -113,6 +106,8 @@ void UTurbineSpawner::AddToTurbinesByLevels(ATurbine* Turbine, int Level)
 
 	UE_LOG(LogTemp, Log, TEXT("[UTurbineSpawner] AddToTurbinesByLevels, Total number of Level %d turbines is %d"),
 	       Level, TurbinesOfThisLevel->Num());
+
+	OnTurbineAdded.Broadcast(Turbine);
 }
 
 void UTurbineSpawner::RemoveToTurbinesByLevels(ATurbine* Turbine) const

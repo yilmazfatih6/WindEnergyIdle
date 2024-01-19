@@ -3,17 +3,22 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "TurbinePlacer.h"
 #include "TurbineSpawner.h"
 #include "Components/ActorComponent.h"
+#include "WindEnergyIdle_CPP/Core/WEI_Pawn.h"
 #include "TurbineMerger.generated.h"
 
-
+class FBoolEvent;
 class ATurbine;
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class WINDENERGYIDLE_CPP_API UTurbineMerger : public UActorComponent
 {
 	GENERATED_BODY()
+
+	UPROPERTY(BlueprintAssignable)
+	FBoolEvent OnCanMergeChanged;
 
 public:
 	// Sets default values for this component's properties
@@ -30,12 +35,14 @@ private:
 	int MergeMovementCompleteCount;
 
 	UFUNCTION()
-	void OnTurbineSpawn(ATurbine* Turbine);
+	void OnTurbineAdded(ATurbine* Turbine);
 
 	void FindClosestObjects(TArray<ATurbine*>* Turbines, bool& bWasSuccessful) const;
 
 	UFUNCTION()
 	void OnMergeMovementComplete(ATurbine* Turbine);
+
+	void SetCanMerge();
 
 protected:
 	// Called when the game starts
@@ -52,4 +59,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void Merge(bool& bWasSuccessful);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool GetCanMerge() const;
+	
+
 };

@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "../Actors/Turbine.h"
-#include "GameFramework/HUD.h"
+#include "WindEnergyIdle_CPP/Actors/Turbine.h"
 #include "GameFramework/Pawn.h"
 #include "InputMappingContext.h"
+#include "WindEnergyIdle_CPP/Utilities/Delegates.h"
 #include "WEI_Pawn.generated.h"
 
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FVoidEvent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBoolEvent, bool, Value);
 
 UCLASS()
 class WINDENERGYIDLE_CPP_API AWEI_Pawn : public APawn

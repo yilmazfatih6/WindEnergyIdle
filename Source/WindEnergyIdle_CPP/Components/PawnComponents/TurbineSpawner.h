@@ -21,6 +21,12 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FTurbineDelegate OnSpawnComplete;
 
+	UPROPERTY(BlueprintAssignable)
+	FTurbineDelegate OnTurbineAdded;
+	
+	UPROPERTY(BlueprintAssignable)
+	FTurbineDelegate OnTurbineRemoved;
+	
 #pragma endregion
 
 #pragma region "Properties"
@@ -30,7 +36,7 @@ private:
 
 	ATurbine* SpawnedTurbine;
 
-	TArray<TArray<ATurbine*>*>* SpawnedTurbinesByLevel;
+	TArray<TArray<ATurbine*>*>* SpawnedTurbinesByLevel = new TArray<TArray<ATurbine*>*>();;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
 	FRotator SpawnRotation;
@@ -40,8 +46,8 @@ private:
 	// TSubclassOf<class ABaseTurbine> TurbineToSpawn;
 
 protected:
-	UPROPERTY(BlueprintReadOnly)
-	TArray<ATurbine*> SpawnedTurbines;
+	// UPROPERTY(BlueprintReadOnly)
+	// TArray<ATurbine*> SpawnedTurbines;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spawn")
 	FVector SpawnLocation;
@@ -51,7 +57,6 @@ protected:
 #pragma region "Functions"
 
 private:
-	void AddToTurbinesByLevels(ATurbine* Turbine, int Level);
 	void RemoveToTurbinesByLevels(ATurbine* Turbine) const;
 
 protected:
@@ -71,6 +76,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	ATurbine* SpawnTurbine(int Level, bool& bWasSuccessful);
 
+	void AddToTurbinesByLevels(ATurbine* Turbine, int Level);
 	void RemoveTurbineFromArray(ATurbine* Turbine);
 	void DespawnTurbine(ATurbine* Turbine);
 

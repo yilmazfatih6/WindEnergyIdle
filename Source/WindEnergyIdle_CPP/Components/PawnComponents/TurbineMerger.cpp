@@ -8,6 +8,7 @@
 #include "WindEnergyIdle_CPP/DataAssets/TurbineBlueprintData.h"
 #include "WindEnergyIdle_CPP/Components/TurbineComponents//TurbineEnergyController.h"
 #include "WindEnergyIdle_CPP/Actors/Turbine.h"
+#include "WindEnergyIdle_CPP/Utilities/Delegates.h"
 
 UTurbineMerger::UTurbineMerger()
 {
@@ -31,7 +32,7 @@ void UTurbineMerger::InjectData(UTurbineSpawner* TurbineSpawnerReference, UTurbi
 	TurbineSelector = TurbineSelectorReference;
 
 	UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] InjectData, TurbineSpawner: %s"), *TurbineSpawner->GetName());
-	TurbineSpawner->OnSpawnComplete.AddDynamic(this, &ThisClass::OnTurbineSpawn);
+	TurbineSpawner->OnTurbineAdded.AddDynamic(this, &ThisClass::OnTurbineAdded);
 }
 
 
@@ -86,6 +87,7 @@ void UTurbineMerger::Merge(bool& bWasSuccessful)
 		if (TurbinesLevel == MaxTurbineLevel)
 		{
 			continue;
+			
 		}
 
 		// Skip if number of turbines in this level is less than required amount
@@ -142,10 +144,43 @@ void UTurbineMerger::Merge(bool& bWasSuccessful)
 	bWasSuccessful = true;
 }
 
-void UTurbineMerger::OnTurbineSpawn(ATurbine* Turbine)
+bool UTurbineMerger::GetCanMerge() const
 {
-	// UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] OnTurbineSpawn"));
-	// SetCanMerge();
+	return bCanMerge;
+}
+
+void UTurbineMerger::SetCanMerge()
+{
+	if (TurbineSpawner == nullptr)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] SetCanMerge, TurbineSpawner is null!"));
+		return;
+	}
+
+	bCanMerge = false;
+
+	const auto SpawnedTurbinesByLevel = TurbineSpawner->GetSpawnedTurbinesByLevel();
+
+	for (int i = 0; i < SpawnedTurbinesByLevel->Num(); i++)
+	{
+		const auto SpawnedTurbines = (*SpawnedTurbinesByLevel)[i];
+
+		if (SpawnedTurbines->Num() >= MERGE_TURBINE_AMOUNT)
+		{
+			bCanMerge = true;
+			OnCanMergeChanged.Broadcast(bCanMerge);
+			UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] SetCanMerge(), Can merge!"));
+			return;
+		}
+	}
+
+	UE_LOG(LogTemp, Log, TEXT("[UTurbineMerger] SetCanMerge(), Can not merge!"));
+	OnCanMergeChanged.Broadcast(bCanMerge);
+}
+
+void UTurbineMerger::OnTurbineAdded(ATurbine* Turbine)
+{
+	SetCanMerge();
 }
 
 void UTurbineMerger::FindClosestObjects(TArray<ATurbine*>* Turbines, bool& bWasSuccessful) const

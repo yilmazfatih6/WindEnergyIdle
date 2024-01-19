@@ -83,3 +83,8 @@ int UUpgrade::GetLevel() const
 {
 	return Level;
 }
+
+AWEI_Pawn* UUpgrade::GetWEIPawn()
+{
+	return Pawn;
+}

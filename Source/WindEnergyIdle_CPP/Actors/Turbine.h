@@ -53,6 +53,9 @@ private:
 protected:
 	UPROPERTY(Category="References", BlueprintReadOnly)
 	class AWEI_GM* GameMode;
+
+	UPROPERTY(Category="References", BlueprintReadOnly)
+	class AWEI_Pawn* WEI_Pawn;
 	
 	UPROPERTY(Category="References", EditDefaultsOnly, BlueprintReadOnly)
 	UMaterialInstance* SelectionInvalidMaterial;
