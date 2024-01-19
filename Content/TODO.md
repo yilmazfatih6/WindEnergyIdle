@@ -7,8 +7,8 @@
    - ~~Change turbine rotation relative to wind map value.~~
    - ~~Implement income upgrade~~
 2. Minor Fixes
-   - Disable merge button if merge is not possible.
-   - Rotate merged turbine.
+   - ~~Disable merge button if merge is not possible.~~
+   - ~~Rotate merged turbine.~~
    - Enable wind map on all grounds
    - Display income on turbines.
    - Add VFX to Turbines

@@ -228,6 +228,11 @@ FVector ATurbine::GetPlacementLocation() const
 	return PlacementLocation;
 }
 
+float ATurbine::GetWindMapValue() const
+{
+	return WindMapValue;
+}
+
 void ATurbine::SetWindMapValue(float Value)
 {
 	WindMapValue = Value;

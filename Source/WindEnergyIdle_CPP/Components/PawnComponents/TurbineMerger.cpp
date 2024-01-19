@@ -263,6 +263,9 @@ void UTurbineMerger::OnMergeMovementComplete(ATurbine* Turbine)
 		// Set location
 		SpawnedTurbine->SetActorLocation(CenterTurbine->GetActorLocation());
 
+		// Set wind map value
+		SpawnedTurbine->SetWindMapValue(CenterTurbine->GetWindMapValue());
+
 		// Place
 
 		if (TurbinePlacer == nullptr)

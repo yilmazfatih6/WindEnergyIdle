@@ -138,10 +138,13 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	FTransform GetEnergyTextPosition() const;
 
+	float GetWindMapValue() const;
+	
 	UFUNCTION(BlueprintCallable)
 	virtual void SetWindMapValue(float Value);
 
 	UFUNCTION(BlueprintCallable)
 	void SetPropellerRotationRate();
+
 #pragma endregion
 };
