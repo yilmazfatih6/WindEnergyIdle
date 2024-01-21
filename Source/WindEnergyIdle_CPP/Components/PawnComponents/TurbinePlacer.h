@@ -69,4 +69,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool IsPlacing() const;
+
+	UFUNCTION(BlueprintCallable)
+	FVector GetWorldLocation() const;
+
+	UFUNCTION(BlueprintCallable)
+	FVector GetWorldDirection() const;
+	
 };

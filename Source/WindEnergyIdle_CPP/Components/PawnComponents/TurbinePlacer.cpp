@@ -85,6 +85,16 @@ bool UTurbinePlacer::IsPlacing() const
 	return TargetTurbine != nullptr && bHover;
 }
 
+FVector UTurbinePlacer::GetWorldLocation() const
+{
+	return WorldLocation;
+}
+
+FVector UTurbinePlacer::GetWorldDirection() const
+{
+	return WorldDirection;
+}
+
 void UTurbinePlacer::Place()
 {
 	if (!TargetTurbine)

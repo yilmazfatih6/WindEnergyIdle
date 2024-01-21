@@ -1,7 +1,6 @@
 #pragma once
 
-
-static class GameplayReferences
+class GameplayReferences
 {
 public:
 	static class AWEI_Pawn* GetWEIPawn(const UObject* WorldContextObject);
