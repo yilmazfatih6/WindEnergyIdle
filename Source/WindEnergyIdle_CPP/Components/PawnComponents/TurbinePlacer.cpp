@@ -122,3 +122,8 @@ void UTurbinePlacer::Place()
 	}
 	// UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] PlaceSelectedTurbine, Turbine: %s"), *PreviouslySelectedTurbine->GetName());
 }
+
+ATurbine* UTurbinePlacer::GetTargetTurbine() const
+{
+	return TargetTurbine;
+}

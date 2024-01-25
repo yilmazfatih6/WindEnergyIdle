@@ -64,6 +64,8 @@ public:
 
 	void HoverSelectedTurbine();
 	void Place();
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	ATurbine* GetTargetTurbine() const;
 	void SetTargetTurbine(ATurbine* Turbine);
 	void SetHover(bool bValue);
 

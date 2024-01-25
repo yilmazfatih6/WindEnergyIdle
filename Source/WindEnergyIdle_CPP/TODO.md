@@ -10,6 +10,6 @@
    - ~~Disable merge button if merge is not possible.~~
    - ~~Rotate merged turbine.~~
    - ~~Enable wind map on all grounds (Fixed camera angle instead and deleted other grounds)~~
-   - Disable spawn button if there is a spawned turbine.
+   - ~~Disable spawn button if there is a spawned turbine.~~
    - Display income on turbines.
    - Add VFX to Turbines
