@@ -102,25 +102,20 @@ void UTurbinePlacer::Place()
 		return;
 	}
 
-	if (TargetTurbine->IsOverlapping())
+	const auto bIsInitialPlacement = TargetTurbine->IsInitialPlacement();
+	const auto bIsPlacementSuccessful = TargetTurbine->IsOverlapping();
+	if (bIsPlacementSuccessful)
 	{
-		TargetTurbine->StartMovement(TargetTurbine->GetPlacementLocation());
 		OnPlacementFail.Broadcast(TargetTurbine);
-		UE_LOG(LogTemp, Log, TEXT("[UTurbinePlacer] Place, Placement failed due to overlap! Turbine: %s"),
-		       *TargetTurbine->GetName());
+		TargetTurbine->StartMovement(TargetTurbine->GetPlacementLocation());
+		TargetTurbine = bIsInitialPlacement ? TargetTurbine : nullptr;
 	}
 	else
 	{
-		TargetTurbine->Place();
 		OnPlacementSucceed.Broadcast(TargetTurbine);
-		UE_LOG(LogTemp, Log, TEXT("[UTurbinePlacer] Place, Turbine: %s"), *TargetTurbine->GetName());
-	}
-
-	if (!TargetTurbine->IsInitialPlacement())
-	{
+		TargetTurbine->Place();
 		TargetTurbine = nullptr;
 	}
-	// UE_LOG(LogTemp, Log, TEXT("[WEI_Pawn] PlaceSelectedTurbine, Turbine: %s"), *PreviouslySelectedTurbine->GetName());
 }
 
 ATurbine* UTurbinePlacer::GetTargetTurbine() const

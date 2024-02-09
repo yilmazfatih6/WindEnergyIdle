@@ -5,11 +5,10 @@
 #include "CoreMinimal.h"
 #include "Components/TimelineComponent.h"
 #include "GameFramework/Actor.h"
+#include "WindEnergyIdle_CPP/Utilities/Delegates.h"
 #include "Turbine.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTurbineDelegate, ATurbine*, Turbine);
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FVoidDelegate);
+class FTurbinePlacementData;
 
 constexpr int MERGE_TURBINE_AMOUNT = 3;
 
@@ -129,6 +128,7 @@ public:
 
 	void DisableOverlap();
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool IsInitialPlacement() const;
 
 	UTurbineEnergyController* GetEnergyController() const;

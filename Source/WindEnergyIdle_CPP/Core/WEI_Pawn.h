@@ -6,7 +6,6 @@
 #include "WindEnergyIdle_CPP/Actors/Turbine.h"
 #include "GameFramework/Pawn.h"
 #include "InputMappingContext.h"
-#include "WindEnergyIdle_CPP/Utilities/Delegates.h"
 #include "WEI_Pawn.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FVoidEvent);

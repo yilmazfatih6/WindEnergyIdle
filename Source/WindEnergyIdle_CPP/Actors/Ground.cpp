@@ -36,9 +36,9 @@ void AGround::BeginPlay()
 	StaticMeshComponent->SetMaterial(0, MaterialInstanceDynamic);
 
 	auto Pawn = static_cast<AWEI_Pawn*>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	Pawn->GetTurbineSelector()->OnSelect.AddDynamic(this, &ThisClass::OnTurbineSelected);
-	Pawn->GetTurbinePlacer()->OnPlacementSucceed.AddDynamic(this, &ThisClass::OnTurbinePlaced);
-	Pawn->GetTurbinePlacer()->OnPlacementFail.AddDynamic(this, &ThisClass::OnTurbinePlaced);
+	Pawn->GetTurbineSelector()->OnSelect.AddUniqueDynamic(this, &ThisClass::OnTurbineSelected);
+	Pawn->GetTurbinePlacer()->OnPlacementSucceed.AddUniqueDynamic(this, &ThisClass::OnPlacementSucceed);
+	Pawn->GetTurbinePlacer()->OnPlacementFail.AddUniqueDynamic(this, &ThisClass::OnPlacementFail);
 }
 
 // Called every frame
@@ -54,9 +54,18 @@ void AGround::OnTurbineSelected(ATurbine* Turbine)
 	EnableWindMap();
 }
 
-void AGround::OnTurbinePlaced(ATurbine* Turbine)
+void AGround::OnPlacementSucceed(ATurbine* Turbine)
 {
-	UE_LOG(LogTemp, Log, TEXT("[AGround] OnTurbinePlaced"));
+	DisableWindMap();
+}
+
+void AGround::OnPlacementFail(ATurbine* Turbine)
+{
+	if(Turbine->IsInitialPlacement())
+	{
+		return;
+	}
+	
 	DisableWindMap();
 }
 

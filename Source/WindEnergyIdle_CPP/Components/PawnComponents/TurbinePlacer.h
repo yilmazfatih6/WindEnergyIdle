@@ -16,6 +16,7 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FTurbineDelegate OnPlacementStart;
 
+	// Called while hovering
 	UPROPERTY(BlueprintAssignable)
 	FTurbineDelegate OnPlacementChange;
 

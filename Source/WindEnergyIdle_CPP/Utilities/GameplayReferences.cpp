@@ -4,7 +4,7 @@
 #include "WindEnergyIdle_CPP/Core/WEI_GM.h"
 #include "WindEnergyIdle_CPP/Core/WEI_Pawn.h"
 
-AWEI_Pawn* GameplayReferences::GetWEIPawn(const UObject* WorldContextObject)
+AWEI_Pawn* UGameplayReferences::GetWEIPawn(const UObject* WorldContextObject)
 {
 	const auto Pawn = UGameplayStatics::GetPlayerPawn(WorldContextObject, 0);
 	if(Pawn == nullptr)
@@ -22,7 +22,7 @@ AWEI_Pawn* GameplayReferences::GetWEIPawn(const UObject* WorldContextObject)
 	return WEI_Pawn;
 }
 
-AWEI_GM* GameplayReferences::GetWEIGameMode(const UObject* WorldContextObject)
+AWEI_GM* UGameplayReferences::GetWEIGameMode(const UObject* WorldContextObject)
 {
 	const auto GM = UGameplayStatics::GetGameMode(WorldContextObject);
 	if(GM == nullptr)

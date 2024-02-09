@@ -15,7 +15,7 @@ void AWEI_GM::BeginPlay()
 {
 	Super::BeginPlay();
 
-	const auto WEI_Pawn = GameplayReferences::GetWEIPawn(GetWorld());
+	const auto WEI_Pawn = UGameplayReferences::GetWEIPawn(GetWorld());
 	
 	IncomeManager->InjectData(ResourceManager, EnergyManager, UpgradeManager, WEI_Pawn);
 	UpgradeManager->InjectData(ResourceManager);

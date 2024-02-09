@@ -37,7 +37,7 @@ void UUpgradeManager::InjectData(UResourceManager* NewResourceManager)
 {
 	ResourceManager = NewResourceManager;
 
-	const auto WEI_Pawn = GameplayReferences::GetWEIPawn(GetWorld());
+	const auto WEI_Pawn = UGameplayReferences::GetWEIPawn(GetWorld());
 	
 	UpgradeAdd->InjectData(ResourceManager, WEI_Pawn);
 	UpgradeMerge->InjectData(ResourceManager, WEI_Pawn);

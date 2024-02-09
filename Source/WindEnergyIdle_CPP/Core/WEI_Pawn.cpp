@@ -136,6 +136,7 @@ void AWEI_Pawn::OnTurbinePlaced(ATurbine* Turbine)
 
 void AWEI_Pawn::OnTurbinePlacementFailed(ATurbine* Turbine)
 {
+	UE_LOG(LogTemp, Log, TEXT("[AWEI_Pawn] OnTurbinePlacementFailed, IsInitialPlacement: %hs"), Turbine->IsInitialPlacement() ? "True" : "False");
 	if (Turbine->IsInitialPlacement())
 	{
 		return;

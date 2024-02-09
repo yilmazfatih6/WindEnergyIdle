@@ -10,6 +10,7 @@
 #include "WindEnergyIdle_CPP/Core/WEI_GM.h"
 #include "WindEnergyIdle_CPP/Core/WEI_Pawn.h"
 #include "WindEnergyIdle_CPP/DataAssets/TurbineDataAsset.h"
+#include "WindEnergyIdle_CPP/DataContainers/TurbinePlacementData.h"
 #include "WindEnergyIdle_CPP/Managers/IncomeManager.h"
 #include "WindEnergyIdle_CPP/Utilities/GameplayReferences.h"
 
@@ -106,9 +107,9 @@ void ATurbine::BeginPlay()
 	
 	DefaultRotationRate = RotatingMovementComponent->RotationRate;
 
-	WEI_Pawn = GameplayReferences::GetWEIPawn(GetWorld());
+	WEI_Pawn = UGameplayReferences::GetWEIPawn(GetWorld());
 
-	GameMode = GameplayReferences::GetWEIGameMode(GetWorld());
+	GameMode = UGameplayReferences::GetWEIGameMode(GetWorld());
 	
 	GameMode->IncomeManager->OnBoostRatioChanged.AddDynamic(this, &ThisClass::OnBoostRatioChanged);
 }

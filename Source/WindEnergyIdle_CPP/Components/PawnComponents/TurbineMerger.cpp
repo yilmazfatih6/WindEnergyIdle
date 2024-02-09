@@ -8,7 +8,6 @@
 #include "WindEnergyIdle_CPP/DataAssets/TurbineBlueprintData.h"
 #include "WindEnergyIdle_CPP/Components/TurbineComponents//TurbineEnergyController.h"
 #include "WindEnergyIdle_CPP/Actors/Turbine.h"
-#include "WindEnergyIdle_CPP/Utilities/Delegates.h"
 
 UTurbineMerger::UTurbineMerger()
 {

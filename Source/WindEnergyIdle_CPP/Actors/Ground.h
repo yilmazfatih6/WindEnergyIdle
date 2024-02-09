@@ -42,8 +42,11 @@ private:
 	void OnTurbineSelected(ATurbine* Turbine);
 
 	UFUNCTION()
-	void OnTurbinePlaced(ATurbine* Turbine);
+	void OnPlacementSucceed(ATurbine* Turbine);
 
+	UFUNCTION()
+	void OnPlacementFail(ATurbine* Turbine);
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
